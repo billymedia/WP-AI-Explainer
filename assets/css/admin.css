@@ -1,0 +1,1146 @@
+/**
+ * Admin styles for AI Explainer Plugin
+ */
+
+/* =============================================================================
+   Settings Page Layout
+   ============================================================================= */
+
+.explainer-admin-wrap {
+    max-width: 1200px;
+}
+
+.explainer-admin-header {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid #0073aa;
+}
+
+.explainer-admin-header p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.explainer-admin-tabs {
+    margin-bottom: 20px;
+}
+
+.explainer-admin-tabs .nav-tab-wrapper {
+    border-bottom: 1px solid #ccc;
+}
+
+.explainer-admin-actions {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.explainer-admin-actions h2 {
+    margin-top: 0;
+    color: #23282d;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.explainer-admin-actions .button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* =============================================================================
+   Help and Support Tab Styles
+   ============================================================================= */
+
+.help-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.help-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #23282d;
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 8px;
+}
+
+.help-steps {
+    display: grid;
+    gap: 20px;
+}
+
+.help-step {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid #46b450;
+}
+
+.help-step h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #1d2327;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.help-step p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.help-step ul {
+    margin-left: 20px;
+}
+
+.help-step li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.help-usage ol {
+    margin-left: 20px;
+    line-height: 1.6;
+}
+
+.help-usage li {
+    margin-bottom: 8px;
+}
+
+.help-feature {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.help-feature h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0073aa;
+    font-weight: 600;
+}
+
+.help-feature ul {
+    margin-left: 20px;
+}
+
+.help-feature li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.help-troubleshooting {
+    display: grid;
+    gap: 20px;
+}
+
+.help-issue {
+    padding: 15px;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    border-left: 4px solid #f39c12;
+}
+
+.help-issue h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #856404;
+    font-weight: 600;
+}
+
+.help-issue ul {
+    margin-left: 20px;
+}
+
+.help-issue li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+    color: #856404;
+}
+
+.help-costs ul {
+    margin-left: 20px;
+    line-height: 1.6;
+}
+
+.help-costs li {
+    margin-bottom: 8px;
+}
+
+/* Support tab styles */
+.support-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.support-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #23282d;
+    border-bottom: 2px solid #0073aa;
+    padding-bottom: 8px;
+}
+
+.developer-info p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.developer-info strong {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.project-links p {
+    margin-bottom: 15px;
+}
+
+.project-links .description {
+    margin-top: 10px;
+    font-style: italic;
+    color: #666;
+}
+
+.support-options {
+    display: grid;
+    gap: 20px;
+}
+
+.support-option {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 4px solid #0073aa;
+}
+
+.support-option h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #1d2327;
+    font-weight: 600;
+}
+
+.support-option p {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.support-info-needed {
+    padding: 15px;
+    background: #e8f4fd;
+    border: 1px solid #b3d9ff;
+    border-radius: 4px;
+}
+
+.support-info-needed p {
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.support-info-needed ul {
+    margin-left: 20px;
+}
+
+.support-info-needed li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.contributing-info {
+    padding: 15px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+}
+
+.contributing-info p {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #155724;
+}
+
+.contributing-info ul {
+    margin-left: 20px;
+}
+
+.contributing-info li {
+    margin-bottom: 5px;
+    line-height: 1.4;
+    color: #155724;
+}
+
+.system-info {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.system-info .form-table {
+    margin-bottom: 0;
+}
+
+.system-info th {
+    width: 200px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.system-info td {
+    font-family: monospace;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 3px;
+}
+
+/* Responsive design for help/support tabs */
+@media (max-width: 768px) {
+    .help-steps,
+    .help-troubleshooting,
+    .support-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .help-section,
+    .support-section {
+        padding: 15px;
+    }
+    
+    .help-step,
+    .help-issue,
+    .support-option {
+        padding: 12px;
+    }
+}
+
+#admin-messages {
+    margin-top: 20px;
+}
+
+.tab-content {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+
+.tab-content h2 {
+    margin-top: 0;
+    color: #23282d;
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* =============================================================================
+   Form Field Styling
+   ============================================================================= */
+
+.form-table th {
+    vertical-align: top;
+    padding-top: 15px;
+}
+
+.form-table input[type="password"],
+.form-table input[type="text"],
+.form-table input[type="number"],
+.form-table select {
+    width: 300px;
+}
+
+.form-table input[type="number"] {
+    width: 100px;
+}
+
+.form-table .description {
+    margin-top: 5px;
+    color: #666;
+    font-style: italic;
+}
+
+/* =============================================================================
+   API Key Field
+   ============================================================================= */
+
+.api-key-feedback {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 0;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.api-key-feedback.success .valid {
+    color: #46b450;
+}
+
+.api-key-feedback.error .invalid {
+    color: #dc3232;
+}
+
+/* =============================================================================
+   Validation Feedback
+   ============================================================================= */
+
+.duration-feedback,
+.rate-limit-feedback {
+    display: block;
+    margin-left: 0;
+    margin-top: 5px;
+    font-size: 13px;
+    clear: both;
+}
+
+.duration-feedback.success .valid,
+.rate-limit-feedback.success .valid {
+    color: #46b450;
+}
+
+.duration-feedback.error .invalid,
+.rate-limit-feedback.error .invalid {
+    color: #dc3232;
+}
+
+/* =============================================================================
+   Usage Statistics
+   ============================================================================= */
+
+.usage-stats {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.usage-stats h3 {
+    margin-top: 0;
+    color: #23282d;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.stats-section {
+    margin-bottom: 20px;
+}
+
+.stats-section h4 {
+    margin-bottom: 10px;
+    color: #0073aa;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.stats-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.stats-section li {
+    margin-bottom: 5px;
+    color: #555;
+}
+
+/* =============================================================================
+   Button States
+   ============================================================================= */
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.button.loading {
+    position: relative;
+    color: transparent;
+}
+
+.button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #ccc;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* =============================================================================
+   Admin Notices
+   ============================================================================= */
+
+#admin-messages .notice {
+    margin: 15px 0;
+    padding: 12px;
+    border-left: 4px solid #0073aa;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+#admin-messages .notice-success {
+    border-left-color: #46b450;
+}
+
+#admin-messages .notice-error {
+    border-left-color: #dc3232;
+}
+
+#admin-messages .notice-info {
+    border-left-color: #0073aa;
+}
+
+#admin-messages .notice-warning {
+    border-left-color: #ffb900;
+}
+
+#admin-messages .notice p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* =============================================================================
+   Settings Sections
+   ============================================================================= */
+
+.form-table {
+    margin-top: 20px;
+}
+
+.form-table tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.form-table tr:last-child {
+    border-bottom: none;
+}
+
+.form-table th {
+    font-weight: 600;
+    color: #23282d;
+    padding: 20px 10px 20px 0;
+    width: 200px;
+}
+
+.form-table td {
+    padding: 15px 10px;
+}
+
+/* =============================================================================
+   Checkbox Styling
+   ============================================================================= */
+
+.form-table input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.form-table label {
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: normal;
+    color: #555;
+}
+
+/* =============================================================================
+   Select Styling
+   ============================================================================= */
+
+.form-table select {
+    height: 36px;
+    padding: 0 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    font-size: 14px;
+}
+
+.form-table select:focus {
+    border-color: #0073aa;
+    outline: none;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+/* =============================================================================
+   Input Styling
+   ============================================================================= */
+
+.form-table input[type="text"],
+.form-table input[type="password"],
+.form-table input[type="number"] {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.form-table input[type="text"]:focus,
+.form-table input[type="password"]:focus,
+.form-table input[type="number"]:focus {
+    border-color: #0073aa;
+    outline: none;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+/* =============================================================================
+   Responsive Design
+   ============================================================================= */
+
+@media (max-width: 782px) {
+    .form-table th,
+    .form-table td {
+        display: block;
+        width: auto;
+        padding: 10px 0;
+    }
+    
+    .form-table th {
+        padding-bottom: 5px;
+    }
+    
+    .form-table input[type="password"],
+    .form-table input[type="text"],
+    .form-table input[type="number"],
+    .form-table select {
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .explainer-admin-actions .button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+    
+    /* Make feedback display below input on mobile */
+    .api-key-feedback,
+    .duration-feedback,
+    .rate-limit-feedback,
+    .field-feedback {
+        display: block;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}
+
+/* =============================================================================
+   Dark Mode Support
+   ============================================================================= */
+
+@media (prefers-color-scheme: dark) {
+    .usage-stats {
+        background: #1e1e1e;
+        color: #fff;
+    }
+    
+    .stats-section h4 {
+        color: #00a0d2;
+    }
+    
+    .stats-section li {
+        color: #ccc;
+    }
+}
+
+/* =============================================================================
+   New Feature Styles
+   ============================================================================= */
+
+/* Tooltip Preview - Matches Frontend Design */
+.tooltip-preview {
+    margin-top: 10px;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+}
+
+/* Admin tooltip preview - exact copy of frontend styles */
+.explainer-tooltip-preview {
+    position: relative;
+    display: inline-block;
+    
+    /* Box styling - exact match to frontend using same CSS variables */
+    background: #333;
+    color: white;
+    border-radius: 6px;
+    padding: 12px 16px;
+    max-width: 300px;
+    min-width: 200px;
+    
+    /* Typography - use site's paragraph font to match frontend */
+    font-size: 14px;
+    font-family: var(--explainer-site-font, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif);
+    line-height: 1.4;
+    
+    /* Effects - exact match to frontend using same CSS variables */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    
+    /* Dynamic color updates */
+    background-color: var(--explainer-tooltip-bg-color, #333) !important;
+    color: var(--explainer-tooltip-text-color, #ffffff) !important;
+}
+
+/* Tooltip arrow using pseudo-element - exact match to frontend */
+.explainer-tooltip-preview::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--explainer-tooltip-bg-color, #333);
+}
+
+/* Header styling - exact match to frontend */
+.explainer-tooltip-preview .explainer-tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Title styling - exact match to frontend */
+.explainer-tooltip-preview .explainer-tooltip-title {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+    color: inherit;
+}
+
+/* Close button styling - exact match to frontend */
+.explainer-tooltip-preview .explainer-tooltip-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    outline: none;
+}
+
+.explainer-tooltip-preview .explainer-tooltip-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.explainer-tooltip-preview .explainer-tooltip-close:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Content styling - exact match to frontend */
+.explainer-tooltip-preview .explainer-tooltip-content {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: inherit;
+}
+
+/* Footer styling - exact match to frontend */
+.explainer-tooltip-preview .explainer-tooltip-footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 11px;
+    line-height: 1.3;
+    opacity: 0.7;
+}
+
+.explainer-tooltip-preview .explainer-disclaimer,
+.explainer-tooltip-preview .explainer-provider {
+    margin: 2px 0;
+    font-style: italic;
+    color: var(--explainer-tooltip-footer-color, rgba(255, 255, 255, 0.8));
+}
+
+.explainer-tooltip-preview .explainer-provider {
+    font-size: 10px;
+}
+
+/* Button Preview */
+.button-preview {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button-preview h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0073aa;
+    font-size: 14px;
+}
+
+.preview-explainer-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    text-transform: none;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.preview-explainer-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.preview-explainer-button svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.preview-explainer-button.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.preview-explainer-button.disabled:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Debug Tools Section */
+.debug-actions {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.debug-actions h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #0073aa;
+    font-size: 14px;
+}
+
+.debug-actions .button {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+#debug-logs-viewer {
+    max-height: 400px;
+    overflow-y: auto;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+#debug-logs-viewer pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Field Validation */
+.field-feedback {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 0;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.field-feedback.success .valid {
+    color: #46b450;
+}
+
+.field-feedback.error .invalid {
+    color: #dc3232;
+}
+
+.form-table input.error,
+.form-table textarea.error,
+.form-table select.error {
+    border-color: #dc3232;
+}
+
+.form-table input.success,
+.form-table textarea.success,
+.form-table select.success {
+    border-color: #46b450;
+}
+
+/* Color Picker Integration */
+.wp-picker-container {
+    margin-top: 5px;
+}
+
+.wp-picker-container .wp-color-result {
+    height: 32px;
+    border-radius: 4px;
+}
+
+/* Quick Actions */
+.explainer-admin-actions .button-primary {
+    background: #0073aa;
+    border-color: #0073aa;
+}
+
+.explainer-admin-actions .button-primary:hover {
+    background: #005a87;
+    border-color: #005a87;
+}
+
+/* API Key Visibility Toggle */
+#api-key-status,
+#claude-api-key-status {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+#api-key-status.valid,
+#claude-api-key-status.valid {
+    color: #46b450;
+}
+
+#api-key-status.invalid,
+#claude-api-key-status.invalid {
+    color: #dc3232;
+}
+
+/* Provider-specific field visibility */
+.openai-fields {
+    display: table-row;
+}
+
+.claude-fields {
+    display: none;
+}
+
+/* Model selection optgroups */
+#explainer_api_model optgroup {
+    display: block;
+}
+
+#explainer_api_model optgroup.claude-models {
+    display: none;
+}
+
+/* When Claude provider is selected, show Claude models and hide OpenAI models */
+body.claude-provider #explainer_api_model optgroup.openai-models {
+    display: none;
+}
+
+body.claude-provider #explainer_api_model optgroup.claude-models {
+    display: block;
+}
+
+/* Disabled options styling */
+#explainer_api_model option:disabled {
+    color: #999;
+    background-color: #f5f5f5;
+}
+
+/* Model dropdown styling */
+#explainer_api_model {
+    min-width: 300px;
+}
+
+#explainer_api_model optgroup {
+    font-weight: bold;
+    color: #0073aa;
+}
+
+#explainer_api_model option {
+    font-weight: normal;
+    color: #333;
+    padding: 4px 8px;
+}
+
+/* Hide optgroups by default, show based on provider */
+.form-table #explainer_api_model optgroup {
+    display: none;
+}
+
+.form-table #explainer_api_model optgroup.openai-models {
+    display: block;
+}
+
+body.claude-provider .form-table #explainer_api_model optgroup.openai-models {
+    display: none;
+}
+
+body.claude-provider .form-table #explainer_api_model optgroup.claude-models {
+    display: block;
+}
+
+/* Provider selection styling */
+#explainer_api_provider {
+    font-weight: 600;
+    color: #0073aa;
+}
+
+/* =============================================================================
+   Custom Prompt Field
+   ============================================================================= */
+
+.form-table textarea.code {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-table textarea.code:focus {
+    border-color: #0073aa;
+    background: #fff;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+.prompt-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.prompt-actions .button {
+    font-size: 13px;
+    padding: 6px 12px;
+    height: auto;
+    line-height: 1.4;
+}
+
+#prompt-preview {
+    margin-top: 10px;
+    padding: 12px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+}
+
+#prompt-preview strong {
+    color: #0073aa;
+    font-weight: 600;
+}
+
+.custom-prompt-help {
+    margin-top: 8px;
+    padding: 12px;
+    background: #e7f3ff;
+    border: 1px solid #bee5eb;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.custom-prompt-help strong {
+    color: #0073aa;
+}
+
+/* Character count for prompt */
+.prompt-counter {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+    text-align: right;
+}
+
+.prompt-counter.warning {
+    color: #ffb900;
+}
+
+.prompt-counter.error {
+    color: #dc3232;
+}
+
+/* =============================================================================
+   High Contrast Mode
+   ============================================================================= */
+
+@media (prefers-contrast: high) {
+    .form-table input[type="text"],
+    .form-table input[type="password"],
+    .form-table input[type="number"],
+    .form-table select {
+        border: 2px solid #000;
+    }
+    
+    .form-table input[type="text"]:focus,
+    .form-table input[type="password"]:focus,
+    .form-table input[type="number"]:focus,
+    .form-table select:focus {
+        border-color: #0073aa;
+        box-shadow: 0 0 0 2px #0073aa;
+    }
+    
+    .preview-tooltip {
+        border: 2px solid #000;
+    }
+    
+    .analytics-section,
+    .analytics-dashboard {
+        border: 2px solid #000;
+    }
+}

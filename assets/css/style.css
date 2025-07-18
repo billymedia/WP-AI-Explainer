@@ -1,0 +1,528 @@
+/**
+ * AI Explainer Plugin - Styles
+ * Performance optimized with CSS containment and efficient selectors
+ */
+
+/* =============================================================================
+   CSS Custom Properties for Performance
+   ============================================================================= */
+
+:root {
+    --explainer-primary-color: #0073aa;
+    --explainer-primary-hover: #005a87;
+    --explainer-success-color: #46b450;
+    --explainer-error-color: #dc3232;
+    --explainer-text-color: #333333;
+    --explainer-border-radius: 6px;
+    --explainer-box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    --explainer-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --explainer-z-index-tooltip: 999999;
+    --explainer-z-index-toggle: 999998;
+    --explainer-animation-duration: 0.2s;
+    --explainer-font-stack: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    
+    /* Button colors - will be dynamically updated by JavaScript */
+    --explainer-button-enabled: #46b450;
+    --explainer-button-disabled: #666666;
+    --explainer-button-text: #ffffff;
+}
+
+/* =============================================================================
+   Toggle Button - Modern Button Design with Icon
+   ============================================================================= */
+
+.explainer-toggle {
+    /* Positioning */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: var(--explainer-z-index-toggle);
+    
+    /* Button styling */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    
+    /* Typography */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--explainer-font-stack);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    
+    /* Colors - disabled state by default */
+    background-color: var(--explainer-button-disabled);
+    color: var(--explainer-button-text);
+    
+    /* Effects */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: var(--explainer-transition);
+    cursor: pointer;
+    
+    /* Performance optimizations */
+    contain: layout style;
+    will-change: transform, background-color, box-shadow;
+    
+    /* Accessibility enhancements */
+    outline: none;
+    user-select: none;
+    
+    /* Touch optimization */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Remove default button styles */
+    margin: 0;
+    
+    /* Ensure text and icon are properly aligned */
+    line-height: 1;
+}
+
+/* Icon styling */
+.explainer-toggle .explainer-icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+/* Button text */
+.explainer-toggle .explainer-text {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+}
+
+/* Hover state */
+.explainer-toggle:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Active state */
+.explainer-toggle:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus state for accessibility */
+.explainer-toggle:focus {
+    outline: 2px solid #0066CC;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3);
+}
+
+.explainer-toggle:focus-visible {
+    outline: 2px solid #0066CC;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3);
+}
+
+/* Enabled state */
+.explainer-toggle.enabled {
+    background-color: var(--explainer-button-enabled);
+}
+
+.explainer-toggle.enabled:hover {
+    filter: brightness(1.1);
+}
+
+/* Disabled state (when plugin functionality is disabled) */
+.explainer-toggle:disabled {
+    background-color: var(--explainer-button-disabled);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.explainer-toggle:disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Position variations */
+.explainer-toggle.bottom-left {
+    bottom: 20px;
+    left: 20px;
+    right: auto;
+}
+
+.explainer-toggle.top-right {
+    top: 20px;
+    bottom: auto;
+    right: 20px;
+}
+
+.explainer-toggle.top-left {
+    top: 20px;
+    bottom: auto;
+    left: 20px;
+    right: auto;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .explainer-toggle {
+        padding: 10px 16px;
+        font-size: 13px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .explainer-toggle .explainer-icon {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .explainer-toggle.bottom-left {
+        bottom: 15px;
+        left: 15px;
+    }
+    
+    .explainer-toggle.top-right {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .explainer-toggle.top-left {
+        top: 15px;
+        left: 15px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .explainer-toggle {
+        border: 2px solid currentColor;
+    }
+    
+    .explainer-toggle:focus {
+        outline: 3px solid #0066CC;
+        outline-offset: 3px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .explainer-toggle {
+        transition: background-color 0.2s ease;
+        will-change: background-color;
+    }
+    
+    .explainer-toggle:hover {
+        transform: none;
+    }
+    
+    .explainer-toggle:active {
+        transform: none;
+    }
+}
+
+/* =============================================================================
+   Text Selection Highlighting
+   ============================================================================= */
+
+.explainer-selection-highlight {
+    background-color: rgba(255, 255, 0, 0.3) !important;
+    border-radius: 2px;
+    transition: background-color 0.2s ease;
+}
+
+.explainer-selection-highlight.processing {
+    background-color: rgba(0, 115, 170, 0.3) !important;
+}
+
+/* =============================================================================
+   Tooltip Base Styles
+   ============================================================================= */
+
+.explainer-tooltip {
+    position: absolute;
+    z-index: var(--explainer-z-index-tooltip);
+    
+    /* Box styling - uses admin color settings */
+    background: var(--explainer-tooltip-bg-color, #333);
+    color: var(--explainer-tooltip-text-color, white);
+    border-radius: var(--explainer-border-radius);
+    padding: 12px 16px;
+    max-width: 300px;
+    min-width: 200px;
+    
+    /* Typography - use site's paragraph font */
+    font-size: 14px;
+    font-family: var(--explainer-site-font, inherit);
+    line-height: 1.4;
+    
+    /* Effects */
+    box-shadow: var(--explainer-box-shadow);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    
+    /* Pointer events */
+    pointer-events: auto;
+    
+    /* Touch-friendly */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Better mobile interaction */
+    -webkit-touch-callout: none;
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    
+    /* Accessibility */
+    role: tooltip;
+}
+
+.explainer-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.explainer-tooltip.hidden {
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+}
+
+/* Tooltip header */
+.explainer-tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.explainer-tooltip-title {
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+.explainer-tooltip-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.explainer-tooltip-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Tooltip content */
+.explainer-tooltip-content {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Tooltip footer */
+.explainer-tooltip-footer {
+    margin-top: 12px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 11px;
+    line-height: 1.3;
+    opacity: 0.7;
+}
+
+.explainer-disclaimer,
+.explainer-provider {
+    margin: 2px 0;
+    font-style: italic;
+    color: var(--explainer-tooltip-footer-color, rgba(255, 255, 255, 0.8));
+}
+
+.explainer-provider {
+    font-size: 10px;
+}
+
+/* Loading state */
+.explainer-tooltip.loading .explainer-tooltip-content {
+    opacity: 0.7;
+}
+
+.explainer-tooltip.loading::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error state */
+.explainer-tooltip.error {
+    background: var(--explainer-error-color);
+}
+
+.explainer-tooltip.error .explainer-tooltip-content {
+    color: white;
+}
+
+/* Success state */
+.explainer-tooltip.success {
+    background: var(--explainer-success-color);
+}
+
+/* Tooltip arrow - uses admin color settings */
+.explainer-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--explainer-tooltip-bg-color, #333);
+}
+
+.explainer-tooltip.error::before {
+    border-bottom-color: var(--explainer-error-color);
+}
+
+.explainer-tooltip.success::before {
+    border-bottom-color: var(--explainer-success-color);
+}
+
+/* Position tooltip below selection */
+.explainer-tooltip.below::before {
+    top: -8px;
+    border-top: none;
+    border-bottom: 8px solid #333;
+}
+
+/* Position tooltip above selection */
+.explainer-tooltip.above {
+    transform: translateY(-10px);
+}
+
+.explainer-tooltip.above.visible {
+    transform: translateY(0);
+}
+
+.explainer-tooltip.above::before {
+    top: auto;
+    bottom: -8px;
+    border-bottom: none;
+    border-top: 8px solid #333;
+}
+
+.explainer-tooltip.above.error::before {
+    border-top-color: var(--explainer-error-color);
+}
+
+.explainer-tooltip.above.success::before {
+    border-top-color: var(--explainer-success-color);
+}
+
+/* Mobile tooltip adjustments */
+@media (max-width: 768px) {
+    .explainer-tooltip {
+        max-width: calc(100vw - 40px);
+        font-size: 13px;
+        padding: 10px 14px;
+    }
+    
+    .explainer-tooltip-title {
+        font-size: 12px;
+    }
+    
+    .explainer-tooltip-content {
+        font-size: 13px;
+    }
+}
+
+/* =============================================================================
+   Accessibility Enhancements
+   ============================================================================= */
+
+/* Screen reader only text */
+.explainer-sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Focus indicators for keyboard navigation */
+.explainer-selection-highlight:focus {
+    outline: 2px solid #0066CC;
+    outline-offset: 2px;
+}
+
+/* High contrast mode adjustments */
+@media (forced-colors: active) {
+    .explainer-toggle {
+        border: 2px solid ButtonText;
+        background: ButtonFace;
+        color: ButtonText;
+    }
+    
+    .explainer-toggle:hover,
+    .explainer-toggle:focus {
+        background: Highlight;
+        color: HighlightText;
+    }
+    
+    .explainer-tooltip {
+        background: Canvas;
+        color: CanvasText;
+        border: 2px solid CanvasText;
+    }
+    
+    .explainer-tooltip::before {
+        border-bottom-color: CanvasText;
+    }
+    
+    .explainer-tooltip.above::before {
+        border-top-color: CanvasText;
+    }
+}
+
+/* =============================================================================
+   Print Styles
+   ============================================================================= */
+
+@media print {
+    .explainer-toggle,
+    .explainer-tooltip,
+    .explainer-selection-highlight {
+        display: none !important;
+    }
+}
