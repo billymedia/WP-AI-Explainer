@@ -143,10 +143,6 @@ msgstr "Explanation"
 msgid "Error loading explanation"
 msgstr "Error loading explanation"
 
-#: templates/admin-settings.php:25
-msgid "WP AI Explainer Settings"
-msgstr "WP AI Explainer Settings"
-
 #: templates/admin-settings.php:35
 msgid "Basic"
 msgstr "Basic"
@@ -222,3 +218,39 @@ msgstr "Chinese (Simplified)"
 #: includes/class-admin.php:243
 msgid "Select the language for the plugin interface and AI explanations."
 msgstr "Select the language for the plugin interface and AI explanations."
+
+#: templates/admin-settings.php:430
+msgid "Tooltip Colors"
+msgstr "Tooltip Colours"
+
+#: templates/admin-settings.php:434
+msgid "Background Color:"
+msgstr "Background Colour:"
+
+#: templates/admin-settings.php:439
+msgid "Text Color:"
+msgstr "Text Colour:"
+
+#: templates/admin-settings.php:448
+msgid "Toggle Button Colors"
+msgstr "Toggle Button Colours"
+
+#: templates/admin-settings.php:452
+msgid "Enabled Color:"
+msgstr "Enabled Colour:"
+
+#: templates/admin-settings.php:457
+msgid "Disabled Color:"
+msgstr "Disabled Colour:"
+
+#: templates/admin-settings.php:462
+msgid "Button Text Color:"
+msgstr "Button Text Colour:"
+
+#: templates/admin-settings.php:491
+msgid "Footer Text Color"
+msgstr "Footer Text Colour"
+
+#: includes/class-accessibility-testing.php:108
+msgid "Color Contrast"
+msgstr "Colour Contrast"

@@ -121,11 +121,11 @@ class ExplainerPlugin {
      * Load plugin text domain for translations
      */
     public function load_plugin_textdomain() {
-        // Check for custom language setting
-        $selected_language = get_option('explainer_language', '');
+        // Check for custom language setting, fallback to WordPress locale
+        $selected_language = get_option('explainer_language', get_locale());
         
-        if (!empty($selected_language)) {
-            // Override locale for this plugin only
+        if (!empty($selected_language) && $selected_language !== get_locale()) {
+            // Override locale for this plugin only if different from WordPress default
             add_filter('plugin_locale', array($this, 'override_plugin_locale'), 10, 2);
         }
         
@@ -136,7 +136,7 @@ class ExplainerPlugin {
         );
         
         // Remove the filter after loading
-        if (!empty($selected_language)) {
+        if (!empty($selected_language) && $selected_language !== get_locale()) {
             remove_filter('plugin_locale', array($this, 'override_plugin_locale'), 10);
         }
     }
@@ -146,7 +146,7 @@ class ExplainerPlugin {
      */
     public function override_plugin_locale($locale, $domain) {
         if ($domain === 'explainer-plugin') {
-            $selected_language = get_option('explainer_language', '');
+            $selected_language = get_option('explainer_language', get_locale());
             if (!empty($selected_language)) {
                 return $selected_language;
             }
@@ -219,8 +219,8 @@ class ExplainerPlugin {
      * Get localized strings for frontend
      */
     public function get_localized_strings() {
-        // Get selected language
-        $selected_language = get_option('explainer_language', 'en_GB');
+        // Get selected language, fallback to WordPress locale
+        $selected_language = get_option('explainer_language', get_locale());
         
         // Define localized strings
         $strings = array(
