@@ -52,7 +52,10 @@
                                 loading: 'Loading...',
                                 error: 'Error',
                                 disclaimer: 'AI-generated content may not always be accurate',
-                                powered_by: 'Powered by'
+                                powered_by: 'Powered by',
+                                failed_to_get_explanation: 'Failed to get explanation',
+                                connection_error: 'Connection error. Please try again.',
+                                loading_explanation: 'Loading explanation...'
                             };
                             resolve(localizedStrings);
                         }
@@ -63,7 +66,10 @@
                             loading: 'Loading...',
                             error: 'Error',
                             disclaimer: 'AI-generated content may not always be accurate',
-                            powered_by: 'Powered by'
+                            powered_by: 'Powered by',
+                            failed_to_get_explanation: 'Failed to get explanation',
+                            connection_error: 'Connection error. Please try again.',
+                            loading_explanation: 'Loading explanation...'
                         };
                         resolve(localizedStrings);
                     }

@@ -37,7 +37,8 @@
         debounceTimer: null,
         throttleTimer: null,
         cache: new Map(),
-        observers: []
+        observers: [],
+        localizedStrings: null
     };
     
     // DOM elements
@@ -122,6 +123,9 @@
         
         // Load settings from localized data
         loadSettings();
+        
+        // Load localized strings
+        loadLocalizedStrings();
         
         // Validate and enhance color contrast
         validateColorContrast();
@@ -223,6 +227,106 @@
             config.apiProvider = 'openai';
         }
         debugLog('Final config:', config);
+    }
+    
+    /**
+     * Load localized strings from server
+     */
+    function loadLocalizedStrings() {
+        debugLog('Loading localized strings...');
+        
+        if (!explainerAjax || !explainerAjax.ajaxurl) {
+            debugLog('No AJAX URL available, using default strings');
+            state.localizedStrings = {
+                'explanation': 'Explanation',
+                'loading': 'Loading...',
+                'error': 'Error',
+                'disclaimer': 'AI-generated content may not always be accurate',
+                'powered_by': 'Powered by',
+                'failed_to_get_explanation': 'Failed to get explanation',
+                'connection_error': 'Connection error. Please try again.',
+                'loading_explanation': 'Loading explanation...',
+                'selection_too_short': 'Selection too short (minimum %d characters)',
+                'selection_too_long': 'Selection too long (maximum %d characters)', 
+                'selection_word_count': 'Selection must be between %d and %d words',
+                'ai_explainer_enabled': 'AI Explainer enabled. Select text to get explanations.',
+                'ai_explainer_disabled': 'AI Explainer disabled.'
+            };
+            return;
+        }
+        
+        // Fetch localized strings via AJAX
+        fetch(explainerAjax.ajaxurl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'explainer_get_localized_strings',
+                nonce: explainerAjax.nonce
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data.strings) {
+                state.localizedStrings = data.data.strings;
+                debugLog('Localized strings loaded:', state.localizedStrings);
+            } else {
+                debugLog('Failed to load localized strings, using defaults');
+                state.localizedStrings = {
+                    'explanation': 'Explanation',
+                    'loading': 'Loading...',
+                    'error': 'Error',
+                    'disclaimer': 'AI-generated content may not always be accurate',
+                    'powered_by': 'Powered by',
+                    'failed_to_get_explanation': 'Failed to get explanation',
+                    'connection_error': 'Connection error. Please try again.',
+                    'loading_explanation': 'Loading explanation...',
+                    'selection_too_short': 'Selection too short (minimum %d characters)',
+                    'selection_too_long': 'Selection too long (maximum %d characters)', 
+                    'selection_word_count': 'Selection must be between %d and %d words',
+                    'ai_explainer_enabled': 'AI Explainer enabled. Select text to get explanations.',
+                    'ai_explainer_disabled': 'AI Explainer disabled.'
+                };
+            }
+        })
+        .catch(error => {
+            debugLog('Error loading localized strings:', error);
+            state.localizedStrings = {
+                'explanation': 'Explanation',
+                'loading': 'Loading...',
+                'error': 'Error',
+                'disclaimer': 'AI-generated content may not always be accurate',
+                'powered_by': 'Powered by',
+                'failed_to_get_explanation': 'Failed to get explanation',
+                'connection_error': 'Connection error. Please try again.',
+                'loading_explanation': 'Loading explanation...',
+                'selection_too_short': 'Selection too short (minimum %d characters)',
+                'selection_too_long': 'Selection too long (maximum %d characters)', 
+                'selection_word_count': 'Selection must be between %d and %d words',
+                'ai_explainer_enabled': 'AI Explainer enabled. Select text to get explanations.',
+                'ai_explainer_disabled': 'AI Explainer disabled.'
+            };
+        });
+    }
+    
+    /**
+     * Get localized string
+     */
+    function getLocalizedString(key, ...args) {
+        let string = state.localizedStrings && state.localizedStrings[key] 
+            ? state.localizedStrings[key] 
+            : key;
+        
+        // Handle sprintf-style formatting
+        if (args.length > 0) {
+            let i = 0;
+            string = string.replace(/%d/g, function() {
+                return args[i++] || '';
+            });
+        }
+        
+        return string;
     }
     
     /**
@@ -608,14 +712,14 @@
         // Check minimum length
         if (text.length < config.minSelectionLength) {
             debugLog('Validation failed - too short');
-            showValidationMessage(`Selection too short (minimum ${config.minSelectionLength} characters)`);
+            showValidationMessage(getLocalizedString('selection_too_short', config.minSelectionLength));
             return false;
         }
         
         // Check maximum length
         if (text.length > config.maxSelectionLength) {
             debugLog('Validation failed - too long');
-            showValidationMessage(`Selection too long (maximum ${config.maxSelectionLength} characters)`);
+            showValidationMessage(getLocalizedString('selection_too_long', config.maxSelectionLength));
             return false;
         }
         
@@ -624,7 +728,7 @@
         debugLog('Word count:', wordCount);
         if (wordCount < config.minWords || wordCount > config.maxWords) {
             debugLog('Validation failed - word count out of range');
-            showValidationMessage(`Selection must be between ${config.minWords} and ${config.maxWords} words`);
+            showValidationMessage(getLocalizedString('selection_word_count', config.minWords, config.maxWords));
             return false;
         }
         
@@ -837,7 +941,7 @@
                 showExplanation(data.data.explanation, data.data.provider);
             } else {
                 // Handle different error response formats
-                let errorMessage = 'Failed to get explanation';
+                let errorMessage = getLocalizedString('failed_to_get_explanation');
                 if (data.data && data.data.message) {
                     errorMessage = data.data.message;
                 } else if (data.message) {
@@ -853,7 +957,7 @@
             state.isProcessing = false;
             debugLog('API request failed', { error: error.message || error });
             console.error('API request error:', error);
-            showError('Connection error. Please try again.');
+            showError(getLocalizedString('connection_error'));
         });
     }
     
@@ -862,7 +966,7 @@
      */
     function showLoadingState() {
         if (window.ExplainerPlugin.showTooltip) {
-            window.ExplainerPlugin.showTooltip('Loading explanation...', state.selectionPosition, 'loading');
+            window.ExplainerPlugin.showTooltip(getLocalizedString('loading_explanation'), state.selectionPosition, 'loading');
         }
     }
     
@@ -982,8 +1086,8 @@
         
         // Announce state change to screen reader
         announceToScreenReader(config.enabled ? 
-            'AI Explainer enabled. Select text to get explanations.' : 
-            'AI Explainer disabled.'
+            getLocalizedString('ai_explainer_enabled') : 
+            getLocalizedString('ai_explainer_disabled')
         );
         
         debugLog('togglePlugin completed, final state:', config.enabled);

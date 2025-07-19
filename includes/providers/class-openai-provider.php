@@ -232,6 +232,103 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
     }
     
     /**
+     * Check if response indicates quota exceeded for OpenAI
+     * 
+     * @param int $response_code HTTP response code
+     * @param array $data Parsed response data
+     * @return bool True if quota exceeded
+     */
+    protected function is_quota_exceeded_error($response_code, $data) {
+        // Check for OpenAI quota exceeded error conditions
+        
+        // HTTP 403 typically indicates quota exceeded
+        if ($response_code === 403) {
+            return true;
+        }
+        
+        // Check for specific error types in the response
+        if (isset($data['error'])) {
+            $error = $data['error'];
+            $error_type = $error['type'] ?? '';
+            $error_code = $error['code'] ?? '';
+            $error_message = strtolower($error['message'] ?? '');
+            
+            // OpenAI error types that indicate quota/billing issues
+            $quota_error_types = array(
+                'insufficient_quota',
+                'quota_exceeded',
+                'billing_not_active',
+                'invalid_payment_method',
+                'payment_required'
+            );
+            
+            if (in_array($error_type, $quota_error_types, true)) {
+                return true;
+            }
+            
+            // Check for quota-related error codes
+            $quota_error_codes = array(
+                'insufficient_quota',
+                'quota_exceeded',
+                'billing_not_active'
+            );
+            
+            if (in_array($error_code, $quota_error_codes, true)) {
+                return true;
+            }
+            
+            // Check for quota-related keywords in error message
+            $quota_keywords = array(
+                'quota',
+                'billing',
+                'payment',
+                'credit',
+                'exceeded',
+                'insufficient',
+                'limit',
+                'usage'
+            );
+            
+            foreach ($quota_keywords as $keyword) {
+                if (strpos($error_message, $keyword) !== false) {
+                    // Additional check to ensure it's not just a rate limit
+                    if (strpos($error_message, 'rate') === false || 
+                        strpos($error_message, 'quota') !== false ||
+                        strpos($error_message, 'billing') !== false) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Get OpenAI-specific quota exceeded message
+     * 
+     * @param array $data Parsed response data
+     * @return string User-friendly error message
+     */
+    protected function get_quota_exceeded_message($data) {
+        // Try to get specific error message from OpenAI
+        $api_message = '';
+        if (isset($data['error']['message'])) {
+            $api_message = $data['error']['message'];
+        }
+        
+        $base_message = __('OpenAI API usage limit exceeded. The plugin has been automatically disabled to prevent further charges.', 'explainer-plugin');
+        
+        if (!empty($api_message)) {
+            $base_message .= ' ' . sprintf(__('OpenAI error: %s', 'explainer-plugin'), $api_message);
+        }
+        
+        $base_message .= ' ' . __('Please check your OpenAI account billing and usage limits, then manually re-enable the plugin when ready.', 'explainer-plugin');
+        
+        return $base_message;
+    }
+    
+    /**
      * Perform test request for OpenAI
      * 
      * @param string $api_key API key

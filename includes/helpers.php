@@ -576,3 +576,187 @@ function explainer_verify_secure_nonce($nonce, $action = 'explainer_nonce') {
     
     return true;
 }
+
+/**
+ * Automatically disable the plugin due to quota exceeded
+ *
+ * @param string $reason The reason for disabling (e.g., quota exceeded message)
+ * @param string $provider The AI provider that caused the issue
+ * @return bool True if plugin was disabled successfully
+ */
+function explainer_auto_disable_plugin($reason, $provider = '') {
+    // Disable the plugin
+    update_option('explainer_enabled', false);
+    
+    // Store the reason for disabling
+    update_option('explainer_disabled_reason', sanitize_textarea_field($reason));
+    
+    // Store the provider that caused the issue
+    if (!empty($provider)) {
+        update_option('explainer_disabled_provider', sanitize_text_field($provider));
+    }
+    
+    // Store timestamp
+    update_option('explainer_disabled_timestamp', current_time('mysql'));
+    
+    // Track how many times this has happened
+    $count = (int) get_option('explainer_usage_exceeded_count', 0);
+    update_option('explainer_usage_exceeded_count', $count + 1);
+    
+    // Log the event
+    error_log(sprintf(
+        'Explainer Plugin: Auto-disabled due to quota exceeded. Provider: %s, Reason: %s',
+        $provider,
+        $reason
+    ));
+    
+    // Set a flag to show admin notice
+    update_option('explainer_show_usage_notice', true);
+    
+    return true;
+}
+
+/**
+ * Check if the plugin is currently auto-disabled
+ *
+ * @return bool True if plugin is auto-disabled
+ */
+function explainer_is_auto_disabled() {
+    // Check if plugin is enabled
+    if (get_option('explainer_enabled', true)) {
+        return false;
+    }
+    
+    // Check if there's a disable reason (indicates auto-disable vs manual disable)
+    $reason = get_option('explainer_disabled_reason', '');
+    return !empty($reason);
+}
+
+/**
+ * Get the reason why the plugin was auto-disabled
+ *
+ * @return string The disable reason or empty string if not auto-disabled
+ */
+function explainer_get_disable_reason() {
+    if (!explainer_is_auto_disabled()) {
+        return '';
+    }
+    
+    return get_option('explainer_disabled_reason', '');
+}
+
+/**
+ * Get the provider that caused the auto-disable
+ *
+ * @return string The provider name or empty string
+ */
+function explainer_get_disable_provider() {
+    if (!explainer_is_auto_disabled()) {
+        return '';
+    }
+    
+    return get_option('explainer_disabled_provider', '');
+}
+
+/**
+ * Get the timestamp when the plugin was auto-disabled
+ *
+ * @return string MySQL timestamp or empty string
+ */
+function explainer_get_disable_timestamp() {
+    if (!explainer_is_auto_disabled()) {
+        return '';
+    }
+    
+    return get_option('explainer_disabled_timestamp', '');
+}
+
+/**
+ * Get human-readable time since plugin was disabled
+ *
+ * @return string Human-readable time difference
+ */
+function explainer_get_time_since_disabled() {
+    $timestamp = explainer_get_disable_timestamp();
+    if (empty($timestamp)) {
+        return '';
+    }
+    
+    $disabled_time = strtotime($timestamp);
+    $current_time = current_time('timestamp');
+    $time_diff = $current_time - $disabled_time;
+    
+    return human_time_diff($disabled_time, $current_time) . ' ' . __('ago', 'explainer-plugin');
+}
+
+/**
+ * Manually re-enable the plugin after auto-disable
+ *
+ * @return bool True if plugin was re-enabled successfully
+ */
+function explainer_reenable_plugin() {
+    // Check if user has permission
+    if (!current_user_can('manage_options')) {
+        return false;
+    }
+    
+    // Enable the plugin
+    update_option('explainer_enabled', true);
+    
+    // Clear disable-related options
+    delete_option('explainer_disabled_reason');
+    delete_option('explainer_disabled_provider');
+    delete_option('explainer_disabled_timestamp');
+    delete_option('explainer_show_usage_notice');
+    
+    // Log the re-enable event
+    error_log('Explainer Plugin: Manually re-enabled by user: ' . get_current_user_id());
+    
+    return true;
+}
+
+/**
+ * Check if we should show the usage exceeded admin notice
+ *
+ * @return bool True if notice should be shown
+ */
+function explainer_should_show_usage_notice() {
+    // Only show to admins
+    if (!current_user_can('manage_options')) {
+        return false;
+    }
+    
+    // Check if plugin is auto-disabled and notice flag is set
+    return explainer_is_auto_disabled() && get_option('explainer_show_usage_notice', false);
+}
+
+/**
+ * Dismiss the usage exceeded admin notice
+ *
+ * @return bool True if notice was dismissed
+ */
+function explainer_dismiss_usage_notice() {
+    // Check if user has permission
+    if (!current_user_can('manage_options')) {
+        return false;
+    }
+    
+    delete_option('explainer_show_usage_notice');
+    return true;
+}
+
+/**
+ * Get usage exceeded statistics
+ *
+ * @return array Statistics about usage exceeded events
+ */
+function explainer_get_usage_exceeded_stats() {
+    return array(
+        'count' => (int) get_option('explainer_usage_exceeded_count', 0),
+        'is_disabled' => explainer_is_auto_disabled(),
+        'reason' => explainer_get_disable_reason(),
+        'provider' => explainer_get_disable_provider(),
+        'timestamp' => explainer_get_disable_timestamp(),
+        'time_since' => explainer_get_time_since_disabled()
+    );
+}

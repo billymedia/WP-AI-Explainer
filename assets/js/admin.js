@@ -53,6 +53,9 @@
         // Reset settings button
         $('#reset-settings').on('click', resetSettings);
         
+        // Re-enable plugin button (for auto-disabled state)
+        $('.explainer-reenable-btn-settings').on('click', reEnablePlugin);
+        
         
         // Prompt functionality
         $('#reset-prompt-default').on('click', resetPromptToDefault);
@@ -820,6 +823,50 @@
             feedback.html('').removeClass('error').addClass('success');
             $(this).removeClass('error');
         }
+    }
+    
+    /**
+     * Handle re-enable plugin button in settings page
+     */
+    function reEnablePlugin(e) {
+        e.preventDefault();
+        
+        var button = $(this);
+        var nonce = button.data('nonce');
+        var originalText = button.text();
+        
+        if (!confirm('Are you sure you want to re-enable the AI Explainer plugin? Make sure you have resolved the usage limit issues first.')) {
+            return;
+        }
+        
+        // Show loading state
+        button.prop('disabled', true).text('Re-enabling...');
+        
+        // Clear previous messages
+        $('.explainer-status-message').remove();
+        
+        $.post(ajaxurl, {
+            action: 'explainer_reenable_plugin',
+            nonce: nonce
+        })
+        .done(function(response) {
+            if (response.success) {
+                // Show success message
+                button.closest('.explainer-status-disabled').before('<div class="explainer-status-message notice notice-success"><p>Plugin has been successfully re-enabled.</p></div>');
+                
+                // Reload page after a short delay to reflect enabled state
+                setTimeout(function() {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                alert('Error re-enabling plugin: ' + (response.data.message || 'Unknown error'));
+                button.prop('disabled', false).text(originalText);
+            }
+        })
+        .fail(function() {
+            alert('Failed to re-enable plugin. Please try again.');
+            button.prop('disabled', false).text(originalText);
+        });
     }
     
 })(jQuery);

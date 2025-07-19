@@ -38,13 +38,60 @@ if (!defined('ABSPATH')) {
                 <tr>
                     <th scope="row"><?php echo esc_html__('Plugin Status', 'explainer-plugin'); ?></th>
                     <td>
-                        <fieldset>
-                            <label for="explainer_enabled">
-                                <input type="checkbox" name="explainer_enabled" id="explainer_enabled" value="1" <?php checked(get_option('explainer_enabled', true), true); ?> />
-                                <?php echo esc_html__('Enable AI Explainer plugin', 'explainer-plugin'); ?>
-                            </label>
-                            <p class="description"><?php echo esc_html__('Enable or disable the plugin functionality site-wide.', 'explainer-plugin'); ?></p>
-                        </fieldset>
+                        <?php 
+                        $is_auto_disabled = explainer_is_auto_disabled();
+                        $is_enabled = get_option('explainer_enabled', true);
+                        ?>
+                        
+                        <?php if ($is_auto_disabled): ?>
+                            <!-- Auto-disabled state -->
+                            <div class="explainer-status-disabled">
+                                <p><span class="dashicons dashicons-warning" style="color: #dc3232;"></span> 
+                                <strong style="color: #dc3232;"><?php echo esc_html__('Plugin Automatically Disabled', 'explainer-plugin'); ?></strong></p>
+                                
+                                <?php 
+                                $stats = explainer_get_usage_exceeded_stats();
+                                if (!empty($stats['reason'])): ?>
+                                    <p><strong><?php echo esc_html__('Reason:', 'explainer-plugin'); ?></strong> <?php echo esc_html($stats['reason']); ?></p>
+                                <?php endif; ?>
+                                
+                                <?php if (!empty($stats['provider'])): ?>
+                                    <p><strong><?php echo esc_html__('Provider:', 'explainer-plugin'); ?></strong> <?php echo esc_html($stats['provider']); ?></p>
+                                <?php endif; ?>
+                                
+                                <?php if (!empty($stats['time_since'])): ?>
+                                    <p><strong><?php echo esc_html__('Disabled:', 'explainer-plugin'); ?></strong> <?php echo esc_html($stats['time_since']); ?></p>
+                                <?php endif; ?>
+                                
+                                <div class="explainer-reenable-section" style="margin-top: 15px; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 4px;">
+                                    <h4><?php echo esc_html__('Re-enable Plugin', 'explainer-plugin'); ?></h4>
+                                    <p><?php echo esc_html__('Before re-enabling, please ensure you have resolved the API usage limit issues with your provider.', 'explainer-plugin'); ?></p>
+                                    <button type="button" class="button button-primary explainer-reenable-btn-settings" 
+                                            data-nonce="<?php echo wp_create_nonce('explainer_reenable_plugin'); ?>">
+                                        <?php echo esc_html__('Re-enable Plugin Now', 'explainer-plugin'); ?>
+                                    </button>
+                                    <p class="description" style="margin-top: 10px;">
+                                        <?php echo esc_html__('This will clear the auto-disable flag and restore normal plugin functionality.', 'explainer-plugin'); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <!-- Normal enabled/disabled state -->
+                            <fieldset>
+                                <label for="explainer_enabled">
+                                    <input type="checkbox" name="explainer_enabled" id="explainer_enabled" value="1" <?php checked($is_enabled, true); ?> />
+                                    <?php echo esc_html__('Enable AI Explainer plugin', 'explainer-plugin'); ?>
+                                </label>
+                                <p class="description"><?php echo esc_html__('Enable or disable the plugin functionality site-wide.', 'explainer-plugin'); ?></p>
+                                
+                                <?php if (!$is_enabled): ?>
+                                    <p style="color: #d63638; margin-top: 8px;">
+                                        <span class="dashicons dashicons-info" style="color: #d63638;"></span>
+                                        <?php echo esc_html__('Plugin is currently disabled manually.', 'explainer-plugin'); ?>
+                                    </p>
+                                <?php endif; ?>
+                            </fieldset>
+                        <?php endif; ?>
                     </td>
                 </tr>
                 

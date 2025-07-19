@@ -30,6 +30,13 @@ class ExplainerPlugin_Admin {
         
         // Hook to process custom prompt before saving
         add_filter('pre_update_option_explainer_custom_prompt', array($this, 'process_custom_prompt_save'), 10, 2);
+        
+        // Hook for admin notices
+        add_action('admin_notices', array($this, 'display_usage_exceeded_notice'));
+        
+        // AJAX handlers for usage exceeded notice actions
+        add_action('wp_ajax_explainer_reenable_plugin', array($this, 'handle_reenable_plugin'));
+        add_action('wp_ajax_explainer_dismiss_usage_notice', array($this, 'handle_dismiss_usage_notice'));
     }
     
     /**
@@ -760,5 +767,221 @@ class ExplainerPlugin_Admin {
         }
         
         return $value;
+    }
+    
+    /**
+     * Display usage exceeded admin notice
+     */
+    public function display_usage_exceeded_notice() {
+        // Check if we should show the notice
+        if (!explainer_should_show_usage_notice()) {
+            return;
+        }
+        
+        // Get disable information
+        $stats = explainer_get_usage_exceeded_stats();
+        $reason = $stats['reason'];
+        $provider = $stats['provider'];
+        $time_since = $stats['time_since'];
+        
+        // Create the notice
+        $notice_class = 'notice notice-error is-dismissible explainer-usage-notice';
+        $notice_id = 'explainer-usage-exceeded-notice';
+        
+        ?>
+        <div id="<?php echo esc_attr($notice_id); ?>" class="<?php echo esc_attr($notice_class); ?>">
+            <div class="explainer-notice-content">
+                <h3><?php _e('AI Explainer Plugin Automatically Disabled', 'explainer-plugin'); ?></h3>
+                <p><strong><?php _e('The plugin has been automatically disabled due to API usage limits being exceeded.', 'explainer-plugin'); ?></strong></p>
+                
+                <?php if (!empty($reason)): ?>
+                    <p><strong><?php _e('Reason:', 'explainer-plugin'); ?></strong> <?php echo esc_html($reason); ?></p>
+                <?php endif; ?>
+                
+                <?php if (!empty($provider)): ?>
+                    <p><strong><?php _e('Provider:', 'explainer-plugin'); ?></strong> <?php echo esc_html($provider); ?></p>
+                <?php endif; ?>
+                
+                <?php if (!empty($time_since)): ?>
+                    <p><strong><?php _e('Disabled:', 'explainer-plugin'); ?></strong> <?php echo esc_html($time_since); ?></p>
+                <?php endif; ?>
+                
+                <p><?php _e('Please check your AI provider account billing and usage limits. Once resolved, you can manually re-enable the plugin below.', 'explainer-plugin'); ?></p>
+                
+                <div class="explainer-notice-actions">
+                    <button type="button" class="button button-primary explainer-reenable-btn" data-nonce="<?php echo wp_create_nonce('explainer_reenable_plugin'); ?>">
+                        <?php _e('Re-enable Plugin', 'explainer-plugin'); ?>
+                    </button>
+                    <button type="button" class="button explainer-dismiss-notice-btn" data-nonce="<?php echo wp_create_nonce('explainer_dismiss_notice'); ?>">
+                        <?php _e('Dismiss Notice (Keep Plugin Disabled)', 'explainer-plugin'); ?>
+                    </button>
+                    <a href="<?php echo admin_url('options-general.php?page=explainer-settings'); ?>" class="button">
+                        <?php _e('Go to Plugin Settings', 'explainer-plugin'); ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <style>
+        .explainer-usage-notice {
+            border-left-color: #dc3232 !important;
+            background-color: #fff2f2;
+        }
+        .explainer-notice-content h3 {
+            margin: 0 0 10px 0;
+            color: #dc3232;
+        }
+        .explainer-notice-content p {
+            margin: 8px 0;
+        }
+        .explainer-notice-actions {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        .explainer-notice-actions .button {
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+        .explainer-reenable-btn:disabled,
+        .explainer-dismiss-notice-btn:disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        </style>
+        
+        <script>
+        jQuery(document).ready(function($) {
+            // Handle re-enable button
+            $('.explainer-reenable-btn').on('click', function(e) {
+                e.preventDefault();
+                var button = $(this);
+                var nonce = button.data('nonce');
+                var originalText = button.text();
+                
+                if (!confirm('<?php echo esc_js(__('Are you sure you want to re-enable the AI Explainer plugin? Make sure you have resolved the usage limit issues first.', 'explainer-plugin')); ?>')) {
+                    return;
+                }
+                
+                button.prop('disabled', true).text('<?php echo esc_js(__('Re-enabling...', 'explainer-plugin')); ?>');
+                
+                $.post(ajaxurl, {
+                    action: 'explainer_reenable_plugin',
+                    nonce: nonce
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        $('#explainer-usage-exceeded-notice').fadeOut(function() {
+                            $(this).remove();
+                        });
+                        // Show success message
+                        $('body').prepend('<div class="notice notice-success is-dismissible"><p><?php echo esc_js(__('Plugin has been successfully re-enabled.', 'explainer-plugin')); ?></p></div>');
+                        // Reload page after a short delay to reflect enabled state
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 2000);
+                    } else {
+                        alert('<?php echo esc_js(__('Error re-enabling plugin:', 'explainer-plugin')); ?> ' + (response.data.message || '<?php echo esc_js(__('Unknown error', 'explainer-plugin')); ?>'));
+                        button.prop('disabled', false).text(originalText);
+                    }
+                })
+                .fail(function() {
+                    alert('<?php echo esc_js(__('Failed to re-enable plugin. Please try again.', 'explainer-plugin')); ?>');
+                    button.prop('disabled', false).text(originalText);
+                });
+            });
+            
+            // Handle dismiss notice button
+            $('.explainer-dismiss-notice-btn').on('click', function(e) {
+                e.preventDefault();
+                var button = $(this);
+                var nonce = button.data('nonce');
+                var originalText = button.text();
+                
+                button.prop('disabled', true).text('<?php echo esc_js(__('Dismissing...', 'explainer-plugin')); ?>');
+                
+                $.post(ajaxurl, {
+                    action: 'explainer_dismiss_usage_notice',
+                    nonce: nonce
+                })
+                .done(function(response) {
+                    if (response.success) {
+                        $('#explainer-usage-exceeded-notice').fadeOut(function() {
+                            $(this).remove();
+                        });
+                    } else {
+                        alert('<?php echo esc_js(__('Error dismissing notice:', 'explainer-plugin')); ?> ' + (response.data.message || '<?php echo esc_js(__('Unknown error', 'explainer-plugin')); ?>'));
+                        button.prop('disabled', false).text(originalText);
+                    }
+                })
+                .fail(function() {
+                    alert('<?php echo esc_js(__('Failed to dismiss notice. Please try again.', 'explainer-plugin')); ?>');
+                    button.prop('disabled', false).text(originalText);
+                });
+            });
+        });
+        </script>
+        <?php
+    }
+    
+    /**
+     * Handle AJAX request to re-enable the plugin
+     */
+    public function handle_reenable_plugin() {
+        // Verify nonce
+        if (!wp_verify_nonce($_POST['nonce'] ?? '', 'explainer_reenable_plugin')) {
+            wp_send_json_error(array('message' => __('Invalid nonce.', 'explainer-plugin')));
+        }
+        
+        // Check user capability
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => __('Insufficient permissions.', 'explainer-plugin')));
+        }
+        
+        // Check if plugin is actually auto-disabled
+        if (!explainer_is_auto_disabled()) {
+            wp_send_json_error(array('message' => __('Plugin is not currently auto-disabled.', 'explainer-plugin')));
+        }
+        
+        // Re-enable the plugin
+        $success = explainer_reenable_plugin();
+        
+        if ($success) {
+            wp_send_json_success(array(
+                'message' => __('Plugin has been successfully re-enabled.', 'explainer-plugin')
+            ));
+        } else {
+            wp_send_json_error(array(
+                'message' => __('Failed to re-enable plugin.', 'explainer-plugin')
+            ));
+        }
+    }
+    
+    /**
+     * Handle AJAX request to dismiss usage exceeded notice
+     */
+    public function handle_dismiss_usage_notice() {
+        // Verify nonce
+        if (!wp_verify_nonce($_POST['nonce'] ?? '', 'explainer_dismiss_notice')) {
+            wp_send_json_error(array('message' => __('Invalid nonce.', 'explainer-plugin')));
+        }
+        
+        // Check user capability
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => __('Insufficient permissions.', 'explainer-plugin')));
+        }
+        
+        // Dismiss the notice
+        $success = explainer_dismiss_usage_notice();
+        
+        if ($success) {
+            wp_send_json_success(array(
+                'message' => __('Notice dismissed successfully.', 'explainer-plugin')
+            ));
+        } else {
+            wp_send_json_error(array(
+                'message' => __('Failed to dismiss notice.', 'explainer-plugin')
+            ));
+        }
     }
 }

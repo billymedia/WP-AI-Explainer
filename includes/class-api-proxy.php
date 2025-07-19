@@ -77,6 +77,19 @@ class ExplainerPlugin_API_Proxy {
             wp_send_json_error(array('message' => __('API key not configured. Please check your settings.', 'explainer-plugin')));
         }
         
+        // TESTING: Simulate quota exceeded error (REMOVE AFTER TESTING)
+        if (isset($_POST['text']) && strpos($_POST['text'], 'test quota') !== false) {
+            error_log('ExplainerPlugin: Simulating quota exceeded error for testing');
+            $test_result = array(
+                'success' => false,
+                'error' => 'You exceeded your current quota. Please check your plan and billing details.',
+                'disable_plugin' => true,
+                'error_type' => 'quota_exceeded'
+            );
+            $this->handle_quota_exceeded_error($test_result);
+            wp_send_json_error($test_result);
+        }
+        
         // Check cache first
         $cached_explanation = $this->get_cached_explanation($selected_text);
         if ($cached_explanation) {
@@ -120,9 +133,16 @@ class ExplainerPlugin_API_Proxy {
                 'provider' => get_option('explainer_api_provider', 'openai')
             ));
         } else {
+            // Check if this is a quota exceeded error that should disable the plugin
+            if (isset($result['disable_plugin']) && $result['disable_plugin'] === true) {
+                $this->handle_quota_exceeded_error($result);
+            }
+            
             // Debug logging
             $this->debug_log('API Request failed', array(
                 'error' => $result['error'],
+                'error_type' => $result['error_type'] ?? 'unknown',
+                'disable_plugin' => $result['disable_plugin'] ?? false,
                 'response_time' => round($response_time, 3)
             ));
             
@@ -653,6 +673,42 @@ class ExplainerPlugin_API_Proxy {
         return true;
     }
     
+    
+    /**
+     * Handle quota exceeded error and auto-disable plugin
+     * 
+     * @param array $result API result containing quota exceeded error
+     */
+    private function handle_quota_exceeded_error($result) {
+        // Get current provider name for logging
+        $provider = get_option('explainer_api_provider', 'openai');
+        $provider_name = $provider === 'openai' ? 'OpenAI' : 'Claude';
+        
+        // Get the error message
+        $error_message = $result['error'] ?? __('API usage limit exceeded.', 'explainer-plugin');
+        
+        // Auto-disable the plugin using helper function
+        $disabled = explainer_auto_disable_plugin($error_message, $provider_name);
+        
+        if ($disabled) {
+            // Additional logging for this critical event
+            $this->debug_log('Plugin auto-disabled due to quota exceeded', array(
+                'provider' => $provider_name,
+                'error_message' => $error_message,
+                'error_type' => $result['error_type'] ?? 'quota_exceeded',
+                'user_id' => get_current_user_id(),
+                'timestamp' => current_time('mysql')
+            ));
+            
+            // Log to PHP error log as well for server-level tracking
+            error_log(sprintf(
+                'CRITICAL: Explainer Plugin auto-disabled. Provider: %s, User: %d, Error: %s',
+                $provider_name,
+                get_current_user_id(),
+                $error_message
+            ));
+        }
+    }
     
     /**
      * Clear explanation cache

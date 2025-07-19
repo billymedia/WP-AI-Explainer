@@ -208,6 +208,12 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         
         $response_code = wp_remote_retrieve_response_code($response);
         
+        // Check for quota/billing issues first
+        $quota_error = $this->check_quota_exceeded($response);
+        if ($quota_error) {
+            return $quota_error;
+        }
+        
         if ($response_code !== 200) {
             return array(
                 'success' => false,
@@ -226,5 +232,60 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         }
         
         return null; // No common errors found
+    }
+    
+    /**
+     * Check if the API response indicates quota/billing exceeded
+     * 
+     * @param array $response WordPress HTTP response
+     * @return array|null Error array with disable_plugin flag or null if no quota error
+     */
+    protected function check_quota_exceeded($response) {
+        $response_code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        
+        // Parse response body for error details
+        $data = json_decode($body, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $data = array();
+        }
+        
+        // Check for provider-specific quota errors
+        if ($this->is_quota_exceeded_error($response_code, $data)) {
+            return array(
+                'success' => false,
+                'error' => $this->get_quota_exceeded_message($data),
+                'disable_plugin' => true,
+                'error_type' => 'quota_exceeded'
+            );
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Check if response indicates quota exceeded (provider-specific implementation)
+     * 
+     * @param int $response_code HTTP response code
+     * @param array $data Parsed response data
+     * @return bool True if quota exceeded
+     */
+    protected function is_quota_exceeded_error($response_code, $data) {
+        // Default implementation - providers should override this
+        return false;
+    }
+    
+    /**
+     * Get user-friendly message for quota exceeded error
+     * 
+     * @param array $data Parsed response data
+     * @return string User-friendly error message
+     */
+    protected function get_quota_exceeded_message($data) {
+        return sprintf(
+            __('API usage limit exceeded for %s. The plugin has been automatically disabled to prevent further charges. Please check your %s account billing and usage limits, then manually re-enable the plugin when ready.', 'explainer-plugin'),
+            $this->get_name(),
+            $this->get_name()
+        );
     }
 }
