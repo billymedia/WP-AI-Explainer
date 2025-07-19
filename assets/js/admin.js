@@ -60,6 +60,14 @@
         // Prompt functionality
         $('#reset-prompt-default').on('click', resetPromptToDefault);
         $('textarea[name="explainer_custom_prompt"]').on('input', validateCustomPrompt);
+        
+        // Blocked words functionality
+        $('#explainer_blocked_words').on('input', updateBlockedWordsCount);
+        $('#clear-blocked-words').on('click', clearBlockedWords);
+        $('#load-default-blocked-words').on('click', loadDefaultBlockedWords);
+        
+        // Initialize blocked words count
+        updateBlockedWordsCount();
     }
     
     /**
@@ -867,6 +875,74 @@
             alert('Failed to re-enable plugin. Please try again.');
             button.prop('disabled', false).text(originalText);
         });
+    }
+    
+    /**
+     * Update blocked words count
+     */
+    function updateBlockedWordsCount() {
+        var textarea = $('#explainer_blocked_words');
+        var text = textarea.val();
+        var words = text.split('\n').filter(function(word) {
+            return word.trim().length > 0;
+        });
+        var count = words.length;
+        
+        $('#blocked-words-count').text(count);
+        
+        // Show warning if approaching limit
+        if (count > 450) {
+            $('#blocked-words-count').css('color', '#dc3232').css('font-weight', 'bold');
+        } else if (count > 400) {
+            $('#blocked-words-count').css('color', '#dba617').css('font-weight', 'bold');
+        } else {
+            $('#blocked-words-count').css('color', '').css('font-weight', '');
+        }
+    }
+    
+    /**
+     * Clear all blocked words
+     */
+    function clearBlockedWords() {
+        if (confirm('Are you sure you want to clear all blocked words?')) {
+            $('#explainer_blocked_words').val('');
+            updateBlockedWordsCount();
+        }
+    }
+    
+    /**
+     * Load default blocked words
+     */
+    function loadDefaultBlockedWords() {
+        var defaultWords = [
+            'abuse',
+            'addiction',
+            'alcohol',
+            'attack',
+            'cannabis',
+            'cocaine',
+            'death',
+            'drug',
+            'gambling',
+            'hate',
+            'heroin',
+            'illegal',
+            'kill',
+            'murder',
+            'poison',
+            'porn',
+            'rape',
+            'sex',
+            'suicide',
+            'tobacco',
+            'violence',
+            'weapon'
+        ];
+        
+        if (confirm('This will replace your current blocked words list with common inappropriate words. Continue?')) {
+            $('#explainer_blocked_words').val(defaultWords.join('\n'));
+            updateBlockedWordsCount();
+        }
     }
     
 })(jQuery);

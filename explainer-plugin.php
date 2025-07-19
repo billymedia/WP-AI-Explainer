@@ -237,7 +237,8 @@ class ExplainerPlugin {
                 'selection_too_long' => 'Selection too long (maximum %d characters)',
                 'selection_word_count' => 'Selection must be between %d and %d words',
                 'ai_explainer_enabled' => 'AI Explainer enabled. Select text to get explanations.',
-                'ai_explainer_disabled' => 'AI Explainer disabled.'
+                'ai_explainer_disabled' => 'AI Explainer disabled.',
+                'blocked_word_found' => 'Your selection contains blocked content'
             ),
             'en_GB' => array(
                 'explanation' => 'Explanation',
@@ -252,7 +253,8 @@ class ExplainerPlugin {
                 'selection_too_long' => 'Selection too long (maximum %d characters)',
                 'selection_word_count' => 'Selection must be between %d and %d words',
                 'ai_explainer_enabled' => 'AI Explainer enabled. Select text to get explanations.',
-                'ai_explainer_disabled' => 'AI Explainer disabled.'
+                'ai_explainer_disabled' => 'AI Explainer disabled.',
+                'blocked_word_found' => 'Your selection contains blocked content'
             ),
             'es_ES' => array(
                 'explanation' => 'Explicación',
@@ -267,7 +269,8 @@ class ExplainerPlugin {
                 'selection_too_long' => 'Selección demasiado larga (máximo %d caracteres)',
                 'selection_word_count' => 'La selección debe tener entre %d y %d palabras',
                 'ai_explainer_enabled' => 'Explicador IA activado. Selecciona texto para obtener explicaciones.',
-                'ai_explainer_disabled' => 'Explicador IA desactivado.'
+                'ai_explainer_disabled' => 'Explicador IA desactivado.',
+                'blocked_word_found' => 'Su selección contiene contenido bloqueado'
             ),
             'de_DE' => array(
                 'explanation' => 'Erklärung',
@@ -282,7 +285,8 @@ class ExplainerPlugin {
                 'selection_too_long' => 'Auswahl zu lang (maximal %d Zeichen)',
                 'selection_word_count' => 'Auswahl muss zwischen %d und %d Wörtern enthalten',
                 'ai_explainer_enabled' => 'KI-Erklärer aktiviert. Text auswählen für Erklärungen.',
-                'ai_explainer_disabled' => 'KI-Erklärer deaktiviert.'
+                'ai_explainer_disabled' => 'KI-Erklärer deaktiviert.',
+                'blocked_word_found' => 'Ihre Auswahl enthält blockierten Inhalt'
             ),
             'fr_FR' => array(
                 'explanation' => 'Explication',
@@ -297,7 +301,8 @@ class ExplainerPlugin {
                 'selection_too_long' => 'Sélection trop longue (maximum %d caractères)',
                 'selection_word_count' => 'La sélection doit contenir entre %d et %d mots',
                 'ai_explainer_enabled' => 'Explicateur IA activé. Sélectionnez du texte pour obtenir des explications.',
-                'ai_explainer_disabled' => 'Explicateur IA désactivé.'
+                'ai_explainer_disabled' => 'Explicateur IA désactivé.',
+                'blocked_word_found' => 'Votre sélection contient du contenu bloqué'
             ),
             'hi_IN' => array(
                 'explanation' => 'व्याख्या',
@@ -312,7 +317,8 @@ class ExplainerPlugin {
                 'selection_too_long' => 'चयन बहुत लंबा है (अधिकतम %d वर्ण)',
                 'selection_word_count' => 'चयन में %d और %d शब्दों के बीच होना चाहिए',
                 'ai_explainer_enabled' => 'AI व्याख्याकार सक्षम। व्याख्या पाने के लिए टेक्स्ट चुनें।',
-                'ai_explainer_disabled' => 'AI व्याख्याकार अक्षम।'
+                'ai_explainer_disabled' => 'AI व्याख्याकार अक्षम।',
+                'blocked_word_found' => 'आपके चयन में अवरुद्ध सामग्री है'
             ),
             'zh_CN' => array(
                 'explanation' => '解释',
@@ -327,7 +333,8 @@ class ExplainerPlugin {
                 'selection_too_long' => '选择太长（最多%d个字符）',
                 'selection_word_count' => '选择必须在%d到%d个单词之间',
                 'ai_explainer_enabled' => 'AI解释器已启用。选择文本以获取解释。',
-                'ai_explainer_disabled' => 'AI解释器已禁用。'
+                'ai_explainer_disabled' => 'AI解释器已禁用。',
+                'blocked_word_found' => '您的选择包含被阻止的内容'
             )
         );
         

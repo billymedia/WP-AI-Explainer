@@ -85,6 +85,9 @@ class ExplainerPlugin_Admin {
         register_setting('explainer_settings', 'explainer_show_provider', array('sanitize_callback' => 'absint'));
         register_setting('explainer_settings', 'explainer_tooltip_footer_color', array('sanitize_callback' => 'sanitize_hex_color'));
         register_setting('explainer_settings', 'explainer_debug_mode', array('sanitize_callback' => 'absint'));
+        register_setting('explainer_settings', 'explainer_blocked_words', array('sanitize_callback' => array($this, 'sanitize_blocked_words')));
+        register_setting('explainer_settings', 'explainer_blocked_words_case_sensitive', array('sanitize_callback' => 'absint'));
+        register_setting('explainer_settings', 'explainer_blocked_words_whole_word', array('sanitize_callback' => 'absint'));
         
         // Add settings sections
         add_settings_section(
@@ -983,5 +986,50 @@ class ExplainerPlugin_Admin {
                 'message' => __('Failed to dismiss notice.', 'explainer-plugin')
             ));
         }
+    }
+    
+    /**
+     * Sanitize blocked words list
+     * 
+     * @param string $value The textarea value with blocked words
+     * @return string Sanitized blocked words list
+     */
+    public function sanitize_blocked_words($value) {
+        if (empty($value)) {
+            return '';
+        }
+        
+        // Split by newlines
+        $words = explode("\n", $value);
+        $sanitized_words = array();
+        
+        foreach ($words as $word) {
+            // Trim whitespace
+            $word = trim($word);
+            
+            // Skip empty lines
+            if (empty($word)) {
+                continue;
+            }
+            
+            // Sanitize the word (allow letters, numbers, spaces, hyphens, and common punctuation)
+            $word = preg_replace('/[^a-zA-Z0-9\s\-_.,!?\'"]/u', '', $word);
+            
+            // Limit word length to prevent abuse
+            if (strlen($word) > 100) {
+                $word = substr($word, 0, 100);
+            }
+            
+            // Add to sanitized list
+            if (!empty($word)) {
+                $sanitized_words[] = $word;
+            }
+        }
+        
+        // Limit total number of blocked words to 500
+        $sanitized_words = array_slice($sanitized_words, 0, 500);
+        
+        // Join back with newlines
+        return implode("\n", $sanitized_words);
     }
 }

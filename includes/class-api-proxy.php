@@ -209,7 +209,13 @@ class ExplainerPlugin_API_Proxy {
         // Use helper function for final security validation
         $validated_text = explainer_sanitize_text_selection($selected_text);
         if (!$validated_text) {
-            wp_send_json_error(array('message' => __('Text selection contains invalid content', 'explainer-plugin')));
+            // Check if this was due to a blocked word
+            $blocked_word = apply_filters('explainer_blocked_word_found', false);
+            if ($blocked_word !== false) {
+                wp_send_json_error(array('message' => __('Your selection contains blocked content', 'explainer-plugin')));
+            } else {
+                wp_send_json_error(array('message' => __('Text selection contains invalid content', 'explainer-plugin')));
+            }
             return false;
         }
         

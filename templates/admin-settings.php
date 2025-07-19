@@ -312,6 +312,42 @@ if (!defined('ABSPATH')) {
                         <p class="description"><?php echo esc_html__('CSS selectors for areas where text selection is blocked (comma-separated).', 'explainer-plugin'); ?></p>
                     </td>
                 </tr>
+                
+                <tr>
+                    <th scope="row">
+                        <label for="explainer_blocked_words"><?php echo esc_html__('Blocked Words', 'explainer-plugin'); ?></label>
+                    </th>
+                    <td>
+                        <textarea name="explainer_blocked_words" id="explainer_blocked_words" rows="8" cols="50" class="large-text" placeholder="<?php echo esc_attr__('Enter one word or phrase per line', 'explainer-plugin'); ?>"><?php echo esc_textarea(get_option('explainer_blocked_words', '')); ?></textarea>
+                        <p class="description">
+                            <?php echo esc_html__('Enter words or phrases that should be blocked from getting AI explanations (one per line).', 'explainer-plugin'); ?>
+                            <br>
+                            <span id="blocked-words-count">0</span> <?php echo esc_html__('words blocked', 'explainer-plugin'); ?>
+                        </p>
+                        
+                        <div class="blocked-words-options" style="margin-top: 10px;">
+                            <label>
+                                <input type="checkbox" name="explainer_blocked_words_case_sensitive" id="explainer_blocked_words_case_sensitive" value="1" <?php checked(get_option('explainer_blocked_words_case_sensitive', false), true); ?> />
+                                <?php echo esc_html__('Case sensitive matching', 'explainer-plugin'); ?>
+                            </label>
+                            <br>
+                            <label>
+                                <input type="checkbox" name="explainer_blocked_words_whole_word" id="explainer_blocked_words_whole_word" value="1" <?php checked(get_option('explainer_blocked_words_whole_word', false), true); ?> />
+                                <?php echo esc_html__('Match whole words only', 'explainer-plugin'); ?>
+                            </label>
+                        </div>
+                        
+                        <div class="blocked-words-actions" style="margin-top: 10px;">
+                            <button type="button" class="button" id="clear-blocked-words"><?php echo esc_html__('Clear All', 'explainer-plugin'); ?></button>
+                            <button type="button" class="button" id="load-default-blocked-words"><?php echo esc_html__('Load Common Inappropriate Words', 'explainer-plugin'); ?></button>
+                        </div>
+                        
+                        <p class="description" style="margin-top: 10px;">
+                            <strong><?php echo esc_html__('Note:', 'explainer-plugin'); ?></strong> 
+                            <?php echo esc_html__('Maximum 500 words, 100 characters per word. Special characters will be removed.', 'explainer-plugin'); ?>
+                        </p>
+                    </td>
+                </tr>
             </table>
         </div>
         

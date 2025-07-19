@@ -64,6 +64,16 @@ function explainer_sanitize_text_selection($text) {
         return false;
     }
     
+    // Check for blocked words
+    $blocked_word = explainer_check_blocked_words($text);
+    if ($blocked_word !== false) {
+        // Return false to indicate blocked content, but store the blocked word for error messaging
+        add_filter('explainer_blocked_word_found', function() use ($blocked_word) {
+            return $blocked_word;
+        });
+        return false;
+    }
+    
     return $text;
 }
 
@@ -373,26 +383,33 @@ function explainer_get_version() {
  * @return bool True if suspicious content found
  */
 function explainer_contains_suspicious_content($text) {
-    // Check for common injection patterns
+    // Check for actual code injection attempts
+    // Note: This is for an AI text explanation service, so we should only block
+    // actual malicious patterns, not common programming terms
     $suspicious_patterns = array(
-        '/\b(union|select|insert|update|delete|drop|create|alter|exec|execute)\b/i',
-        '/\b(script|iframe|object|embed|form|input|textarea|button)\b/i',
-        '/\b(eval|setTimeout|setInterval|Function|constructor)\b/i',
-        '/\b(document\.|window\.|location\.|history\.)/i',
-        '/\b(alert|confirm|prompt|console\.)/i',
-        '/\b(XMLHttpRequest|fetch|ajax)/i',
-        '/\b(base64_decode|eval|exec|system|shell_exec|passthru|file_get_contents)/i',
-        '/\b(wp_query|wp_db|wpdb|global \$)/i',
-        '/\b(\$_GET|\$_POST|\$_REQUEST|\$_COOKIE|\$_SESSION|\$_SERVER|\$_FILES)/i',
-        '/\b(include|require|include_once|require_once)/i',
-        '/\b(file_put_contents|fwrite|fopen|fclose|unlink|rmdir|mkdir)/i',
-        '/\b(curl_exec|curl_init|wp_remote_get|wp_remote_post)/i',
-        '/\b(mail|wp_mail|wp_send_json|wp_die)/i',
-        '/\b(add_action|add_filter|remove_action|remove_filter)/i',
-        '/\b(do_action|apply_filters|current_user_can|is_admin)/i',
-        '/\b(wp_enqueue_script|wp_enqueue_style|wp_localize_script)/i',
-        '/\b(register_activation_hook|register_deactivation_hook)/i',
-        '/\b(wp_verify_nonce|wp_create_nonce|check_admin_referer)/i'
+        // Block actual script tags and injection attempts
+        '/<script[^>]*>.*?<\/script>/is',
+        '/<iframe[^>]*>.*?<\/iframe>/is',
+        '/javascript:/i',
+        '/vbscript:/i',
+        '/on\w+\s*=/i', // onclick=, onload=, etc.
+        
+        // Block PHP code execution attempts
+        '/<\?php/i',
+        '/\$\{.*\}/s', // PHP variable interpolation
+        
+        // Block SQL injection patterns (but allow words like "select" in normal text)
+        '/\b(union\s+select|select\s+\*\s+from|drop\s+table|insert\s+into)\b/i',
+        
+        // Block obvious eval attempts
+        '/\beval\s*\(/i',
+        '/\bexec\s*\(/i',
+        '/\bsystem\s*\(/i',
+        
+        // Block base64 encoded content
+        '/data:text\/html/i',
+        '/data:application\/javascript/i',
+        '/base64,/i'
     );
     
     foreach ($suspicious_patterns as $pattern) {
@@ -401,9 +418,9 @@ function explainer_contains_suspicious_content($text) {
         }
     }
     
-    // Check for excessive special characters
+    // Check for excessive special characters (more than 30% is suspicious)
     $special_char_count = preg_match_all('/[<>{}[\]()&|`~!@#$%^*+=\\\\\/]/', $text);
-    if ($special_char_count > (strlen($text) * 0.2)) {
+    if ($special_char_count > (strlen($text) * 0.3)) {
         return true;
     }
     
@@ -415,6 +432,66 @@ function explainer_contains_suspicious_content($text) {
     }
     
     return false;
+}
+
+/**
+ * Check if text contains blocked words
+ *
+ * @param string $text The text to check
+ * @return bool|string False if no blocked words found, or the first blocked word found
+ */
+function explainer_check_blocked_words($text) {
+    // Get blocked words from options
+    $blocked_words = get_option('explainer_blocked_words', '');
+    
+    // If no blocked words configured, return false
+    if (empty($blocked_words)) {
+        return false;
+    }
+    
+    // Get matching options
+    $case_sensitive = get_option('explainer_blocked_words_case_sensitive', false);
+    $whole_word_only = get_option('explainer_blocked_words_whole_word', false);
+    
+    // Split blocked words by newlines
+    $words = explode("\n", $blocked_words);
+    
+    // Prepare text for comparison
+    $compare_text = $case_sensitive ? $text : strtolower($text);
+    
+    foreach ($words as $word) {
+        $word = trim($word);
+        
+        // Skip empty words
+        if (empty($word)) {
+            continue;
+        }
+        
+        // Prepare word for comparison
+        $compare_word = $case_sensitive ? $word : strtolower($word);
+        
+        // Check for match
+        if ($whole_word_only) {
+            // Use word boundaries for whole word matching
+            $pattern = '/\b' . preg_quote($compare_word, '/') . '\b/';
+            if ($case_sensitive) {
+                $match = preg_match($pattern, $text);
+            } else {
+                $match = preg_match($pattern . 'i', $text);
+            }
+            
+            if ($match) {
+                return $word; // Return the original blocked word
+            }
+        } else {
+            // Simple substring matching
+            if (strpos($compare_text, $compare_word) !== false) {
+                return $word; // Return the original blocked word
+            }
+        }
+    }
+    
+    return false; // No blocked words found
 }
 
 /**
