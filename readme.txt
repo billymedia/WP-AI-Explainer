@@ -19,6 +19,7 @@ The AI Explainer Plugin transforms your WordPress site into an interactive learn
 * **Multi-Provider AI Support**: Choose between OpenAI (GPT-3.5, GPT-4) and Claude (Sonnet, Haiku) models
 * **Interactive Tooltips**: Smart positioning with manual user control (no auto-close)
 * **Customisable Appearance**: Configure tooltip colours (background, text, footer), positioning, disclaimers, and provider attribution
+* **Multi-Language Support**: Localized tooltips in 7 languages (English US/UK, Spanish, German, French, Hindi, Chinese)
 * **Secure Integration**: API keys encrypted and never exposed to frontend
 * **Advanced Admin Interface**: Tabbed settings with Basic and Advanced configuration options
 * **Custom Prompt Templates**: Create personalised AI prompts with `{{snippet}}` placeholders
@@ -33,9 +34,10 @@ The AI Explainer Plugin transforms your WordPress site into an interactive learn
 
 1. Install and activate the plugin
 2. Choose your AI provider (OpenAI or Claude) and add your API key
-3. Customise tooltip appearance, prompts, and footer options
-4. Visitors select text to get instant AI explanations
-5. Explanations appear in responsive tooltips with configurable disclaimers
+3. Select your preferred language for tooltip interface elements
+4. Customise tooltip appearance, prompts, and footer options
+5. Visitors select text to get instant AI explanations
+6. Explanations appear in responsive tooltips with localized disclaimers and attribution
 
 **Perfect For:**
 
@@ -57,6 +59,7 @@ The AI Explainer Plugin transforms your WordPress site into an interactive learn
 * **Responsive CSS**: Mobile-first design with CSS custom properties
 * **WordPress Standards**: Follows all WordPress coding and security standards
 * **Comprehensive Admin Interface**: Tabbed settings with real-time validation
+* **Multi-Language Interface**: Localized tooltip headers, disclaimers, and provider attribution
 * **Debug Tools**: Built-in logging and troubleshooting capabilities
 
 == Installation ==
@@ -68,11 +71,12 @@ The AI Explainer Plugin transforms your WordPress site into an interactive learn
 3. Click "Install Now" and then "Activate"
 4. Go to Settings → Explainer Settings
 5. Choose your AI provider (OpenAI or Claude)
-6. Enter your API key and select a model
-7. Test your API key to ensure it works
-8. Customise appearance and footer options
-9. Configure advanced settings as needed
-10. Save your settings and test on your site
+6. Select your preferred language for tooltip interface
+7. Enter your API key and select a model
+8. Test your API key to ensure it works
+9. Customise appearance and footer options
+10. Configure advanced settings as needed
+11. Save your settings and test on your site
 
 **First Time Setup:**
 
@@ -170,7 +174,7 @@ Yes, the plugin works with popular page builders like Elementor, Gutenberg, and 
 
 = Can I translate this plugin? =
 
-Yes, the plugin is fully internationalized and ready for translation. You can contribute translations or create your own using WordPress translation tools.
+Yes, the plugin is fully internationalized and ready for translation. The tooltip interface is already localized in 7 languages (English US/UK, Spanish, German, French, Hindi, Chinese), and you can contribute additional translations or create your own using WordPress translation tools.
 
 == Screenshots ==
 
@@ -186,6 +190,7 @@ Yes, the plugin is fully internationalized and ready for translation. You can co
 = 1.0.0 =
 * **Multi-Provider Support**: OpenAI and Claude integration with model selection
 * **Advanced Tooltip System**: Smart positioning, manual control, and configurable footers
+* **Multi-Language Interface**: Localized tooltips in 7 languages with real-time language switching
 * **Comprehensive Admin Interface**: Tabbed settings with Basic and Advanced options
 * **Custom Prompt Templates**: Personalised AI prompts with validation
 * **Encrypted API Storage**: Secure WordPress salts-based encryption

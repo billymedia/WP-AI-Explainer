@@ -23,6 +23,74 @@
     let currentTooltip = null;
     let autoCloseTimer = null;
     let isTooltipVisible = false;
+    let localizedStrings = null;
+    
+    /**
+     * Load localized strings from server
+     */
+    function loadLocalizedStrings() {
+        if (localizedStrings) {
+            return Promise.resolve(localizedStrings);
+        }
+        
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', window.explainerAjax?.ajaxurl || '/wp-admin/admin-ajax.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success && response.data.strings) {
+                            localizedStrings = response.data.strings;
+                            resolve(localizedStrings);
+                        } else {
+                            // Fallback to English
+                            localizedStrings = {
+                                explanation: 'Explanation',
+                                loading: 'Loading...',
+                                error: 'Error',
+                                disclaimer: 'AI-generated content may not always be accurate',
+                                powered_by: 'Powered by'
+                            };
+                            resolve(localizedStrings);
+                        }
+                    } catch (e) {
+                        // Fallback to English
+                        localizedStrings = {
+                            explanation: 'Explanation',
+                            loading: 'Loading...',
+                            error: 'Error',
+                            disclaimer: 'AI-generated content may not always be accurate',
+                            powered_by: 'Powered by'
+                        };
+                        resolve(localizedStrings);
+                    }
+                } else {
+                    reject(new Error('Failed to load localized strings'));
+                }
+            };
+            
+            xhr.onerror = function() {
+                reject(new Error('Network error'));
+            };
+            
+            const data = 'action=explainer_get_localized_strings' + 
+                        (window.explainerAjax?.nonce ? '&nonce=' + encodeURIComponent(window.explainerAjax.nonce) : '');
+            xhr.send(data);
+        });
+    }
+    
+    /**
+     * Get localized string
+     */
+    function getLocalizedString(key, fallback = '') {
+        if (localizedStrings && localizedStrings[key]) {
+            return localizedStrings[key];
+        }
+        return fallback || key;
+    }
     
     /**
      * Show tooltip with content
@@ -139,14 +207,14 @@
         
         switch (type) {
             case 'loading':
-                title.textContent = 'Loading...';
+                title.textContent = getLocalizedString('loading', 'Loading...');
                 break;
             case 'error':
-                title.textContent = 'Error';
+                title.textContent = getLocalizedString('error', 'Error');
                 break;
             case 'explanation':
             default:
-                title.textContent = 'Explanation';
+                title.textContent = getLocalizedString('explanation', 'Explanation');
                 break;
         }
         
@@ -231,7 +299,7 @@
         if (showDisclaimer) {
             const disclaimerDiv = document.createElement('div');
             disclaimerDiv.className = 'explainer-disclaimer';
-            disclaimerDiv.textContent = 'AI-generated content may not always be accurate';
+            disclaimerDiv.textContent = getLocalizedString('disclaimer', 'AI-generated content may not always be accurate');
             footerDiv.appendChild(disclaimerDiv);
         }
         
@@ -241,7 +309,8 @@
             
             // Capitalize provider name
             const providerName = provider.charAt(0).toUpperCase() + provider.slice(1);
-            providerDiv.textContent = `Powered by ${providerName}`;
+            const poweredByText = getLocalizedString('powered_by', 'Powered by');
+            providerDiv.textContent = `${poweredByText} ${providerName}`;
             footerDiv.appendChild(providerDiv);
         }
         
@@ -621,6 +690,11 @@
      * Initialize tooltip system
      */
     function initializeTooltips() {
+        // Load localized strings first
+        loadLocalizedStrings().catch(error => {
+            console.warn('ExplainerPlugin: Failed to load localized strings, using fallback:', error);
+        });
+        
         // Add window event listeners
         window.addEventListener('resize', handleWindowResize);
         window.addEventListener('scroll', handleWindowScroll);

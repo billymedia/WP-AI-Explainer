@@ -50,6 +50,38 @@ if (!defined('ABSPATH')) {
                 
                 <tr>
                     <th scope="row">
+                        <label for="explainer_language"><?php echo esc_html__('Language', 'explainer-plugin'); ?></label>
+                    </th>
+                    <td>
+                        <select name="explainer_language" id="explainer_language">
+                            <option value="en_US" <?php selected(get_option('explainer_language', 'en_GB'), 'en_US'); ?>>
+                                <?php echo esc_html__('English (United States)', 'explainer-plugin'); ?>
+                            </option>
+                            <option value="en_GB" <?php selected(get_option('explainer_language', 'en_GB'), 'en_GB'); ?>>
+                                <?php echo esc_html__('English (United Kingdom)', 'explainer-plugin'); ?>
+                            </option>
+                            <option value="es_ES" <?php selected(get_option('explainer_language', 'en_GB'), 'es_ES'); ?>>
+                                <?php echo esc_html__('Spanish (Spain)', 'explainer-plugin'); ?>
+                            </option>
+                            <option value="de_DE" <?php selected(get_option('explainer_language', 'en_GB'), 'de_DE'); ?>>
+                                <?php echo esc_html__('German (Germany)', 'explainer-plugin'); ?>
+                            </option>
+                            <option value="fr_FR" <?php selected(get_option('explainer_language', 'en_GB'), 'fr_FR'); ?>>
+                                <?php echo esc_html__('French (France)', 'explainer-plugin'); ?>
+                            </option>
+                            <option value="hi_IN" <?php selected(get_option('explainer_language', 'en_GB'), 'hi_IN'); ?>>
+                                <?php echo esc_html__('Hindi (India)', 'explainer-plugin'); ?>
+                            </option>
+                            <option value="zh_CN" <?php selected(get_option('explainer_language', 'en_GB'), 'zh_CN'); ?>>
+                                <?php echo esc_html__('Chinese (Simplified)', 'explainer-plugin'); ?>
+                            </option>
+                        </select>
+                        <p class="description"><?php echo esc_html__('Select the language for the AI explanations.', 'explainer-plugin'); ?></p>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row">
                         <label for="explainer_api_provider"><?php echo esc_html__('AI Provider', 'explainer-plugin'); ?></label>
                     </th>
                     <td>
@@ -387,15 +419,15 @@ if (!defined('ABSPATH')) {
                         <div id="tooltip-preview" class="tooltip-preview">
                             <div class="explainer-tooltip explainer-tooltip-preview">
                                 <div class="explainer-tooltip-header">
-                                    <span class="explainer-tooltip-title"><?php echo esc_html__('Explanation', 'explainer-plugin'); ?></span>
+                                    <span class="explainer-tooltip-title" id="preview-tooltip-title"><?php echo esc_html__('Explanation', 'explainer-plugin'); ?></span>
                                     <button class="explainer-tooltip-close" type="button">×</button>
                                 </div>
                                 <div class="explainer-tooltip-content">
-                                    <?php echo esc_html__('This is how your tooltip will look with the selected colors. It matches the actual frontend design with proper spacing and typography.', 'explainer-plugin'); ?>
+                                    <span id="preview-tooltip-content"><?php echo esc_html__('This is how your tooltip will look with the selected colors. It matches the actual frontend design with proper spacing and typography.', 'explainer-plugin'); ?></span>
                                 </div>
                                 <div class="explainer-tooltip-footer">
-                                    <div class="explainer-disclaimer"><?php echo esc_html__('AI-generated content may not always be accurate', 'explainer-plugin'); ?></div>
-                                    <div class="explainer-provider"><?php echo esc_html__('Powered by OpenAI', 'explainer-plugin'); ?></div>
+                                    <div class="explainer-disclaimer" id="preview-disclaimer"><?php echo esc_html__('AI-generated content may not always be accurate', 'explainer-plugin'); ?></div>
+                                    <div class="explainer-provider" id="preview-provider"><?php echo esc_html__('Powered by OpenAI', 'explainer-plugin'); ?></div>
                                 </div>
                             </div>
                         </div>
@@ -465,7 +497,7 @@ if (!defined('ABSPATH')) {
             <h2><?php echo esc_html__('How to Use AI Explainer Plugin', 'explainer-plugin'); ?></h2>
             
             <div class="help-section">
-                <h3><?php echo esc_html__('🚀 Quick Start Guide', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Quick Start Guide', 'explainer-plugin'); ?></h3>
                 <div class="help-steps">
                     <div class="help-step">
                         <h4><?php echo esc_html__('1. Choose Your AI Provider', 'explainer-plugin'); ?></h4>
@@ -498,7 +530,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="help-section">
-                <h3><?php echo esc_html__('💡 How Users Get Explanations', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('How Users Get Explanations', 'explainer-plugin'); ?></h3>
                 <div class="help-usage">
                     <ol>
                         <li><?php echo esc_html__('Users select any text on your website', 'explainer-plugin'); ?></li>
@@ -510,7 +542,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="help-section">
-                <h3><?php echo esc_html__('⚙️ Customisation Options', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Customisation Options', 'explainer-plugin'); ?></h3>
                 
                 <div class="help-feature">
                     <h4><?php echo esc_html__('Appearance Tab', 'explainer-plugin'); ?></h4>
@@ -542,7 +574,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="help-section">
-                <h3><?php echo esc_html__('🔧 Troubleshooting', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Troubleshooting', 'explainer-plugin'); ?></h3>
                 <div class="help-troubleshooting">
                     <div class="help-issue">
                         <h4><?php echo esc_html__('Explanations not working?', 'explainer-plugin'); ?></h4>
@@ -576,7 +608,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="help-section">
-                <h3><?php echo esc_html__('💰 Cost Management Tips', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Cost Management Tips', 'explainer-plugin'); ?></h3>
                 <div class="help-costs">
                     <ul>
                         <li><?php echo esc_html__('Start with caching enabled and conservative rate limits', 'explainer-plugin'); ?></li>
@@ -594,7 +626,7 @@ if (!defined('ABSPATH')) {
             <h2><?php echo esc_html__('Support & Contact', 'explainer-plugin'); ?></h2>
             
             <div class="support-section">
-                <h3><?php echo esc_html__('👤 Developer Information', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Developer Information', 'explainer-plugin'); ?></h3>
                 <div class="developer-info">
                     <p><strong><?php echo esc_html__('Developer:', 'explainer-plugin'); ?></strong> Billy Patel</p>
                     <p><strong><?php echo esc_html__('Email:', 'explainer-plugin'); ?></strong> <a href="mailto:billy@billymedia.co.uk">billy@billymedia.co.uk</a></p>
@@ -603,7 +635,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="support-section">
-                <h3><?php echo esc_html__('🔗 Project Links', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Project Links', 'explainer-plugin'); ?></h3>
                 <div class="project-links">
                     <p>
                         <strong><?php echo esc_html__('GitHub Repository:', 'explainer-plugin'); ?></strong><br>
@@ -618,7 +650,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="support-section">
-                <h3><?php echo esc_html__('🆘 Getting Help', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Getting Help', 'explainer-plugin'); ?></h3>
                 <div class="support-options">
                     <div class="support-option">
                         <h4><?php echo esc_html__('1. Check the Help Tab', 'explainer-plugin'); ?></h4>
@@ -643,7 +675,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="support-section">
-                <h3><?php echo esc_html__('📝 When Requesting Support', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('When Requesting Support', 'explainer-plugin'); ?></h3>
                 <div class="support-info-needed">
                     <p><?php echo esc_html__('Please include the following information when requesting support:', 'explainer-plugin'); ?></p>
                     <ul>
@@ -660,7 +692,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="support-section">
-                <h3><?php echo esc_html__('❤️ Contributing', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('Contributing', 'explainer-plugin'); ?></h3>
                 <div class="contributing-info">
                     <p><?php echo esc_html__('We welcome contributions to make this plugin better:', 'explainer-plugin'); ?></p>
                     <ul>
@@ -674,7 +706,7 @@ if (!defined('ABSPATH')) {
             </div>
             
             <div class="support-section">
-                <h3><?php echo esc_html__('📊 System Information', 'explainer-plugin'); ?></h3>
+                <h3><?php echo esc_html__('System Information', 'explainer-plugin'); ?></h3>
                 <div class="system-info">
                     <table class="form-table">
                         <tr>
@@ -832,6 +864,83 @@ jQuery(document).ready(function($) {
     // Initialize previews
     updateTooltipPreview();
     updateButtonPreview();
+    
+    // Language change handler
+    $('#explainer_language').on('change', function() {
+        updatePreviewLanguage();
+    });
+    
+    // Update preview language
+    function updatePreviewLanguage() {
+        const selectedLanguage = $('#explainer_language').val();
+        const selectedProvider = $('#explainer_api_provider').val();
+        
+        // Define localized strings
+        const strings = {
+            'en_US': {
+                'title': 'Explanation',
+                'content': 'This is how your tooltip will look with the selected colors. It matches the actual frontend design with proper spacing and typography.',
+                'disclaimer': 'AI-generated content may not always be accurate',
+                'powered_by': 'Powered by'
+            },
+            'en_GB': {
+                'title': 'Explanation', 
+                'content': 'This is how your tooltip will look with the selected colours. It matches the actual frontend design with proper spacing and typography.',
+                'disclaimer': 'AI-generated content may not always be accurate',
+                'powered_by': 'Powered by'
+            },
+            'es_ES': {
+                'title': 'Explicación',
+                'content': 'Así es como se verá tu tooltip con los colores seleccionados. Coincide con el diseño frontend real con el espaciado y tipografía adecuados.',
+                'disclaimer': 'El contenido generado por IA puede no ser siempre preciso',
+                'powered_by': 'Desarrollado por'
+            },
+            'de_DE': {
+                'title': 'Erklärung',
+                'content': 'So wird Ihr Tooltip mit den ausgewählten Farben aussehen. Es entspricht dem tatsächlichen Frontend-Design mit angemessenen Abständen und Typografie.',
+                'disclaimer': 'KI-generierte Inhalte sind möglicherweise nicht immer korrekt',
+                'powered_by': 'Unterstützt von'
+            },
+            'fr_FR': {
+                'title': 'Explication',
+                'content': 'Voici à quoi ressemblera votre tooltip avec les couleurs sélectionnées. Il correspond au design frontend réel avec un espacement et une typographie appropriés.',
+                'disclaimer': 'Le contenu généré par IA peut ne pas toujours être précis',
+                'powered_by': 'Propulsé par'
+            },
+            'hi_IN': {
+                'title': 'व्याख्या',
+                'content': 'चयनित रंगों के साथ आपका टूलटिप इस तरह दिखेगा। यह उचित स्पेसिंग और टाइपोग्राफी के साथ वास्तविक फ्रंटएंड डिज़ाइन से मेल खाता है।',
+                'disclaimer': 'AI-जनरेटेड सामग्री हमेशा सटीक नहीं हो सकती',
+                'powered_by': 'द्वारा संचालित'
+            },
+            'zh_CN': {
+                'title': '解释',
+                'content': '这是您的工具提示在所选颜色下的外观。它与实际的前端设计相匹配，具有适当的间距和排版。',
+                'disclaimer': 'AI生成的内容可能并不总是准确的',
+                'powered_by': '技术支持'
+            }
+        };
+        
+        // Get strings for selected language, fallback to English
+        const langStrings = strings[selectedLanguage] || strings['en_GB'];
+        
+        // Update preview text
+        $('#preview-tooltip-title').text(langStrings.title);
+        $('#preview-tooltip-content').text(langStrings.content);
+        $('#preview-disclaimer').text(langStrings.disclaimer);
+        
+        // Update provider text
+        const providerName = selectedProvider === 'claude' ? 'Claude' : 'OpenAI';
+        $('#preview-provider').text(langStrings.powered_by + ' ' + providerName);
+    }
+    
+    // Initialize preview language
+    updatePreviewLanguage();
+    
+    // Update preview when provider changes too
+    $('#explainer_api_provider').on('change', function() {
+        updatePreviewLanguage();
+    });
     
     
 });

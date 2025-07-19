@@ -88,8 +88,10 @@ class ExplainerPlugin_Deactivator {
         // Clear cache keys from wp_options table
         $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'explainer_cache_%'");
         
-        // Clear WordPress cache
-        wp_cache_delete_group('explainer_explanations');
+        // Clear WordPress object cache
+        if (function_exists('wp_cache_flush')) {
+            wp_cache_flush();
+        }
     }
     
     /**

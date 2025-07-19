@@ -51,6 +51,7 @@ class ExplainerPlugin_Admin {
     public function settings_init() {
         // Register all settings with validation
         register_setting('explainer_settings', 'explainer_enabled', array('sanitize_callback' => 'absint'));
+        register_setting('explainer_settings', 'explainer_language', array('sanitize_callback' => array($this, 'validate_language')));
         register_setting('explainer_settings', 'explainer_api_provider', array('sanitize_callback' => array($this, 'validate_api_provider')));
         register_setting('explainer_settings', 'explainer_api_key', array('sanitize_callback' => 'sanitize_text_field'));
         register_setting('explainer_settings', 'explainer_claude_api_key', array('sanitize_callback' => 'sanitize_text_field'));
@@ -98,6 +99,14 @@ class ExplainerPlugin_Admin {
             'explainer_enabled',
             __('Enable Plugin', 'explainer-plugin'),
             array($this, 'enabled_field_callback'),
+            'explainer_settings',
+            'explainer_basic_settings'
+        );
+        
+        add_settings_field(
+            'explainer_language',
+            __('Language', 'explainer-plugin'),
+            array($this, 'language_field_callback'),
             'explainer_settings',
             'explainer_basic_settings'
         );
@@ -205,6 +214,34 @@ class ExplainerPlugin_Admin {
             <input type="checkbox" name="explainer_enabled" value="1" <?php checked($value, true); ?> />
             <?php echo esc_html__('Enable the AI Explainer plugin', 'explainer-plugin'); ?>
         </label>
+        <?php
+    }
+    
+    /**
+     * Language field callback
+     */
+    public function language_field_callback() {
+        $value = get_option('explainer_language', 'en_GB');
+        $languages = array(
+            'en_US' => __('English (United States)', 'explainer-plugin'),
+            'en_GB' => __('English (United Kingdom)', 'explainer-plugin'),
+            'es_ES' => __('Spanish (Spain)', 'explainer-plugin'),
+            'de_DE' => __('German (Germany)', 'explainer-plugin'),
+            'fr_FR' => __('French (France)', 'explainer-plugin'),
+            'hi_IN' => __('Hindi (India)', 'explainer-plugin'),
+            'zh_CN' => __('Chinese (Simplified)', 'explainer-plugin')
+        );
+        ?>
+        <select name="explainer_language" class="regular-text">
+            <?php foreach ($languages as $code => $name): ?>
+                <option value="<?php echo esc_attr($code); ?>" <?php selected($value, $code); ?>>
+                    <?php echo esc_html($name); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <p class="description">
+            <?php echo esc_html__('Select the language for the plugin interface and AI explanations.', 'explainer-plugin'); ?>
+        </p>
         <?php
     }
     
@@ -603,6 +640,19 @@ class ExplainerPlugin_Admin {
         
         if (!in_array($value, $valid_providers)) {
             return 'openai'; // Default to OpenAI if invalid
+        }
+        
+        return $value;
+    }
+    
+    /**
+     * Validate language setting
+     */
+    public function validate_language($value) {
+        $valid_languages = array('en_US', 'en_GB', 'es_ES', 'de_DE', 'fr_FR', 'hi_IN', 'zh_CN');
+        
+        if (!in_array($value, $valid_languages)) {
+            return 'en_GB'; // Default to British English if invalid
         }
         
         return $value;

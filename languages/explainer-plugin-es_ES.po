@@ -8,217 +8,217 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2024-12-19 10:00:00+00:00\n"
 "Last-Translator: Billy Patel <billy@billymedia.co.uk>\n"
-"Language-Team: Billy Patel <billy@billymedia.co.uk>\n"
-"Language: \n"
+"Language-Team: Spanish (Spain)\n"
+"Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: WordPress\n"
+"X-Generator: Manual\n"
 
 #: includes/class-activator.php:25
 msgid "This plugin requires WordPress 5.0 or higher."
-msgstr ""
+msgstr "Este complemento requiere WordPress 5.0 o superior."
 
 #: includes/class-activator.php:31
 msgid "This plugin requires PHP 7.4 or higher."
-msgstr ""
+msgstr "Este complemento requiere PHP 7.4 o superior."
 
 #: includes/class-admin.php:50
 msgid "AI Explainer Settings"
-msgstr ""
+msgstr "Configuración del Explicador IA"
 
 #: includes/class-admin.php:51
 msgid "Explainer Settings"
-msgstr ""
+msgstr "Configuración del Explicador"
 
 #: includes/class-admin.php:65
 msgid "Basic Settings"
-msgstr ""
+msgstr "Configuración Básica"
 
 #: includes/class-admin.php:70
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Configuración Avanzada"
 
 #: includes/class-admin.php:80
 msgid "Enable Plugin"
-msgstr ""
+msgstr "Activar Complemento"
 
 #: includes/class-admin.php:81
 msgid "Enable or disable the AI Explainer plugin"
-msgstr ""
+msgstr "Activar o desactivar el complemento Explicador IA"
 
 #: includes/class-admin.php:90
 msgid "OpenAI API Key"
-msgstr ""
+msgstr "Clave API de OpenAI"
 
 #: includes/class-admin.php:91
 msgid "Enter your OpenAI API key to enable AI explanations"
-msgstr ""
+msgstr "Introduce tu clave API de OpenAI para activar las explicaciones IA"
 
 #: includes/class-admin.php:100
 msgid "AI Model"
-msgstr ""
+msgstr "Modelo de IA"
 
 #: includes/class-admin.php:101
 msgid "Select the AI model to use for generating explanations"
-msgstr ""
+msgstr "Selecciona el modelo de IA para generar explicaciones"
 
 #: includes/class-admin.php:110
 msgid "Cache Duration (hours)"
-msgstr ""
+msgstr "Duración de Caché (horas)"
 
 #: includes/class-admin.php:111
 msgid "How long to cache explanations (1-168 hours)"
-msgstr ""
+msgstr "Tiempo para almacenar explicaciones en caché (1-168 horas)"
 
 #: includes/class-admin.php:120
 msgid "Rate Limit (requests per minute)"
-msgstr ""
+msgstr "Límite de Velocidad (solicitudes por minuto)"
 
 #: includes/class-admin.php:121
 msgid "Maximum requests per minute per user"
-msgstr ""
+msgstr "Máximo de solicitudes por minuto por usuario"
 
 #: includes/class-api-proxy.php:45
 msgid "Invalid nonce"
-msgstr ""
+msgstr "Nonce inválido"
 
 #: includes/class-api-proxy.php:51
 msgid "Invalid request"
-msgstr ""
+msgstr "Solicitud inválida"
 
 #: includes/class-api-proxy.php:58
 msgid "Text selection is required"
-msgstr ""
+msgstr "Se requiere selección de texto"
 
 #: includes/class-api-proxy.php:64
 msgid "Text selection is too short"
-msgstr ""
+msgstr "La selección de texto es demasiado corta"
 
 #: includes/class-api-proxy.php:70
 msgid "Text selection is too long"
-msgstr ""
+msgstr "La selección de texto es demasiado larga"
 
 #: includes/class-api-proxy.php:76
 msgid "Rate limit exceeded. Please wait before making another request."
-msgstr ""
+msgstr "Límite de velocidad excedido. Por favor espera antes de hacer otra solicitud."
 
 #: includes/class-api-proxy.php:82
 msgid "API key not configured. Please check your settings."
-msgstr ""
+msgstr "Clave API no configurada. Por favor revisa tu configuración."
 
 #: includes/class-api-proxy.php:120
 msgid "API request failed. Please try again."
-msgstr ""
+msgstr "Solicitud API falló. Por favor inténtalo de nuevo."
 
 #: includes/class-api-proxy.php:126
 msgid "Explanation temporarily unavailable. Please try again later."
-msgstr ""
+msgstr "Explicación temporalmente no disponible. Por favor inténtalo más tarde."
 
 #: assets/js/explainer.js:50
 msgid "Loading explanation..."
-msgstr ""
+msgstr "Cargando explicación..."
 
 #: assets/js/explainer.js:75
 msgid "Close explanation"
-msgstr ""
+msgstr "Cerrar explicación"
 
 #: assets/js/explainer.js:100
 msgid "Toggle AI Explainer"
-msgstr ""
+msgstr "Alternar Explicador IA"
 
 #: assets/js/explainer.js:150
 msgid "Text selection is too short (minimum 3 characters)"
-msgstr ""
+msgstr "La selección de texto es demasiado corta (mínimo 3 caracteres)"
 
 #: assets/js/explainer.js:155
 msgid "Text selection is too long (maximum 200 characters)"
-msgstr ""
+msgstr "La selección de texto es demasiado larga (máximo 200 caracteres)"
 
 #: assets/js/tooltip.js:25
 msgid "Explanation"
-msgstr ""
+msgstr "Explicación"
 
 #: assets/js/tooltip.js:45
 msgid "Error loading explanation"
-msgstr ""
+msgstr "Error al cargar explicación"
 
 #: templates/admin-settings.php:25
 msgid "AI Explainer Plugin Settings"
-msgstr ""
+msgstr "Configuración del Complemento Explicador IA"
 
 #: templates/admin-settings.php:35
 msgid "Basic"
-msgstr ""
+msgstr "Básico"
 
 #: templates/admin-settings.php:40
 msgid "Advanced"
-msgstr ""
+msgstr "Avanzado"
 
 #: templates/admin-settings.php:50
 msgid "Plugin Status"
-msgstr ""
+msgstr "Estado del Complemento"
 
 #: templates/admin-settings.php:55
 msgid "API Configuration"
-msgstr ""
+msgstr "Configuración de API"
 
 #: templates/admin-settings.php:60
 msgid "Performance Settings"
-msgstr ""
+msgstr "Configuración de Rendimiento"
 
 #: templates/admin-settings.php:70
 msgid "Save Changes"
-msgstr ""
+msgstr "Guardar Cambios"
 
 #: templates/admin-settings.php:75
 msgid "Test API Key"
-msgstr ""
+msgstr "Probar Clave API"
 
 #: templates/admin-settings.php:80
 msgid "Clear Cache"
-msgstr ""
+msgstr "Limpiar Caché"
 
 #: templates/admin-settings.php:85
 msgid "Export Settings"
-msgstr ""
+msgstr "Exportar Configuración"
 
 #: templates/admin-settings.php:90
 msgid "Import Settings"
-msgstr ""
+msgstr "Importar Configuración"
 
 #: includes/class-admin.php:108
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: includes/class-admin.php:226
 msgid "English (United States)"
-msgstr ""
+msgstr "Inglés (Estados Unidos)"
 
 #: includes/class-admin.php:227
 msgid "English (United Kingdom)"
-msgstr ""
+msgstr "Inglés (Reino Unido)"
 
 #: includes/class-admin.php:228
 msgid "Spanish (Spain)"
-msgstr ""
+msgstr "Español (España)"
 
 #: includes/class-admin.php:229
 msgid "German (Germany)"
-msgstr ""
+msgstr "Alemán (Alemania)"
 
 #: includes/class-admin.php:230
 msgid "French (France)"
-msgstr ""
+msgstr "Francés (Francia)"
 
 #: includes/class-admin.php:231
 msgid "Hindi (India)"
-msgstr ""
+msgstr "Hindi (India)"
 
 #: includes/class-admin.php:232
 msgid "Chinese (Simplified)"
-msgstr ""
+msgstr "Chino (Simplificado)"
 
 #: includes/class-admin.php:243
 msgid "Select the language for the plugin interface and AI explanations."
-msgstr ""
+msgstr "Selecciona el idioma para la interfaz del complemento y las explicaciones IA."

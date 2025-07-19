@@ -66,7 +66,9 @@ class ExplainerPlugin_API_Proxy {
         
         // Enhanced rate limiting with DDoS protection
         if ($this->is_rate_limited()) {
-            wp_send_json_error(array('message' => __('Rate limit exceeded. Please wait before making another request.', 'explainer-plugin')));
+            $base_message = __('Rate limit exceeded. Please wait before making another request.', 'explainer-plugin');
+            $polite_message = ExplainerPlugin_Localization::get_polite_error_message($base_message);
+            wp_send_json_error(array('message' => $polite_message));
         }
         
         // Check if API key is configured
@@ -471,6 +473,14 @@ class ExplainerPlugin_API_Proxy {
             $custom_prompt = 'Please provide a clear, concise explanation of the following text in 1-2 sentences: {{snippet}}';
         }
         
+        // Add language instruction based on selected language
+        $selected_language = get_option('explainer_language', 'en_GB');
+        $language_instruction = $this->get_language_instruction($selected_language);
+        
+        if (!empty($language_instruction)) {
+            $custom_prompt = $language_instruction . ' ' . $custom_prompt;
+        }
+        
         // Replace {{snippet}} with the selected text
         $prompt = str_replace('{{snippet}}', $selected_text, $custom_prompt);
         
@@ -489,6 +499,23 @@ class ExplainerPlugin_API_Proxy {
         }
         
         return $prompt;
+    }
+    
+    /**
+     * Get language instruction for AI prompt based on selected language
+     */
+    private function get_language_instruction($language_code) {
+        $language_instructions = array(
+            'en_US' => 'Please respond in American English.',
+            'en_GB' => 'Please respond in British English.',
+            'es_ES' => 'Por favor responde en español.',
+            'de_DE' => 'Bitte antworten Sie auf Deutsch.',
+            'fr_FR' => 'Veuillez répondre en français.',
+            'hi_IN' => 'कृपया हिंदी में उत्तर दें।',
+            'zh_CN' => '请用中文回答。'
+        );
+        
+        return isset($language_instructions[$language_code]) ? $language_instructions[$language_code] : '';
     }
     
     /**

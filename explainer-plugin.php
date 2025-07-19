@@ -103,6 +103,9 @@ class ExplainerPlugin {
         // User permissions management
         require_once EXPLAINER_PLUGIN_PATH . 'includes/class-user-permissions.php';
         
+        // Load localization helper
+        require_once EXPLAINER_PLUGIN_PATH . 'includes/class-localization.php';
+        
         // Initialize loader
         $this->loader = new ExplainerPlugin_Loader();
     }
@@ -118,11 +121,37 @@ class ExplainerPlugin {
      * Load plugin text domain for translations
      */
     public function load_plugin_textdomain() {
+        // Check for custom language setting
+        $selected_language = get_option('explainer_language', '');
+        
+        if (!empty($selected_language)) {
+            // Override locale for this plugin only
+            add_filter('plugin_locale', array($this, 'override_plugin_locale'), 10, 2);
+        }
+        
         load_plugin_textdomain(
             'explainer-plugin',
             false,
             dirname(EXPLAINER_PLUGIN_BASENAME) . '/languages/'
         );
+        
+        // Remove the filter after loading
+        if (!empty($selected_language)) {
+            remove_filter('plugin_locale', array($this, 'override_plugin_locale'), 10);
+        }
+    }
+    
+    /**
+     * Override plugin locale for this plugin only
+     */
+    public function override_plugin_locale($locale, $domain) {
+        if ($domain === 'explainer-plugin') {
+            $selected_language = get_option('explainer_language', '');
+            if (!empty($selected_language)) {
+                return $selected_language;
+            }
+        }
+        return $locale;
     }
     
     /**
@@ -179,7 +208,80 @@ class ExplainerPlugin {
         add_action('wp_ajax_explainer_get_explanation', array($api_proxy, 'get_explanation'));
         add_action('wp_ajax_nopriv_explainer_get_explanation', array($api_proxy, 'get_explanation'));
         
+        // Register AJAX handler for localized strings
+        add_action('wp_ajax_explainer_get_localized_strings', array($this, 'get_localized_strings'));
+        add_action('wp_ajax_nopriv_explainer_get_localized_strings', array($this, 'get_localized_strings'));
+        
         error_log('ExplainerPlugin: AJAX handlers registered');
+    }
+    
+    /**
+     * Get localized strings for frontend
+     */
+    public function get_localized_strings() {
+        // Get selected language
+        $selected_language = get_option('explainer_language', 'en_GB');
+        
+        // Define localized strings
+        $strings = array(
+            'en_US' => array(
+                'explanation' => 'Explanation',
+                'loading' => 'Loading...',
+                'error' => 'Error',
+                'disclaimer' => 'AI-generated content may not always be accurate',
+                'powered_by' => 'Powered by'
+            ),
+            'en_GB' => array(
+                'explanation' => 'Explanation',
+                'loading' => 'Loading...',
+                'error' => 'Error',
+                'disclaimer' => 'AI-generated content may not always be accurate',
+                'powered_by' => 'Powered by'
+            ),
+            'es_ES' => array(
+                'explanation' => 'Explicación',
+                'loading' => 'Cargando...',
+                'error' => 'Error',
+                'disclaimer' => 'El contenido generado por IA puede no ser siempre preciso',
+                'powered_by' => 'Desarrollado por'
+            ),
+            'de_DE' => array(
+                'explanation' => 'Erklärung',
+                'loading' => 'Wird geladen...',
+                'error' => 'Fehler',
+                'disclaimer' => 'KI-generierte Inhalte sind möglicherweise nicht immer korrekt',
+                'powered_by' => 'Unterstützt von'
+            ),
+            'fr_FR' => array(
+                'explanation' => 'Explication',
+                'loading' => 'Chargement...',
+                'error' => 'Erreur',
+                'disclaimer' => 'Le contenu généré par IA peut ne pas toujours être précis',
+                'powered_by' => 'Propulsé par'
+            ),
+            'hi_IN' => array(
+                'explanation' => 'व्याख्या',
+                'loading' => 'लोड हो रहा है...',
+                'error' => 'त्रुटि',
+                'disclaimer' => 'AI-जनरेटेड सामग्री हमेशा सटीक नहीं हो सकती',
+                'powered_by' => 'द्वारा संचालित'
+            ),
+            'zh_CN' => array(
+                'explanation' => '解释',
+                'loading' => '加载中...',
+                'error' => '错误',
+                'disclaimer' => 'AI生成的内容可能并不总是准确的',
+                'powered_by' => '技术支持'
+            )
+        );
+        
+        // Get strings for selected language, fallback to English
+        $localized_strings = isset($strings[$selected_language]) ? $strings[$selected_language] : $strings['en_GB'];
+        
+        wp_send_json_success(array(
+            'language' => $selected_language,
+            'strings' => $localized_strings
+        ));
     }
     
     /**
