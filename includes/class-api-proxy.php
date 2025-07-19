@@ -78,17 +78,17 @@ class ExplainerPlugin_API_Proxy {
         }
         
         // TESTING: Simulate quota exceeded error (REMOVE AFTER TESTING)
-        if (isset($_POST['text']) && strpos($_POST['text'], 'test quota') !== false) {
-            error_log('ExplainerPlugin: Simulating quota exceeded error for testing');
-            $test_result = array(
-                'success' => false,
-                'error' => 'You exceeded your current quota. Please check your plan and billing details.',
-                'disable_plugin' => true,
-                'error_type' => 'quota_exceeded'
-            );
-            $this->handle_quota_exceeded_error($test_result);
-            wp_send_json_error($test_result);
-        }
+        // if (isset($_POST['text']) && strpos($_POST['text'], 'test quota') !== false) {
+        //     error_log('ExplainerPlugin: Simulating quota exceeded error for testing');
+        //     $test_result = array(
+        //         'success' => false,
+        //         'error' => 'You exceeded your current quota. Please check your plan and billing details.',
+        //         'disable_plugin' => true,
+        //         'error_type' => 'quota_exceeded'
+        //     );
+        //     $this->handle_quota_exceeded_error($test_result);
+        //     wp_send_json_error($test_result);
+        // }
         
         // Check cache first
         $cached_explanation = $this->get_cached_explanation($selected_text);
