@@ -10,10 +10,10 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="wrap explainer-admin-wrap">
-    <h1><?php echo esc_html__('AI Explainer Plugin Settings', 'explainer-plugin'); ?></h1>
+    <h1><?php echo esc_html__('WP AI Explainer Settings', 'explainer-plugin'); ?></h1>
     
     <div class="explainer-admin-header">
-        <p><?php echo esc_html__('Configure your AI Explainer plugin settings below. This plugin helps users understand complex text by providing AI-generated explanations via tooltips.', 'explainer-plugin'); ?></p>
+        <p><?php echo esc_html__('Configure your WP AI Explainer plugin settings below. This plugin helps users understand complex text by providing AI-generated explanations via tooltips.', 'explainer-plugin'); ?></p>
     </div>
     
     <div class="explainer-admin-tabs">
@@ -577,7 +577,7 @@ if (!defined('ABSPATH')) {
         
         <!-- Help Tab -->
         <div class="tab-content" id="help-tab" style="display: none;">
-            <h2><?php echo esc_html__('How to Use AI Explainer Plugin', 'explainer-plugin'); ?></h2>
+            <h2><?php echo esc_html__('How to Use WP AI Explainer', 'explainer-plugin'); ?></h2>
             
             <div class="help-section">
                 <h3><?php echo esc_html__('Quick Start Guide', 'explainer-plugin'); ?></h3>

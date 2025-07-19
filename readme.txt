@@ -1,4 +1,4 @@
-=== AI Explainer Plugin ===
+=== WP AI Explainer ===
 Contributors: billypatel
 Tags: ai, explanation, tooltip, openai, claude, text-selection, accessibility, multi-provider
 Requires at least: 5.0
@@ -12,7 +12,7 @@ A lightweight WordPress plugin that uses multiple AI providers (OpenAI, Claude) 
 
 == Description ==
 
-The AI Explainer Plugin transforms your WordPress site into an interactive learning experience. Visitors can simply select any text on your site and receive instant AI-generated explanations via elegant, customisable tooltips.
+WP AI Explainer transforms your WordPress site into an interactive learning experience. Visitors can simply select any text on your site and receive instant AI-generated explanations via elegant, customisable tooltips.
 
 **Key Features:**
 
@@ -67,7 +67,7 @@ The AI Explainer Plugin transforms your WordPress site into an interactive learn
 **From WordPress Admin:**
 
 1. Go to Plugins → Add New
-2. Search for "AI Explainer Plugin"
+2. Search for "WP AI Explainer"
 3. Click "Install Now" and then "Activate"
 4. Go to Settings → Explainer Settings
 5. Choose your AI provider (OpenAI or Claude)
@@ -206,7 +206,7 @@ Yes, the plugin is fully internationalized and ready for translation. The toolti
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of the AI Explainer Plugin. Install to start providing AI-powered explanations on your WordPress site.
+Initial release of WP AI Explainer. Install to start providing AI-powered explanations on your WordPress site.
 
 == External Services & Privacy ==
 

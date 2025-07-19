@@ -19,13 +19,13 @@ class ExplainerPlugin_Activator {
     public static function activate() {
         // Check WordPress version
         if (!self::check_wordpress_version()) {
-            deactivate_plugins(plugin_basename(__FILE__));
+            deactivate_plugins(EXPLAINER_PLUGIN_BASENAME);
             wp_die(__('This plugin requires WordPress 5.0 or higher.', 'explainer-plugin'));
         }
         
         // Check PHP version
         if (!self::check_php_version()) {
-            deactivate_plugins(plugin_basename(__FILE__));
+            deactivate_plugins(EXPLAINER_PLUGIN_BASENAME);
             wp_die(__('This plugin requires PHP 7.4 or higher.', 'explainer-plugin'));
         }
         

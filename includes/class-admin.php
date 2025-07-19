@@ -43,12 +43,17 @@ class ExplainerPlugin_Admin {
      * Add admin menu
      */
     public function add_admin_menu() {
-        add_options_page(
-            __('AI Explainer Settings', 'explainer-plugin'),
-            __('Explainer Settings', 'explainer-plugin'),
+        // Custom AI-themed icon as base64 data URI
+        $icon_svg_base64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iY3VycmVudENvbG9yIj4KICA8cGF0aCBkPSJNMTAgMkM3LjIgMiA1IDQuMiA1IDdjMCAuOC4yIDEuNS41IDIuMkw0IDEwLjdjLS4zLjMtLjMuOCAwIDEuMWwuOS45Yy4zLjMuOC4zIDEuMSAwTDcuNSAxMWMuNy4zIDEuNC41IDIuMi41aC42Yy44IDAgMS41LS4yIDIuMi0uNUwxNCAxMi43Yy4zLjMuOC4zIDEuMSAwbC45LS45Yy4zLS4zLjMtLjggMC0xLjFsLTEuNS0xLjVjLjMtLjcuNS0xLjQuNS0yLjIgMC0yLjgtMi4yLTUtNS01em0tMiA1YzAtLjYuNC0xIDEtMXMxIC40IDEgMS0uNCAxLTEgMS0xLS40LTEtMXptMyAwYzAtLjYuNC0xIDEtMXMxIC40IDEgMS0uNCAxLTEgMS0xLS40LTEtMXoiLz4KICA8cGF0aCBkPSJNNiAxNGg4djFINnYtMXptMSAyaDZ2MUg3di0xem0xIDJoNHYxSDh2LTF6Ii8+CiAgPGNpcmNsZSBjeD0iOCIgY3k9IjUiIHI9Ii41Ii8+CiAgPGNpcmNsZSBjeD0iMTIiIGN5PSI1IiByPSIuNSIvPgogIDxjaXJjbGUgY3g9IjEwIiBjeT0iNCIgcj0iLjUiLz4KPC9zdmc+';
+        
+        add_menu_page(
+            __('WP AI Explainer Settings', 'explainer-plugin'),
+            __('WP AI Explainer', 'explainer-plugin'),
             'manage_options',
             'explainer-settings',
-            array($this, 'settings_page')
+            array($this, 'settings_page'),
+            $icon_svg_base64,
+            30
         );
     }
     
@@ -450,7 +455,7 @@ class ExplainerPlugin_Admin {
      * Enqueue admin styles
      */
     public function enqueue_styles($hook) {
-        if ($hook !== 'settings_page_explainer-settings') {
+        if ($hook !== 'toplevel_page_explainer-settings') {
             return;
         }
         
@@ -467,7 +472,7 @@ class ExplainerPlugin_Admin {
      * Enqueue admin scripts
      */
     public function enqueue_scripts($hook) {
-        if ($hook !== 'settings_page_explainer-settings') {
+        if ($hook !== 'toplevel_page_explainer-settings') {
             return;
         }
         
@@ -794,7 +799,7 @@ class ExplainerPlugin_Admin {
         ?>
         <div id="<?php echo esc_attr($notice_id); ?>" class="<?php echo esc_attr($notice_class); ?>">
             <div class="explainer-notice-content">
-                <h3><?php _e('AI Explainer Plugin Automatically Disabled', 'explainer-plugin'); ?></h3>
+                <h3><?php _e('WP AI Explainer Automatically Disabled', 'explainer-plugin'); ?></h3>
                 <p><strong><?php _e('The plugin has been automatically disabled due to API usage limits being exceeded.', 'explainer-plugin'); ?></strong></p>
                 
                 <?php if (!empty($reason)): ?>

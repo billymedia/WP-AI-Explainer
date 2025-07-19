@@ -41,7 +41,7 @@ class Explainer_Accessibility_Testing {
      * Enqueue testing scripts
      */
     public function enqueue_testing_scripts($hook) {
-        if ($hook !== 'settings_page_explainer-settings') {
+        if ($hook !== 'toplevel_page_explainer-settings') {
             return;
         }
         

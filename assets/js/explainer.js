@@ -1,5 +1,5 @@
 /**
- * AI Explainer Plugin - Main JavaScript
+ * WP AI Explainer - Main JavaScript
  * Handles text selection, validation, and UI interactions
  */
 

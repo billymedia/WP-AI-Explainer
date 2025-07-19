@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: AI Explainer Plugin
+ * Plugin Name: WP AI Explainer
  * Plugin URI: https://github.com/billymedia/wp-explainer
  * Description: A lightweight WordPress plugin that uses multiple AI providers (OpenAI, Claude) to explain highlighted text via interactive tooltips. Features customisable appearance, disclaimers, provider attribution, encrypted API storage, and comprehensive admin interface.
  * Version: 1.0.0
@@ -594,6 +594,28 @@ function deactivate_explainer_plugin() {
 // Register activation and deactivation hooks
 register_activation_hook(__FILE__, 'activate_explainer_plugin');
 register_deactivation_hook(__FILE__, 'deactivate_explainer_plugin');
+
+/**
+ * Add settings link to plugin action links
+ * 
+ * @param array $links Array of plugin action links
+ * @return array Modified array of plugin action links
+ */
+function explainer_plugin_action_links($links) {
+    $settings_link = sprintf(
+        '<a href="%s">%s</a>',
+        admin_url('admin.php?page=explainer-settings'),
+        __('Settings', 'explainer-plugin')
+    );
+    
+    // Add settings link to the beginning of the array
+    array_unshift($links, $settings_link);
+    
+    return $links;
+}
+
+// Register the settings link filter
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'explainer_plugin_action_links');
 
 /**
  * Initialize and run the plugin

@@ -708,7 +708,7 @@ class ExplainerPlugin_API_Proxy {
             
             // Log to PHP error log as well for server-level tracking
             error_log(sprintf(
-                'CRITICAL: Explainer Plugin auto-disabled. Provider: %s, User: %d, Error: %s',
+                'CRITICAL: WP AI Explainer auto-disabled. Provider: %s, User: %d, Error: %s',
                 $provider_name,
                 get_current_user_id(),
                 $error_message

@@ -1,5 +1,5 @@
 /**
- * AI Explainer Plugin - Tooltip System
+ * WP AI Explainer - Tooltip System
  * Handles tooltip display, positioning, and interactions
  */
 

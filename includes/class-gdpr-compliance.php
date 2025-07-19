@@ -417,7 +417,7 @@ class Explainer_GDPR_Compliance {
      */
     public function register_data_exporter($exporters) {
         $exporters['explainer-plugin'] = array(
-            'exporter_friendly_name' => __('AI Explainer Plugin', 'explainer-plugin'),
+            'exporter_friendly_name' => __('WP AI Explainer', 'explainer-plugin'),
             'callback' => array($this, 'wp_privacy_exporter')
         );
         
@@ -429,7 +429,7 @@ class Explainer_GDPR_Compliance {
      */
     public function register_data_eraser($erasers) {
         $erasers['explainer-plugin'] = array(
-            'eraser_friendly_name' => __('AI Explainer Plugin', 'explainer-plugin'),
+            'eraser_friendly_name' => __('WP AI Explainer', 'explainer-plugin'),
             'callback' => array($this, 'wp_privacy_eraser')
         );
         
@@ -454,7 +454,7 @@ class Explainer_GDPR_Compliance {
         if (!empty($data)) {
             $export_items[] = array(
                 'group_id' => 'explainer_plugin',
-                'group_label' => __('AI Explainer Plugin', 'explainer-plugin'),
+                'group_label' => __('WP AI Explainer', 'explainer-plugin'),
                 'item_id' => 'explainer_data_' . $user->ID,
                 'data' => array(
                     array(
@@ -526,7 +526,7 @@ class Explainer_GDPR_Compliance {
             '<p>%s</p>' .
             '<h3>%s</h3>' .
             '<p>%s</p>',
-            __('AI Explainer Plugin', 'explainer-plugin'),
+            __('WP AI Explainer', 'explainer-plugin'),
             __('This plugin provides AI-powered text explanations. To provide this service, we may collect and process certain data.', 'explainer-plugin'),
             __('Data We Collect', 'explainer-plugin'),
             __('Selected text for AI processing (temporarily, not stored)', 'explainer-plugin'),
@@ -539,7 +539,7 @@ class Explainer_GDPR_Compliance {
         );
         
         wp_add_privacy_policy_content(
-            'AI Explainer Plugin',
+            'WP AI Explainer',
             wp_kses_post($content)
         );
     }

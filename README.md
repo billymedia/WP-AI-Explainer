@@ -1,4 +1,4 @@
-# AI Explainer Plugin for WordPress
+# WP AI Explainer for WordPress
 
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
@@ -42,7 +42,7 @@ A lightweight WordPress plugin that transforms your website into an interactive 
 ### From WordPress Admin
 
 1. Go to **Plugins → Add New**
-2. Search for "AI Explainer Plugin"
+2. Search for "WP AI Explainer"
 3. Click **Install Now** and then **Activate**
 4. Navigate to **Settings → Explainer Settings**
 5. Choose your AI provider (OpenAI or Claude)

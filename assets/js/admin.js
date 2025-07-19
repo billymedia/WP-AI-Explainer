@@ -1,5 +1,5 @@
 /**
- * Admin JavaScript for AI Explainer Plugin
+ * Admin JavaScript for WP AI Explainer
  */
 
 (function($) {

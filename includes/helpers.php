@@ -531,7 +531,7 @@ function explainer_check_advanced_rate_limit($user_identifier) {
         } else {
             if ($current_count >= $limit) {
                 // Log potential DDoS attempt
-                error_log("Explainer Plugin: Rate limit exceeded for {$user_identifier} in {$window} window");
+                error_log("WP AI Explainer: Rate limit exceeded for {$user_identifier} in {$window} window");
                 return true;
             }
             set_transient($transient_key, $current_count + 1, $time_windows[$window]);
@@ -682,7 +682,7 @@ function explainer_auto_disable_plugin($reason, $provider = '') {
     
     // Log the event
     error_log(sprintf(
-        'Explainer Plugin: Auto-disabled due to quota exceeded. Provider: %s, Reason: %s',
+        'WP AI Explainer: Auto-disabled due to quota exceeded. Provider: %s, Reason: %s',
         $provider,
         $reason
     ));
@@ -787,7 +787,7 @@ function explainer_reenable_plugin() {
     delete_option('explainer_show_usage_notice');
     
     // Log the re-enable event
-    error_log('Explainer Plugin: Manually re-enabled by user: ' . get_current_user_id());
+    error_log('WP AI Explainer: Manually re-enabled by user: ' . get_current_user_id());
     
     return true;
 }

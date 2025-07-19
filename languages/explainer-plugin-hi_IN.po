@@ -1,8 +1,8 @@
 # Copyright (C) 2024 Billy Patel
-# This file is distributed under the same license as the AI Explainer Plugin package.
+# This file is distributed under the same license as the WP AI Explainer package.
 msgid ""
 msgstr ""
-"Project-Id-Version: AI Explainer Plugin 1.0.0\n"
+"Project-Id-Version: WP AI Explainer 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/billymedia/wp-explainer/issues\n"
 "POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
@@ -24,7 +24,7 @@ msgid "This plugin requires PHP 7.4 or higher."
 msgstr "इस प्लगइन के लिए PHP 7.4 या उससे अधिक की आवश्यकता है।"
 
 #: includes/class-admin.php:50
-msgid "AI Explainer Settings"
+msgid "WP AI Explainer Settings"
 msgstr "AI व्याख्याकर्ता सेटिंग्स"
 
 #: includes/class-admin.php:51
@@ -144,7 +144,7 @@ msgid "Error loading explanation"
 msgstr "व्याख्या लोड करने में त्रुटि"
 
 #: templates/admin-settings.php:25
-msgid "AI Explainer Plugin Settings"
+msgid "WP AI Explainer Settings"
 msgstr "AI व्याख्याकर्ता प्लगइन सेटिंग्स"
 
 #: templates/admin-settings.php:35

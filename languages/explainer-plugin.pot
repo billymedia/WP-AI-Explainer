@@ -1,8 +1,8 @@
 # Copyright (C) 2024 Billy Patel
-# This file is distributed under the same license as the AI Explainer Plugin package.
+# This file is distributed under the same license as the WP AI Explainer package.
 msgid ""
 msgstr ""
-"Project-Id-Version: AI Explainer Plugin 1.0.0\n"
+"Project-Id-Version: WP AI Explainer 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/billymedia/wp-explainer/issues\n"
 "POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
@@ -144,7 +144,7 @@ msgid "Error loading explanation"
 msgstr ""
 
 #: templates/admin-settings.php:25
-msgid "AI Explainer Plugin Settings"
+msgid "WP AI Explainer Settings"
 msgstr ""
 
 #: templates/admin-settings.php:35
