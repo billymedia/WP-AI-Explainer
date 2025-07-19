@@ -243,11 +243,11 @@ By using this plugin, site administrators agree to comply with the terms of serv
 
 == Support ==
 
-For support, please report issues or request features via GitHub Issues at https://github.com/billymedia/wp-explainer/issues. For custom modifications or professional services, contact Billy directly at billy@billymedia.co.uk. Include your WordPress version, PHP version, and detailed description when reporting issues.
+For support, please report issues or request features via GitHub Issues at https://github.com/billymedia/WP-AI-Explainer/issues. For custom modifications or professional services, contact Billy directly at billy@billymedia.co.uk. Include your WordPress version, PHP version, and detailed description when reporting issues.
 
 == Contributing ==
 
-Contributions are welcome! Please visit the GitHub repository at https://github.com/billymedia/wp-explainer for development guidelines and to submit pull requests.
+Contributions are welcome! Please visit the GitHub repository at https://github.com/billymedia/WP-AI-Explainer for development guidelines and to submit pull requests.
 
 == Technical Requirements ==
 

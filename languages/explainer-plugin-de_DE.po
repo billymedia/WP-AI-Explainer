@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP AI Explainer 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/billymedia/wp-explainer/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/billymedia/WP-AI-Explainer/issues\n"
 "POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -143,82 +143,3 @@ msgstr "Erklärung"
 msgid "Error loading explanation"
 msgstr "Fehler beim Laden der Erklärung"
 
-#: templates/admin-settings.php:25
-msgid "WP AI Explainer Settings"
-msgstr "KI-Erklärer Plugin Einstellungen"
-
-#: templates/admin-settings.php:35
-msgid "Basic"
-msgstr "Grundlegend"
-
-#: templates/admin-settings.php:40
-msgid "Advanced"
-msgstr "Erweitert"
-
-#: templates/admin-settings.php:50
-msgid "Plugin Status"
-msgstr "Plugin-Status"
-
-#: templates/admin-settings.php:55
-msgid "API Configuration"
-msgstr "API-Konfiguration"
-
-#: templates/admin-settings.php:60
-msgid "Performance Settings"
-msgstr "Leistungseinstellungen"
-
-#: templates/admin-settings.php:70
-msgid "Save Changes"
-msgstr "Änderungen speichern"
-
-#: templates/admin-settings.php:75
-msgid "Test API Key"
-msgstr "API-Schlüssel testen"
-
-#: templates/admin-settings.php:80
-msgid "Clear Cache"
-msgstr "Cache leeren"
-
-#: templates/admin-settings.php:85
-msgid "Export Settings"
-msgstr "Einstellungen exportieren"
-
-#: templates/admin-settings.php:90
-msgid "Import Settings"
-msgstr "Einstellungen importieren"
-
-#: includes/class-admin.php:108
-msgid "Language"
-msgstr "Sprache"
-
-#: includes/class-admin.php:226
-msgid "English (United States)"
-msgstr "Englisch (Vereinigte Staaten)"
-
-#: includes/class-admin.php:227
-msgid "English (United Kingdom)"
-msgstr "Englisch (Vereinigtes Königreich)"
-
-#: includes/class-admin.php:228
-msgid "Spanish (Spain)"
-msgstr "Spanisch (Spanien)"
-
-#: includes/class-admin.php:229
-msgid "German (Germany)"
-msgstr "Deutsch (Deutschland)"
-
-#: includes/class-admin.php:230
-msgid "French (France)"
-msgstr "Französisch (Frankreich)"
-
-#: includes/class-admin.php:231
-msgid "Hindi (India)"
-msgstr "Hindi (Indien)"
-
-#: includes/class-admin.php:232
-msgid "Chinese (Simplified)"
-msgstr "Chinesisch (Vereinfacht)"
-
-#: includes/class-admin.php:243
-msgid "Select the language for the plugin interface and AI explanations."
-msgstr "Wählen Sie die Sprache für die Plugin-Oberfläche und KI-Erklärungen."

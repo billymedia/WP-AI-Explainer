@@ -3,7 +3,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL%20v2%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.3-orange.svg)](https://github.com/billymedia/wp-explainer/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.4-orange.svg)](https://github.com/billymedia/WP-AI-Explainer/releases)
 
 A lightweight WordPress plugin that transforms your website into an interactive learning experience. Users can simply select any text and receive instant AI-generated explanations via elegant, customisable tooltips.
 
@@ -120,7 +120,7 @@ A lightweight WordPress plugin that transforms your website into an interactive 
 ## Bug Reports & Feature Requests
 
 ### Reporting Issues
-- **GitHub Issues**: [github.com/billymedia/wp-explainer/issues](https://github.com/billymedia/wp-explainer/issues)
+- **GitHub Issues**: [github.com/billymedia/WP-AI-Explainer/issues](https://github.com/billymedia/WP-AI-Explainer/issues)
 - Include WordPress version, PHP version, and detailed steps to reproduce
 - Enable Debug Mode for detailed error logs
 - Check existing issues before creating new ones
@@ -177,7 +177,7 @@ This project is licensed under the GPL v2 or later - see the [LICENSE](https://w
 
 ## Support & Contact
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/billymedia/wp-explainer/issues)
+- **GitHub Issues**: [Report bugs or request features](https://github.com/billymedia/WP-AI-Explainer/issues)
 - **Custom Development**: [billy@billymedia.co.uk](mailto:billy@billymedia.co.uk)
 - **Documentation**: Available in the WordPress admin Help tab
 

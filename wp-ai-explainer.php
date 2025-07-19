@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WP AI Explainer
- * Plugin URI: https://github.com/billymedia/wp-explainer
+ * Plugin URI: https://github.com/billymedia/WP-AI-Explainer
  * Description: A lightweight WordPress plugin that uses multiple AI providers (OpenAI, Claude) to explain highlighted text via interactive tooltips. Features customisable appearance, disclaimers, provider attribution, encrypted API storage, and comprehensive admin interface.
  * Version: 1.0.0
  * Author: Billy Patel

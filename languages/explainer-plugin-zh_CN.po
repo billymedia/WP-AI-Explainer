@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP AI Explainer 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/billymedia/wp-explainer/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/billymedia/WP-AI-Explainer/issues\n"
 "POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -143,82 +143,3 @@ msgstr "解释"
 msgid "Error loading explanation"
 msgstr "加载解释时出错"
 
-#: templates/admin-settings.php:25
-msgid "WP AI Explainer Settings"
-msgstr "AI 解释器插件设置"
-
-#: templates/admin-settings.php:35
-msgid "Basic"
-msgstr "基本"
-
-#: templates/admin-settings.php:40
-msgid "Advanced"
-msgstr "高级"
-
-#: templates/admin-settings.php:50
-msgid "Plugin Status"
-msgstr "插件状态"
-
-#: templates/admin-settings.php:55
-msgid "API Configuration"
-msgstr "API 配置"
-
-#: templates/admin-settings.php:60
-msgid "Performance Settings"
-msgstr "性能设置"
-
-#: templates/admin-settings.php:70
-msgid "Save Changes"
-msgstr "保存更改"
-
-#: templates/admin-settings.php:75
-msgid "Test API Key"
-msgstr "测试 API 密钥"
-
-#: templates/admin-settings.php:80
-msgid "Clear Cache"
-msgstr "清除缓存"
-
-#: templates/admin-settings.php:85
-msgid "Export Settings"
-msgstr "导出设置"
-
-#: templates/admin-settings.php:90
-msgid "Import Settings"
-msgstr "导入设置"
-
-#: includes/class-admin.php:108
-msgid "Language"
-msgstr "语言"
-
-#: includes/class-admin.php:226
-msgid "English (United States)"
-msgstr "英语（美国）"
-
-#: includes/class-admin.php:227
-msgid "English (United Kingdom)"
-msgstr "英语（英国）"
-
-#: includes/class-admin.php:228
-msgid "Spanish (Spain)"
-msgstr "西班牙语（西班牙）"
-
-#: includes/class-admin.php:229
-msgid "German (Germany)"
-msgstr "德语（德国）"
-
-#: includes/class-admin.php:230
-msgid "French (France)"
-msgstr "法语（法国）"
-
-#: includes/class-admin.php:231
-msgid "Hindi (India)"
-msgstr "印地语（印度）"
-
-#: includes/class-admin.php:232
-msgid "Chinese (Simplified)"
-msgstr "中文（简体）"
-
-#: includes/class-admin.php:243
-msgid "Select the language for the plugin interface and AI explanations."
-msgstr "选择插件界面和 AI 解释的语言。"

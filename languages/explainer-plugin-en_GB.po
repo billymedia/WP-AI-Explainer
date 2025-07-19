@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WP AI Explainer 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/billymedia/wp-explainer/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/billymedia/WP-AI-Explainer/issues\n"
 "POT-Creation-Date: 2024-01-01 00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
