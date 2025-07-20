@@ -164,7 +164,7 @@ class ExplainerPlugin_Provider_Factory {
         if (!$provider) {
             return array(
                 'success' => false,
-                'message' => __('No provider configured.', 'wp-ai-explainer')
+                'message' => __('No provider configured.', 'ai-explainer')
             );
         }
         

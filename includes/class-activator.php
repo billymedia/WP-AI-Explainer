@@ -20,13 +20,13 @@ class ExplainerPlugin_Activator {
         // Check WordPress version
         if (!self::check_wordpress_version()) {
             deactivate_plugins(EXPLAINER_PLUGIN_BASENAME);
-            wp_die(esc_html__('This plugin requires WordPress 5.0 or higher.', 'wp-ai-explainer'));
+            wp_die(esc_html__('This plugin requires WordPress 5.0 or higher.', 'ai-explainer'));
         }
         
         // Check PHP version
         if (!self::check_php_version()) {
             deactivate_plugins(EXPLAINER_PLUGIN_BASENAME);
-            wp_die(esc_html__('This plugin requires PHP 7.4 or higher.', 'wp-ai-explainer'));
+            wp_die(esc_html__('This plugin requires PHP 7.4 or higher.', 'ai-explainer'));
         }
         
         // Create database tables

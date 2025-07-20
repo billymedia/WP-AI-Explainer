@@ -8,7 +8,7 @@
  * Author URI: https://billymedia.co.uk
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wp-ai-explainer
+ * Text Domain: ai-explainer
  * Domain Path: /languages
  * Requires at least: 5.0
  * Tested up to: 6.8
@@ -113,13 +113,13 @@ class ExplainerPlugin {
      * Set plugin locale for internationalization
      */
     private function set_locale() {
-        $this->loader->add_action('plugins_loaded', $this, 'load_plugin_textdomain');
+        $this->loader->add_action('plugins_loaded', $this, 'setup_locale_override');
     }
     
     /**
-     * Load plugin text domain for translations
+     * Setup locale override for custom language preferences
      */
-    public function load_plugin_textdomain() {
+    public function setup_locale_override() {
         // Check for custom language setting, fallback to WordPress locale
         $selected_language = get_option('explainer_language', get_locale());
         
@@ -127,24 +127,13 @@ class ExplainerPlugin {
             // Override locale for this plugin only if different from WordPress default
             add_filter('plugin_locale', array($this, 'override_plugin_locale'), 10, 2);
         }
-        
-        load_plugin_textdomain(
-            'wp-ai-explainer',
-            false,
-            dirname(EXPLAINER_PLUGIN_BASENAME) . '/languages/'
-        );
-        
-        // Remove the filter after loading
-        if (!empty($selected_language) && $selected_language !== get_locale()) {
-            remove_filter('plugin_locale', array($this, 'override_plugin_locale'), 10);
-        }
     }
     
     /**
      * Override plugin locale for this plugin only
      */
     public function override_plugin_locale($locale, $domain) {
-        if ($domain === 'wp-ai-explainer') {
+        if ($domain === 'ai-explainer') {
             $selected_language = get_option('explainer_language', get_locale());
             if (!empty($selected_language)) {
                 return $selected_language;
@@ -592,7 +581,7 @@ function explainer_plugin_action_links($links) {
     $settings_link = sprintf(
         '<a href="%s">%s</a>',
         admin_url('admin.php?page=explainer-settings'),
-        __('Settings', 'wp-ai-explainer')
+        __('Settings', 'ai-explainer')
     );
     
     // Add settings link to the beginning of the array

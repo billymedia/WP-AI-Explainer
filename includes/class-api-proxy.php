@@ -43,17 +43,17 @@ class ExplainerPlugin_API_Proxy {
         
         // Enhanced CSRF protection
         if (!$this->verify_request_security()) {
-            wp_send_json_error(array('message' => __('Security validation failed', 'wp-ai-explainer')));
+            wp_send_json_error(array('message' => __('Security validation failed', 'ai-explainer')));
         }
         
         // Verify nonce for security
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce' ) ) {
-            wp_send_json_error(array('message' => __('Invalid nonce', 'wp-ai-explainer')));
+            wp_send_json_error(array('message' => __('Invalid nonce', 'ai-explainer')));
         }
         
         // Check if user has permission
         if (!$this->user_can_request_explanation()) {
-            wp_send_json_error(array('message' => __('Invalid request', 'wp-ai-explainer')));
+            wp_send_json_error(array('message' => __('Invalid request', 'ai-explainer')));
         }
         
         // Get and validate input
@@ -64,7 +64,7 @@ class ExplainerPlugin_API_Proxy {
         
         // Enhanced rate limiting with DDoS protection
         if ($this->is_rate_limited()) {
-            $base_message = __('Rate limit exceeded. Please wait before making another request.', 'wp-ai-explainer');
+            $base_message = __('Rate limit exceeded. Please wait before making another request.', 'ai-explainer');
             $polite_message = ExplainerPlugin_Localization::get_polite_error_message($base_message);
             wp_send_json_error(array('message' => $polite_message));
         }
@@ -72,7 +72,7 @@ class ExplainerPlugin_API_Proxy {
         // Check if API key is configured
         $api_key = $this->get_api_key();
         if (!$api_key) {
-            wp_send_json_error(array('message' => __('API key not configured. Please check your settings.', 'wp-ai-explainer')));
+            wp_send_json_error(array('message' => __('API key not configured. Please check your settings.', 'ai-explainer')));
         }
         
         // TESTING: Simulate quota exceeded error (REMOVE AFTER TESTING)
@@ -164,7 +164,7 @@ class ExplainerPlugin_API_Proxy {
         $selected_text = isset($post_data['text']) ? sanitize_textarea_field( wp_unslash( $post_data['text'] ) ) : '';
         
         if (empty($selected_text)) {
-            wp_send_json_error(array('message' => __('Text selection is required', 'wp-ai-explainer')));
+            wp_send_json_error(array('message' => __('Text selection is required', 'ai-explainer')));
             return false;
         }
         
@@ -183,14 +183,14 @@ class ExplainerPlugin_API_Proxy {
         // Check minimum length first
         if (strlen($selected_text) < $min_length) {
             // translators: %d is the minimum number of characters required for text selection
-            wp_send_json_error(array('message' => sprintf(__('Text selection is too short (minimum %d characters)', 'wp-ai-explainer'), $min_length)));
+            wp_send_json_error(array('message' => sprintf(__('Text selection is too short (minimum %d characters)', 'ai-explainer'), $min_length)));
             return false;
         }
         
         // Check maximum length 
         if (strlen($selected_text) > $max_length) {
             // translators: %d is the maximum number of characters allowed for text selection
-            wp_send_json_error(array('message' => sprintf(__('Text selection is too long (maximum %d characters)', 'wp-ai-explainer'), $max_length)));
+            wp_send_json_error(array('message' => sprintf(__('Text selection is too long (maximum %d characters)', 'ai-explainer'), $max_length)));
             return false;
         }
         
@@ -198,13 +198,13 @@ class ExplainerPlugin_API_Proxy {
         $word_count = explainer_count_words($selected_text);
         if ($word_count < $min_words) {
             // translators: %d is the minimum number of words required for text selection
-            wp_send_json_error(array('message' => sprintf(__('Text selection has too few words (minimum %d words)', 'wp-ai-explainer'), $min_words)));
+            wp_send_json_error(array('message' => sprintf(__('Text selection has too few words (minimum %d words)', 'ai-explainer'), $min_words)));
             return false;
         }
         
         if ($word_count > $max_words) {
             // translators: %d is the maximum number of words allowed for text selection
-            wp_send_json_error(array('message' => sprintf(__('Text selection has too many words (maximum %d words)', 'wp-ai-explainer'), $max_words)));
+            wp_send_json_error(array('message' => sprintf(__('Text selection has too many words (maximum %d words)', 'ai-explainer'), $max_words)));
             return false;
         }
         
@@ -214,9 +214,9 @@ class ExplainerPlugin_API_Proxy {
             // Check if this was due to a blocked word
             $blocked_word = apply_filters('explainer_blocked_word_found', false);
             if ($blocked_word !== false) {
-                wp_send_json_error(array('message' => __('Your selection contains blocked content', 'wp-ai-explainer')));
+                wp_send_json_error(array('message' => __('Your selection contains blocked content', 'ai-explainer')));
             } else {
-                wp_send_json_error(array('message' => __('Text selection contains invalid content', 'wp-ai-explainer')));
+                wp_send_json_error(array('message' => __('Text selection contains invalid content', 'ai-explainer')));
             }
             return false;
         }
@@ -460,7 +460,7 @@ class ExplainerPlugin_API_Proxy {
         if (!$provider) {
             return array(
                 'success' => false,
-                'error' => __('No AI provider configured.', 'wp-ai-explainer')
+                'error' => __('No AI provider configured.', 'ai-explainer')
             );
         }
         
@@ -560,7 +560,7 @@ class ExplainerPlugin_API_Proxy {
         if (!$provider) {
             return array(
                 'success' => false,
-                'error' => __('No AI provider configured.', 'wp-ai-explainer')
+                'error' => __('No AI provider configured.', 'ai-explainer')
             );
         }
         
@@ -693,7 +693,7 @@ class ExplainerPlugin_API_Proxy {
         $provider_name = $provider === 'openai' ? 'OpenAI' : 'Claude';
         
         // Get the error message
-        $error_message = $result['error'] ?? __('API usage limit exceeded.', 'wp-ai-explainer');
+        $error_message = $result['error'] ?? __('API usage limit exceeded.', 'ai-explainer');
         
         // Auto-disable the plugin using helper function
         $disabled = explainer_auto_disable_plugin($error_message, $provider_name);

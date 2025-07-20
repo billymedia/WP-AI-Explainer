@@ -3,7 +3,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL%20v2%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.6-orange.svg)](https://github.com/billymedia/WP-AI-Explainer/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.7-orange.svg)](https://github.com/billymedia/WP-AI-Explainer/releases)
 
 A lightweight WordPress plugin that transforms your website into an interactive learning experience. Users can simply select any text and receive instant AI-generated explanations via elegant, customisable tooltips.
 
