@@ -246,9 +246,10 @@ class Explainer_User_Permissions {
      */
     public function restrict_admin_access() {
         // Check if current user can access settings page
-        if (isset($_GET['page']) && $_GET['page'] === 'explainer-settings') {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'explainer-settings' ) {
             if (!$this->can_manage_plugin()) {
-                wp_die(__('You do not have permission to access this page.', 'explainer-plugin'));
+                wp_die(esc_html__('You do not have permission to access this page.', 'wp-ai-explainer'));
             }
         }
     }
@@ -266,7 +267,7 @@ class Explainer_User_Permissions {
     public function check_explanation_capability() {
         if (!$this->can_use_explainer()) {
             wp_send_json_error(array(
-                'message' => __('You do not have permission to use the AI Explainer feature.', 'explainer-plugin')
+                'message' => __('You do not have permission to use the AI Explainer feature.', 'wp-ai-explainer')
             ));
         }
     }
@@ -277,14 +278,14 @@ class Explainer_User_Permissions {
     public function check_guest_access() {
         if (!$this->is_guest_access_allowed()) {
             wp_send_json_error(array(
-                'message' => __('Guest access is not allowed. Please log in to use the AI Explainer feature.', 'explainer-plugin')
+                'message' => __('Guest access is not allowed. Please log in to use the AI Explainer feature.', 'wp-ai-explainer')
             ));
         }
         
         // Apply rate limiting for guests
         if (!$this->check_guest_rate_limit()) {
             wp_send_json_error(array(
-                'message' => __('Rate limit exceeded. Please try again later.', 'explainer-plugin')
+                'message' => __('Rate limit exceeded. Please try again later.', 'wp-ai-explainer')
             ));
         }
     }
@@ -361,7 +362,7 @@ class Explainer_User_Permissions {
      * Log admin action via AJAX
      */
     public function log_admin_action() {
-        if (!wp_verify_nonce($_POST['nonce'], 'explainer_nonce')) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce' ) ) {
             wp_die('Security check failed');
         }
         
@@ -369,8 +370,12 @@ class Explainer_User_Permissions {
             wp_die('Insufficient permissions');
         }
         
-        $action = sanitize_text_field($_POST['action_type']);
-        $details = sanitize_text_field($_POST['details']);
+        if ( ! isset( $_POST['action_type'] ) || ! isset( $_POST['details'] ) ) {
+            wp_die('Missing required parameters');
+        }
+        
+        $action = sanitize_text_field( wp_unslash( $_POST['action_type'] ) );
+        $details = sanitize_text_field( wp_unslash( $_POST['details'] ) );
         
         $this->log_audit_event($action, array(
             'action' => $details,
@@ -392,6 +397,7 @@ class Explainer_User_Permissions {
         // Create audit table if it doesn't exist
         $this->ensure_audit_table_exists();
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for audit logging
         $wpdb->insert(
             $table_name,
             array(
@@ -399,7 +405,7 @@ class Explainer_User_Permissions {
                 'user_id' => $data['user_id'],
                 'action' => $data['action'],
                 'ip_address' => $this->anonymize_ip($data['ip_address']),
-                'user_agent' => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
+                'user_agent' => substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ), 0, 255 ),
                 'event_data' => wp_json_encode($data),
                 'timestamp' => current_time('mysql')
             ),
@@ -415,7 +421,8 @@ class Explainer_User_Permissions {
         
         $table_name = $wpdb->prefix . 'explainer_audit_log';
         
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for table existence check
+        if ($wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) != $table_name) {
             $charset_collate = $wpdb->get_charset_collate();
             
             $sql = "CREATE TABLE $table_name (
@@ -475,14 +482,15 @@ class Explainer_User_Permissions {
         
         $where_clause = implode(' AND ', $where_clauses);
         
-        $sql = "SELECT * FROM $table_name WHERE $where_clause ORDER BY timestamp DESC LIMIT %d OFFSET %d";
+        $sql = "SELECT * FROM $table_name WHERE $where_clause ORDER BY timestamp DESC LIMIT %d OFFSET %d"; // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         $where_values[] = $limit;
         $where_values[] = $offset;
         
         if (!empty($where_values)) {
-            $sql = $wpdb->prepare($sql, $where_values);
+            $sql = $wpdb->prepare($sql, $where_values); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         }
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared -- Direct query needed for audit log retrieval
         return $wpdb->get_results($sql);
     }
     
@@ -491,7 +499,7 @@ class Explainer_User_Permissions {
      */
     public function render_role_management() {
         if (!$this->can_manage_plugin()) {
-            return '<p>' . __('Access denied.', 'explainer-plugin') . '</p>';
+            return '<p>' . __('Access denied.', 'wp-ai-explainer') . '</p>';
         }
         
         $allowed_roles = $this->get_allowed_user_roles();
@@ -500,15 +508,15 @@ class Explainer_User_Permissions {
         ob_start();
         ?>
         <div class="explainer-role-management">
-            <h3><?php _e('User Role Management', 'explainer-plugin'); ?></h3>
-            <p><?php _e('Select which user roles can use the AI Explainer feature.', 'explainer-plugin'); ?></p>
+            <h3><?php esc_html_e('User Role Management', 'wp-ai-explainer'); ?></h3>
+            <p><?php esc_html_e('Select which user roles can use the AI Explainer feature.', 'wp-ai-explainer'); ?></p>
             
             <form method="post" action="options.php">
                 <?php settings_fields('explainer_permissions'); ?>
                 
                 <table class="form-table">
                     <tr>
-                        <th scope="row"><?php _e('Allowed User Roles', 'explainer-plugin'); ?></th>
+                        <th scope="row"><?php esc_html_e('Allowed User Roles', 'wp-ai-explainer'); ?></th>
                         <td>
                             <?php foreach ($all_roles as $role_key => $role_name): ?>
                                 <label>
@@ -523,39 +531,39 @@ class Explainer_User_Permissions {
                     </tr>
                     
                     <tr>
-                        <th scope="row"><?php _e('Guest Access', 'explainer-plugin'); ?></th>
+                        <th scope="row"><?php esc_html_e('Guest Access', 'wp-ai-explainer'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" 
                                        name="explainer_allow_guest_access" 
                                        value="1"
                                        <?php checked($this->is_guest_access_allowed()); ?>>
-                                <?php _e('Allow non-logged-in users to use the explainer', 'explainer-plugin'); ?>
+                                <?php esc_html_e('Allow non-logged-in users to use the explainer', 'wp-ai-explainer'); ?>
                             </label>
                         </td>
                     </tr>
                     
                     <tr>
-                        <th scope="row"><?php _e('Editor Management', 'explainer-plugin'); ?></th>
+                        <th scope="row"><?php esc_html_e('Editor Management', 'wp-ai-explainer'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" 
                                        name="explainer_allow_editor_management" 
                                        value="1"
                                        <?php checked(get_option('explainer_allow_editor_management', false)); ?>>
-                                <?php _e('Allow editors to manage plugin settings', 'explainer-plugin'); ?>
+                                <?php esc_html_e('Allow editors to manage plugin settings', 'wp-ai-explainer'); ?>
                             </label>
                         </td>
                     </tr>
                     
                     <tr>
-                        <th scope="row"><?php _e('Guest Rate Limit', 'explainer-plugin'); ?></th>
+                        <th scope="row"><?php esc_html_e('Guest Rate Limit', 'wp-ai-explainer'); ?></th>
                         <td>
                             <input type="number" 
                                    name="explainer_guest_hourly_limit" 
                                    value="<?php echo esc_attr(get_option('explainer_guest_hourly_limit', 10)); ?>"
                                    min="1" max="100">
-                            <p class="description"><?php _e('Maximum explanations per hour for guest users', 'explainer-plugin'); ?></p>
+                            <p class="description"><?php esc_html_e('Maximum explanations per hour for guest users', 'wp-ai-explainer'); ?></p>
                         </td>
                     </tr>
                 </table>
@@ -577,7 +585,7 @@ class Explainer_User_Permissions {
         
         foreach ($ip_keys as $key) {
             if (!empty($_SERVER[$key])) {
-                $ip = sanitize_text_field($_SERVER[$key]);
+                $ip = sanitize_text_field( wp_unslash( $_SERVER[$key] ) );
                 if (strpos($ip, ',') !== false) {
                     $ip = explode(',', $ip)[0];
                 }
@@ -662,6 +670,7 @@ class Explainer_User_Permissions {
         global $wpdb;
         
         $table_name = $wpdb->prefix . 'explainer_audit_log';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct schema change needed for audit table cleanup on uninstall
         $wpdb->query("DROP TABLE IF EXISTS $table_name");
     }
 }

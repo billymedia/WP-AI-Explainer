@@ -73,7 +73,7 @@ class ExplainerPlugin_Deactivator {
             $files = glob($cache_dir . '/*');
             foreach ($files as $file) {
                 if (is_file($file)) {
-                    unlink($file);
+                    wp_delete_file($file);
                 }
             }
         }
@@ -86,7 +86,8 @@ class ExplainerPlugin_Deactivator {
         global $wpdb;
         
         // Clear cache keys from wp_options table
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'explainer_cache_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for plugin deactivation cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", 'explainer_cache_%' ) );
         
         // Clear WordPress object cache
         if (function_exists('wp_cache_flush')) {
@@ -101,8 +102,10 @@ class ExplainerPlugin_Deactivator {
         global $wpdb;
         
         // Clear rate limiting transients
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_explainer_rate_limit_%'");
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_explainer_rate_limit_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for plugin deactivation cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_explainer_rate_limit_%' ) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for plugin deactivation cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_timeout_explainer_rate_limit_%' ) );
         
         // Clear API test transients
         delete_transient('explainer_api_test');

@@ -90,14 +90,14 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         if (empty($api_key)) {
             return array(
                 'success' => false,
-                'message' => __('API key is required.', 'explainer-plugin')
+                'message' => __('API key is required.', 'wp-ai-explainer')
             );
         }
         
         if (!$this->validate_api_key($api_key)) {
             return array(
                 'success' => false,
-                'message' => __('Invalid API key format.', 'explainer-plugin')
+                'message' => __('Invalid API key format.', 'wp-ai-explainer')
             );
         }
         
@@ -120,7 +120,7 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         if (is_wp_error($response)) {
             return array(
                 'success' => false,
-                'message' => __('Connection failed. Please check your internet connection.', 'explainer-plugin')
+                'message' => __('Connection failed. Please check your internet connection.', 'wp-ai-explainer')
             );
         }
         
@@ -129,27 +129,30 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         if ($response_code === 401) {
             return array(
                 'success' => false,
-                'message' => sprintf(__('Invalid API key. Please check your %s API key.', 'explainer-plugin'), $this->get_name())
+                // translators: %s is the name of the AI provider (OpenAI, Claude, etc.)
+                'message' => sprintf(__('Invalid API key. Please check your %s API key.', 'wp-ai-explainer'), $this->get_name())
             );
         }
         
         if ($response_code === 429) {
             return array(
                 'success' => false,
-                'message' => __('Rate limit exceeded. Please try again later.', 'explainer-plugin')
+                'message' => __('Rate limit exceeded. Please try again later.', 'wp-ai-explainer')
             );
         }
         
         if ($response_code !== 200) {
             return array(
                 'success' => false,
-                'message' => sprintf(__('API error (HTTP %d). Please try again.', 'explainer-plugin'), $response_code)
+                // translators: %d is the HTTP status code from the API response
+                'message' => sprintf(__('API error (HTTP %d). Please try again.', 'wp-ai-explainer'), $response_code)
             );
         }
         
         return array(
             'success' => true,
-            'message' => sprintf(__('%s API key is valid and working.', 'explainer-plugin'), $this->get_name())
+            // translators: %s is the name of the AI provider (OpenAI, Claude, etc.)
+            'message' => sprintf(__('%s API key is valid and working.', 'wp-ai-explainer'), $this->get_name())
         );
     }
     
@@ -202,7 +205,7 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         if (is_wp_error($response)) {
             return array(
                 'success' => false,
-                'error' => __('API request failed. Please try again.', 'explainer-plugin')
+                'error' => __('API request failed. Please try again.', 'wp-ai-explainer')
             );
         }
         
@@ -217,7 +220,7 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         if ($response_code !== 200) {
             return array(
                 'success' => false,
-                'error' => __('Explanation temporarily unavailable. Please try again later.', 'explainer-plugin')
+                'error' => __('Explanation temporarily unavailable. Please try again later.', 'wp-ai-explainer')
             );
         }
         
@@ -227,7 +230,7 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
         if (json_last_error() !== JSON_ERROR_NONE) {
             return array(
                 'success' => false,
-                'error' => __('Invalid API response format.', 'explainer-plugin')
+                'error' => __('Invalid API response format.', 'wp-ai-explainer')
             );
         }
         
@@ -283,7 +286,8 @@ abstract class ExplainerPlugin_Abstract_AI_Provider implements ExplainerPlugin_A
      */
     protected function get_quota_exceeded_message($data) {
         return sprintf(
-            __('API usage limit exceeded for %s. The plugin has been automatically disabled to prevent further charges. Please check your %s account billing and usage limits, then manually re-enable the plugin when ready.', 'explainer-plugin'),
+            // translators: First %1$s is the AI provider name, second %2$s is the same provider name for the account reference
+            __('API usage limit exceeded for %1$s. The plugin has been automatically disabled to prevent further charges. Please check your %2$s account billing and usage limits, then manually re-enable the plugin when ready.', 'wp-ai-explainer'),
             $this->get_name(),
             $this->get_name()
         );

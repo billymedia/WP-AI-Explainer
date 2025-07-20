@@ -1,19 +1,18 @@
 <?php
 /**
- * Plugin Name: WP AI Explainer
- * Plugin URI: https://github.com/billymedia/WP-AI-Explainer
- * Description: A lightweight WordPress plugin that uses multiple AI providers (OpenAI, Claude) to explain highlighted text via interactive tooltips. Features customisable appearance, disclaimers, provider attribution, encrypted API storage, and comprehensive admin interface.
+ * Plugin Name: AI Explainer
+ * Plugin URI: https://github.com/billymedia/AI-Text-Explainer
+ * Description: A lightweight plugin that uses AI to explain highlighted text via tooltips.
  * Version: 1.0.0
  * Author: Billy Patel
  * Author URI: https://billymedia.co.uk
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: explainer-plugin
+ * Text Domain: wp-ai-explainer
  * Domain Path: /languages
  * Requires at least: 5.0
- * Tested up to: 6.7
+ * Tested up to: 6.8
  * Requires PHP: 7.4
- * Network: false
  */
 
 // Prevent direct access
@@ -130,7 +129,7 @@ class ExplainerPlugin {
         }
         
         load_plugin_textdomain(
-            'explainer-plugin',
+            'wp-ai-explainer',
             false,
             dirname(EXPLAINER_PLUGIN_BASENAME) . '/languages/'
         );
@@ -145,7 +144,7 @@ class ExplainerPlugin {
      * Override plugin locale for this plugin only
      */
     public function override_plugin_locale($locale, $domain) {
-        if ($domain === 'explainer-plugin') {
+        if ($domain === 'wp-ai-explainer') {
             $selected_language = get_option('explainer_language', get_locale());
             if (!empty($selected_language)) {
                 return $selected_language;
@@ -186,7 +185,6 @@ class ExplainerPlugin {
             $security = new ExplainerPlugin_Security();
             
             // Frontend scripts and styles
-            error_log('ExplainerPlugin: Registering wp_enqueue_scripts hooks');
             $this->loader->add_action('wp_enqueue_scripts', $this, 'enqueue_public_styles');
             $this->loader->add_action('wp_enqueue_scripts', $this, 'enqueue_public_scripts');
         }
@@ -199,7 +197,6 @@ class ExplainerPlugin {
      * Register AJAX handlers
      */
     public function register_ajax_handlers() {
-        error_log('ExplainerPlugin: Registering AJAX handlers');
         
         // Get API proxy instance
         $api_proxy = new ExplainerPlugin_API_Proxy();
@@ -212,7 +209,6 @@ class ExplainerPlugin {
         add_action('wp_ajax_explainer_get_localized_strings', array($this, 'get_localized_strings'));
         add_action('wp_ajax_nopriv_explainer_get_localized_strings', array($this, 'get_localized_strings'));
         
-        error_log('ExplainerPlugin: AJAX handlers registered');
     }
     
     /**
@@ -368,14 +364,11 @@ class ExplainerPlugin {
      * Enqueue public scripts
      */
     public function enqueue_public_scripts() {
-        error_log('ExplainerPlugin: enqueue_public_scripts called');
         
         if (!$this->should_load_assets()) {
-            error_log('ExplainerPlugin: should_load_assets returned false');
             return;
         }
         
-        error_log('ExplainerPlugin: should_load_assets returned true, proceeding with script loading');
         
         // Load scripts immediately for debugging
         $this->enqueue_scripts_conditionally();
@@ -388,19 +381,15 @@ class ExplainerPlugin {
      * Conditionally enqueue scripts in footer for better performance
      */
     public function enqueue_scripts_conditionally() {
-        error_log('ExplainerPlugin: enqueue_scripts_conditionally called');
         
         // Load on all frontend pages for debugging
         if (is_admin()) {
-            error_log('ExplainerPlugin: Skipping script enqueue - is_admin() is true');
             return;
         }
         
-        error_log('ExplainerPlugin: Enqueueing scripts...');
         
         // Tooltip script (load first) - using full version with footer support
         $tooltip_url = EXPLAINER_PLUGIN_URL . 'assets/js/tooltip.js';
-        error_log('ExplainerPlugin: Tooltip script URL: ' . $tooltip_url);
         
         wp_enqueue_script(
             'explainer-plugin-tooltip',
@@ -412,7 +401,6 @@ class ExplainerPlugin {
         
         // Main explainer script
         $main_url = EXPLAINER_PLUGIN_URL . 'assets/js/explainer.js';
-        error_log('ExplainerPlugin: Main script URL: ' . $main_url);
         
         wp_enqueue_script(
             'explainer-plugin-main',
@@ -422,7 +410,6 @@ class ExplainerPlugin {
             true // Load in footer
         );
         
-        error_log('ExplainerPlugin: Scripts enqueued successfully');
         
         // Localize script for Ajax with optimized settings
         wp_localize_script('explainer-plugin-main', 'explainerAjax', array(
@@ -450,7 +437,7 @@ class ExplainerPlugin {
         // Preload critical CSS
         printf(
             '<link rel="preload" href="%s" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">' . "\n",
-            EXPLAINER_PLUGIN_URL . 'assets/css/style.css?ver=' . EXPLAINER_PLUGIN_VERSION
+            esc_url(EXPLAINER_PLUGIN_URL . 'assets/css/style.css?ver=' . EXPLAINER_PLUGIN_VERSION)
         );
     }
     
@@ -543,7 +530,7 @@ class ExplainerPlugin {
         }
         
         // Check for common login/register URLs
-        $request_uri = $_SERVER['REQUEST_URI'] ?? '';
+        $request_uri = sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) );
         $login_pages = array(
             'wp-login.php',
             'wp-register.php',
@@ -554,7 +541,7 @@ class ExplainerPlugin {
         );
         
         foreach ($login_pages as $page) {
-            if (strpos($request_uri, $page) !== false) {
+            if (str_contains($request_uri, $page)) {
                 return true;
             }
         }
@@ -605,7 +592,7 @@ function explainer_plugin_action_links($links) {
     $settings_link = sprintf(
         '<a href="%s">%s</a>',
         admin_url('admin.php?page=explainer-settings'),
-        __('Settings', 'explainer-plugin')
+        __('Settings', 'wp-ai-explainer')
     );
     
     // Add settings link to the beginning of the array

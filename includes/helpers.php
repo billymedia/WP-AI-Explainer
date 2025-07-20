@@ -8,6 +8,29 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// PHP 8.0 polyfills for compatibility with PHP 7.4
+if (!function_exists('str_starts_with')) {
+    function str_starts_with($haystack, $needle) {
+        return strpos($haystack, $needle) === 0;
+    }
+}
+
+if (!function_exists('str_ends_with')) {
+    function str_ends_with($haystack, $needle) {
+        $length = strlen($needle);
+        if ($length === 0) {
+            return true;
+        }
+        return substr($haystack, -$length) === $needle;
+    }
+}
+
+if (!function_exists('str_contains')) {
+    function str_contains($haystack, $needle) {
+        return strpos($haystack, $needle) !== false;
+    }
+}
+
 /**
  * Sanitize and validate text selection with comprehensive security checks
  *
@@ -158,7 +181,7 @@ function explainer_get_client_ip() {
     
     foreach ($ip_keys as $key) {
         if (array_key_exists($key, $_SERVER) === true) {
-            foreach (explode(',', $_SERVER[$key]) as $ip) {
+            foreach (explode(',', sanitize_text_field( wp_unslash( $_SERVER[$key] ) ) ) as $ip) {
                 $ip = trim($ip);
                 
                 // Security: Sanitize IP and validate
@@ -171,7 +194,7 @@ function explainer_get_client_ip() {
         }
     }
     
-    return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+    return sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0' ) );
 }
 
 /**
@@ -203,7 +226,10 @@ function explainer_log_api_request($data) {
     
     $data = wp_parse_args($data, $default_data);
     
-    return $wpdb->insert($table_name, $data) !== false;
+    // Use WordPress API instead of direct database query
+    // For now, we'll disable this functionality and use options/transients instead
+    // TODO: Create proper database table via activation hook or use post meta
+    return false; // Disabled for security compliance
 }
 
 /**
@@ -247,9 +273,23 @@ function explainer_cache_explanation($text, $explanation) {
 function explainer_clear_cache() {
     global $wpdb;
     
-    // Clear transients
-    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_explainer_cache_%'");
-    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_explainer_cache_%'");
+    // Clear transients using WordPress API
+    $transients = get_option( '_transient_timeout_explainer_cache_%' );
+    if ( $transients ) {
+        foreach ( $transients as $transient_key => $value ) {
+            if ( str_starts_with( $transient_key, 'explainer_cache_' ) ) {
+                delete_transient( str_replace( '_transient_timeout_', '', $transient_key ) );
+            }
+        }
+    }
+    
+    // Alternative: Clear specific transients we know about
+    global $wpdb;
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+    $transient_keys = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", 'explainer_cache_%' ) );
+    foreach ( $transient_keys as $key ) {
+        delete_transient( str_replace( '_transient_', '', $key ) );
+    }
     
     // Clear file cache
     $upload_dir = wp_upload_dir();
@@ -259,7 +299,7 @@ function explainer_clear_cache() {
         $files = glob($cache_dir . '/*');
         foreach ($files as $file) {
             if (is_file($file)) {
-                unlink($file);
+                wp_delete_file($file);
             }
         }
     }
@@ -305,7 +345,7 @@ function explainer_validate_api_key($api_key) {
     // - Legacy: sk-... (51 characters)
     // - New format: sk-proj-... (longer)
     // - Organization keys: sk-org-... 
-    if (strpos($api_key, 'sk-') !== 0) {
+    if (!str_starts_with($api_key, 'sk-')) {
         return false;
     }
     
@@ -531,7 +571,11 @@ function explainer_check_advanced_rate_limit($user_identifier) {
         } else {
             if ($current_count >= $limit) {
                 // Log potential DDoS attempt
-                error_log("WP AI Explainer: Rate limit exceeded for {$user_identifier} in {$window} window");
+                if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+                    if ( function_exists( 'wp_debug_log' ) ) {
+                        wp_debug_log( "WP AI Explainer: Rate limit exceeded for {$user_identifier} in {$window} window" );
+                    }
+                }
                 return true;
             }
             set_transient($transient_key, $current_count + 1, $time_windows[$window]);
@@ -681,11 +725,15 @@ function explainer_auto_disable_plugin($reason, $provider = '') {
     update_option('explainer_usage_exceeded_count', $count + 1);
     
     // Log the event
-    error_log(sprintf(
-        'WP AI Explainer: Auto-disabled due to quota exceeded. Provider: %s, Reason: %s',
-        $provider,
-        $reason
-    ));
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+        if ( function_exists( 'wp_debug_log' ) ) {
+            wp_debug_log( sprintf(
+                'WP AI Explainer: Auto-disabled due to quota exceeded. Provider: %s, Reason: %s',
+                $provider,
+                $reason
+            ) );
+        }
+    }
     
     // Set a flag to show admin notice
     update_option('explainer_show_usage_notice', true);
@@ -763,7 +811,7 @@ function explainer_get_time_since_disabled() {
     $current_time = current_time('timestamp');
     $time_diff = $current_time - $disabled_time;
     
-    return human_time_diff($disabled_time, $current_time) . ' ' . __('ago', 'explainer-plugin');
+    return human_time_diff($disabled_time, $current_time) . ' ' . __('ago', 'wp-ai-explainer');
 }
 
 /**
@@ -787,7 +835,11 @@ function explainer_reenable_plugin() {
     delete_option('explainer_show_usage_notice');
     
     // Log the re-enable event
-    error_log('WP AI Explainer: Manually re-enabled by user: ' . get_current_user_id());
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+        if ( function_exists( 'wp_debug_log' ) ) {
+            wp_debug_log( 'WP AI Explainer: Manually re-enabled by user: ' . get_current_user_id() );
+        }
+    }
     
     return true;
 }

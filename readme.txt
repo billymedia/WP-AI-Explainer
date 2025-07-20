@@ -1,14 +1,14 @@
-=== WP AI Explainer ===
+=== AI Explainer ===
 Contributors: billypatel
-Tags: ai, explanation, tooltip, openai, claude, text-selection, accessibility, multi-provider
+Tags: ai, explanation, tooltip, openai, claude
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A lightweight WordPress plugin that uses multiple AI providers (OpenAI, Claude) to explain highlighted text via interactive tooltips. Select text, get AI-generated explanations with customisable disclaimers and provider attribution.
+A lightweight plugin that uses AI to explain highlighted text via tooltips.
 
 == Description ==
 

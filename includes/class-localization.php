@@ -52,7 +52,7 @@ class ExplainerPlugin_Localization {
         
         $format = isset($formats[$language]) ? $formats[$language] : $formats['en_GB'];
         
-        return date($format, $timestamp);
+        return gmdate($format, $timestamp);
     }
     
     /**

@@ -45,11 +45,11 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
      */
     public function get_models() {
         return array(
-            'gpt-3.5-turbo' => __('GPT-3.5 Turbo (Recommended)', 'explainer-plugin'),
-            'gpt-4' => __('GPT-4 (Higher quality, more expensive)', 'explainer-plugin'),
-            'gpt-4-turbo' => __('GPT-4 Turbo (Fast and efficient)', 'explainer-plugin'),
-            'gpt-4o' => __('GPT-4o (Latest model)', 'explainer-plugin'),
-            'gpt-4o-mini' => __('GPT-4o Mini (Cost-effective)', 'explainer-plugin')
+            'gpt-3.5-turbo' => __('GPT-3.5 Turbo (Recommended)', 'wp-ai-explainer'),
+            'gpt-4' => __('GPT-4 (Higher quality, more expensive)', 'wp-ai-explainer'),
+            'gpt-4-turbo' => __('GPT-4 Turbo (Fast and efficient)', 'wp-ai-explainer'),
+            'gpt-4o' => __('GPT-4o (Latest model)', 'wp-ai-explainer'),
+            'gpt-4o-mini' => __('GPT-4o Mini (Cost-effective)', 'wp-ai-explainer')
         );
     }
     
@@ -77,7 +77,7 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
         $api_key = trim($api_key);
         
         // OpenAI API keys start with 'sk-'
-        if (strpos($api_key, 'sk-') !== 0) {
+        if (!str_starts_with($api_key, 'sk-')) {
             return false;
         }
         
@@ -169,7 +169,7 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
         
         // Check for OpenAI-specific errors
         if (isset($data['error'])) {
-            $error_message = $data['error']['message'] ?? __('Unknown API error.', 'explainer-plugin');
+            $error_message = $data['error']['message'] ?? __('Unknown API error.', 'wp-ai-explainer');
             return array(
                 'success' => false,
                 'error' => $error_message
@@ -180,7 +180,7 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
         if (!isset($data['choices'][0]['message']['content'])) {
             return array(
                 'success' => false,
-                'error' => __('No explanation received from API.', 'explainer-plugin')
+                'error' => __('No explanation received from API.', 'wp-ai-explainer')
             );
         }
         
@@ -317,13 +317,14 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
             $api_message = $data['error']['message'];
         }
         
-        $base_message = __('OpenAI API usage limit exceeded. The plugin has been automatically disabled to prevent further charges.', 'explainer-plugin');
+        $base_message = __('OpenAI API usage limit exceeded. The plugin has been automatically disabled to prevent further charges.', 'wp-ai-explainer');
         
         if (!empty($api_message)) {
-            $base_message .= ' ' . sprintf(__('OpenAI error: %s', 'explainer-plugin'), $api_message);
+            // translators: %s is the error message from the OpenAI API
+            $base_message .= ' ' . sprintf(__('OpenAI error: %s', 'wp-ai-explainer'), $api_message);
         }
         
-        $base_message .= ' ' . __('Please check your OpenAI account billing and usage limits, then manually re-enable the plugin when ready.', 'explainer-plugin');
+        $base_message .= ' ' . __('Please check your OpenAI account billing and usage limits, then manually re-enable the plugin when ready.', 'wp-ai-explainer');
         
         return $base_message;
     }
@@ -359,7 +360,7 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
         if (is_wp_error($response)) {
             return array(
                 'success' => false,
-                'message' => __('Connection failed. Please check your internet connection.', 'explainer-plugin')
+                'message' => __('Connection failed. Please check your internet connection.', 'wp-ai-explainer')
             );
         }
         
@@ -368,27 +369,28 @@ class ExplainerPlugin_OpenAI_Provider extends ExplainerPlugin_Abstract_AI_Provid
         if ($response_code === 401) {
             return array(
                 'success' => false,
-                'message' => __('Invalid API key. Please check your OpenAI API key.', 'explainer-plugin')
+                'message' => __('Invalid API key. Please check your OpenAI API key.', 'wp-ai-explainer')
             );
         }
         
         if ($response_code === 429) {
             return array(
                 'success' => false,
-                'message' => __('Rate limit exceeded. Please try again later.', 'explainer-plugin')
+                'message' => __('Rate limit exceeded. Please try again later.', 'wp-ai-explainer')
             );
         }
         
         if ($response_code !== 200) {
             return array(
                 'success' => false,
-                'message' => sprintf(__('API error (HTTP %d). Please try again.', 'explainer-plugin'), $response_code)
+                // translators: %d is the HTTP status code from the API response
+                'message' => sprintf(__('API error (HTTP %d). Please try again.', 'wp-ai-explainer'), $response_code)
             );
         }
         
         return array(
             'success' => true,
-            'message' => __('OpenAI API key is valid and working.', 'explainer-plugin')
+            'message' => __('OpenAI API key is valid and working.', 'wp-ai-explainer')
         );
     }
 }

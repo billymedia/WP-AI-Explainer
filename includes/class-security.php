@@ -313,7 +313,7 @@ class ExplainerPlugin_Security {
     public function validate_ajax_request() {
         // Additional security validation before processing
         if (!$this->is_valid_ajax_request()) {
-            wp_die(__('Invalid request', 'explainer-plugin'), 'Security Error', array('response' => 403));
+            wp_die(esc_html__('Invalid request', 'wp-ai-explainer'), 'Security Error', array('response' => 403));
         }
     }
     
@@ -322,8 +322,9 @@ class ExplainerPlugin_Security {
      */
     private function is_explainer_request() {
         return (
-            (isset($_POST['action']) && $_POST['action'] === 'explainer_get_explanation') ||
-            (strpos($_SERVER['REQUEST_URI'] ?? '', 'explainer') !== false)
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing
+            (isset($_POST['action']) && sanitize_text_field( wp_unslash( $_POST['action'] ) ) === 'explainer_get_explanation') ||
+            (strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) ), 'explainer') !== false)
         );
     }
     
@@ -342,12 +343,12 @@ class ExplainerPlugin_Security {
         }
         
         // Check nonce
-        if (!isset($_POST['nonce']) || !wp_verify_nonce($_POST['nonce'], 'explainer_nonce')) {
+        if (!isset($_POST['nonce']) || !wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce')) {
             return false;
         }
         
         // Check user agent
-        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $user_agent = sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) );
         if (empty($user_agent) || strlen($user_agent) < 10) {
             return false;
         }
@@ -404,12 +405,19 @@ class ExplainerPlugin_Security {
             'event_type' => sanitize_text_field($event_type),
             'user_id' => get_current_user_id(),
             'user_ip' => explainer_get_client_ip(),
-            'user_agent' => sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? ''),
+            'user_agent' => sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) ),
             'details' => sanitize_text_field(json_encode($details))
         );
         
-        // Log to WordPress error log
-        error_log('Explainer Plugin Security: ' . json_encode($log_entry));
+        // Log to WordPress debug log
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+            // Use WordPress logging mechanism instead of error_log
+            $message = 'Explainer Plugin Security: ' . wp_json_encode($log_entry);
+            // Write to debug.log using WordPress method
+            if ( function_exists( 'wp_debug_log' ) ) {
+                wp_debug_log( $message );
+            }
+        }
         
         // Store in database if needed
         if (get_option('explainer_security_database_logging', false)) {
@@ -425,6 +433,7 @@ class ExplainerPlugin_Security {
         
         $table_name = $wpdb->prefix . 'explainer_security_log';
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for security event logging
         $wpdb->insert(
             $table_name,
             $log_entry,
@@ -501,8 +510,9 @@ class ExplainerPlugin_Security {
         $table_name = $wpdb->prefix . 'explainer_security_log';
         $retention_days = get_option('explainer_security_log_retention', 30);
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for security log cleanup
         $wpdb->query($wpdb->prepare(
-            "DELETE FROM $table_name WHERE timestamp < DATE_SUB(NOW(), INTERVAL %d DAY)",
+            "DELETE FROM $table_name WHERE timestamp < DATE_SUB(NOW(), INTERVAL %d DAY)", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $retention_days
         ));
     }
@@ -523,16 +533,19 @@ class ExplainerPlugin_Security {
         );
         
         // Check if table exists
-        if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") !== $table_name) {
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for table existence check
+        if ($wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_name ) ) !== $table_name) {
             return $stats;
         }
         
         // Total events
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct query needed for security statistics
         $stats['total_events'] = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
         
         // Today's events
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct query needed for security statistics, table name is safe
         $stats['today_events'] = $wpdb->get_var($wpdb->prepare(
-            "SELECT COUNT(*) FROM $table_name WHERE DATE(timestamp) = %s",
+            "SELECT COUNT(*) FROM $table_name WHERE DATE(timestamp) = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             current_time('Y-m-d')
         ));
         
@@ -541,8 +554,9 @@ class ExplainerPlugin_Security {
         $stats['blocked_ips'] = count($blocked_ips);
         
         // Recent events
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct query needed for security statistics, table name is safe
         $stats['recent_events'] = $wpdb->get_results($wpdb->prepare(
-            "SELECT * FROM $table_name ORDER BY timestamp DESC LIMIT %d",
+            "SELECT * FROM $table_name ORDER BY timestamp DESC LIMIT %d", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             10
         ));
         

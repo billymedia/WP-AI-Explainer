@@ -155,12 +155,12 @@ class ExplainerPlugin_Theme_Compatibility {
         
         if (!empty($overrides['css'])) {
             echo '<style id="explainer-theme-compatibility">' . "\n";
-            echo '/* AI Explainer Plugin - Theme Compatibility: ' . $this->current_theme . ' */' . "\n";
+            echo '/* AI Explainer Plugin - Theme Compatibility: ' . esc_html($this->current_theme) . ' */' . "\n";
             
             foreach ($overrides['css'] as $selector => $properties) {
-                echo $selector . ' {' . "\n";
+                echo esc_html($selector) . ' {' . "\n";
                 foreach ($properties as $property => $value) {
-                    echo '    ' . $property . ': ' . $value . ' !important;' . "\n";
+                    echo '    ' . esc_html($property) . ': ' . esc_html($value) . ' !important;' . "\n";
                 }
                 echo '}' . "\n";
             }

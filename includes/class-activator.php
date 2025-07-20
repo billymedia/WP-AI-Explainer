@@ -20,13 +20,13 @@ class ExplainerPlugin_Activator {
         // Check WordPress version
         if (!self::check_wordpress_version()) {
             deactivate_plugins(EXPLAINER_PLUGIN_BASENAME);
-            wp_die(__('This plugin requires WordPress 5.0 or higher.', 'explainer-plugin'));
+            wp_die(esc_html__('This plugin requires WordPress 5.0 or higher.', 'wp-ai-explainer'));
         }
         
         // Check PHP version
         if (!self::check_php_version()) {
             deactivate_plugins(EXPLAINER_PLUGIN_BASENAME);
-            wp_die(__('This plugin requires PHP 7.4 or higher.', 'explainer-plugin'));
+            wp_die(esc_html__('This plugin requires PHP 7.4 or higher.', 'wp-ai-explainer'));
         }
         
         // Create database tables
@@ -39,7 +39,7 @@ class ExplainerPlugin_Activator {
         self::create_directories();
         
         // Set activation flag
-        update_option('explainer_plugin_activated', true);
+        update_option('explainer_plugin_activated', true, 'yes');
         
         // Clear any existing caches
         self::clear_caches();
@@ -68,7 +68,7 @@ class ExplainerPlugin_Activator {
         // Debug logs are stored in wp_options table
         
         // Update database version
-        update_option('explainer_db_version', '1.0');
+        update_option('explainer_db_version', '1.0', 'yes');
     }
     
     /**
@@ -103,7 +103,7 @@ class ExplainerPlugin_Activator {
         );
         
         foreach ($default_options as $option => $value) {
-            add_option($option, $value);
+            add_option($option, $value, '', 'yes');
         }
     }
     
@@ -160,7 +160,7 @@ class ExplainerPlugin_Activator {
             $files = glob($cache_dir . '/*');
             foreach ($files as $file) {
                 if (is_file($file)) {
-                    unlink($file);
+                    wp_delete_file($file);
                 }
             }
         }

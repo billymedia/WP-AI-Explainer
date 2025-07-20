@@ -1144,3 +1144,38 @@ body.claude-provider .form-table #explainer_api_model optgroup.claude-models {
         border: 2px solid #000;
     }
 }
+
+/* =============================================================================
+   Usage Exceeded Notice Styles
+   ============================================================================= */
+
+.explainer-usage-notice {
+    border-left-color: #dc3232 !important;
+    background-color: #fff2f2;
+}
+
+.explainer-notice-content h3 {
+    margin: 0 0 10px 0;
+    color: #dc3232;
+}
+
+.explainer-notice-content p {
+    margin: 8px 0;
+}
+
+.explainer-notice-actions {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.explainer-notice-actions .button {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.explainer-reenable-btn:disabled,
+.explainer-dismiss-notice-btn:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}

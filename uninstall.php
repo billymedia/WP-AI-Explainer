@@ -84,7 +84,8 @@ class ExplainerPlugin_Uninstaller {
         
         // Remove any options that start with explainer_
         global $wpdb;
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'explainer_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", 'explainer_%' ) );
     }
     
     /**
@@ -123,7 +124,7 @@ class ExplainerPlugin_Uninstaller {
             $files = glob($cache_dir . '/*');
             foreach ($files as $file) {
                 if (is_file($file)) {
-                    unlink($file);
+                    wp_delete_file($file);
                 }
             }
         }
@@ -136,16 +137,22 @@ class ExplainerPlugin_Uninstaller {
         global $wpdb;
         
         // Clear rate limiting transients
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_explainer_rate_limit_%'");
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_explainer_rate_limit_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_explainer_rate_limit_%' ) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_timeout_explainer_rate_limit_%' ) );
         
         // Clear cache transients
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_explainer_cache_%'");
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_explainer_cache_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_explainer_cache_%' ) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_timeout_explainer_cache_%' ) );
         
         // Clear settings transients
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_explainer_settings_%'");
-        $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_explainer_settings_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_explainer_settings_%' ) );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", '_transient_timeout_explainer_settings_%' ) );
         
         // Clear API test transients
         delete_transient('explainer_api_test');
@@ -178,11 +185,19 @@ class ExplainerPlugin_Uninstaller {
             if (is_dir($path)) {
                 self::remove_directory_recursive($path);
             } else {
-                unlink($path);
+                wp_delete_file($path);
             }
         }
         
-        rmdir($dir);
+        // Use WordPress filesystem to remove directory
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        if ( function_exists( 'WP_Filesystem' ) ) {
+            WP_Filesystem();
+            global $wp_filesystem;
+            if ( $wp_filesystem ) {
+                $wp_filesystem->rmdir( $dir, true );
+            }
+        }
     }
     
     /**
@@ -210,13 +225,16 @@ class ExplainerPlugin_Uninstaller {
         global $wpdb;
         
         // Remove user preferences
-        $wpdb->query("DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'explainer_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", 'explainer_%' ) );
         
         // Remove user debug preferences
-        $wpdb->query("DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'explainer_debug_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", 'explainer_debug_%' ) );
         
         // Remove user settings
-        $wpdb->query("DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE 'explainer_preferences_%'");
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for uninstall cleanup
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", 'explainer_preferences_%' ) );
     }
 }
 

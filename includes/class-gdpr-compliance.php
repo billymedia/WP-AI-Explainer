@@ -74,7 +74,7 @@ class Explainer_GDPR_Compliance {
         }
         
         $consent = isset($_COOKIE[self::COOKIE_CONSENT_NAME]) ? 
-                   sanitize_text_field($_COOKIE[self::COOKIE_CONSENT_NAME]) : '';
+                   sanitize_text_field( wp_unslash( $_COOKIE[self::COOKIE_CONSENT_NAME] ) ) : '';
         
         return $consent === 'granted';
     }
@@ -109,7 +109,7 @@ class Explainer_GDPR_Compliance {
      */
     private function is_consent_declined() {
         $consent = isset($_COOKIE[self::COOKIE_CONSENT_NAME]) ? 
-                   sanitize_text_field($_COOKIE[self::COOKIE_CONSENT_NAME]) : '';
+                   sanitize_text_field( wp_unslash( $_COOKIE[self::COOKIE_CONSENT_NAME] ) ) : '';
         
         return $consent === 'declined';
     }
@@ -129,12 +129,12 @@ class Explainer_GDPR_Compliance {
         <div id="explainer-gdpr-banner" class="explainer-gdpr-banner" role="banner" aria-live="polite">
             <div class="explainer-gdpr-content">
                 <div class="explainer-gdpr-message">
-                    <h3><?php esc_html_e('Cookie Consent', 'explainer-plugin'); ?></h3>
+                    <h3><?php esc_html_e('Cookie Consent', 'wp-ai-explainer'); ?></h3>
                     <p>
                         <?php
                         printf(
                             /* translators: %s: site name */
-                            esc_html__('This website uses cookies to enhance your experience, including the AI Explainer feature. We respect your privacy and only collect necessary data. By continuing to use %s, you consent to our use of cookies.', 'explainer-plugin'),
+                            esc_html__('This website uses cookies to enhance your experience, including the AI Explainer feature. We respect your privacy and only collect necessary data. By continuing to use %s, you consent to our use of cookies.', 'wp-ai-explainer'),
                             '<strong>' . esc_html($site_name) . '</strong>'
                         );
                         ?>
@@ -142,7 +142,7 @@ class Explainer_GDPR_Compliance {
                     <?php if ($privacy_policy_url): ?>
                     <p>
                         <a href="<?php echo esc_url($privacy_policy_url); ?>" target="_blank" rel="noopener">
-                            <?php esc_html_e('Read our Privacy Policy', 'explainer-plugin'); ?>
+                            <?php esc_html_e('Read our Privacy Policy', 'wp-ai-explainer'); ?>
                         </a>
                     </p>
                     <?php endif; ?>
@@ -151,20 +151,20 @@ class Explainer_GDPR_Compliance {
                     <button type="button" 
                             id="explainer-gdpr-accept" 
                             class="explainer-gdpr-button explainer-gdpr-accept"
-                            aria-label="<?php esc_attr_e('Accept cookies and continue', 'explainer-plugin'); ?>">
-                        <?php esc_html_e('Accept', 'explainer-plugin'); ?>
+                            aria-label="<?php esc_attr_e('Accept cookies and continue', 'wp-ai-explainer'); ?>">
+                        <?php esc_html_e('Accept', 'wp-ai-explainer'); ?>
                     </button>
                     <button type="button" 
                             id="explainer-gdpr-decline" 
                             class="explainer-gdpr-button explainer-gdpr-decline"
-                            aria-label="<?php esc_attr_e('Decline cookies', 'explainer-plugin'); ?>">
-                        <?php esc_html_e('Decline', 'explainer-plugin'); ?>
+                            aria-label="<?php esc_attr_e('Decline cookies', 'wp-ai-explainer'); ?>">
+                        <?php esc_html_e('Decline', 'wp-ai-explainer'); ?>
                     </button>
                     <button type="button" 
                             id="explainer-gdpr-customize" 
                             class="explainer-gdpr-button explainer-gdpr-customize"
-                            aria-label="<?php esc_attr_e('Customize cookie preferences', 'explainer-plugin'); ?>">
-                        <?php esc_html_e('Customize', 'explainer-plugin'); ?>
+                            aria-label="<?php esc_attr_e('Customize cookie preferences', 'wp-ai-explainer'); ?>">
+                        <?php esc_html_e('Customize', 'wp-ai-explainer'); ?>
                     </button>
                 </div>
             </div>
@@ -202,9 +202,9 @@ class Explainer_GDPR_Compliance {
             
             function setConsent(status) {
                 const expiryDate = new Date();
-                expiryDate.setDate(expiryDate.getDate() + <?php echo self::COOKIE_CONSENT_DURATION; ?>);
+                expiryDate.setDate(expiryDate.getDate() + <?php echo esc_js(self::COOKIE_CONSENT_DURATION); ?>);
                 
-                document.cookie = '<?php echo self::COOKIE_CONSENT_NAME; ?>=' + status + 
+                document.cookie = '<?php echo esc_js(self::COOKIE_CONSENT_NAME); ?>=' + status + 
                                 '; expires=' + expiryDate.toUTCString() + 
                                 '; path=/; SameSite=Lax; Secure';
                 
@@ -250,8 +250,8 @@ class Explainer_GDPR_Compliance {
             
             function showCustomizeModal() {
                 // Basic implementation - in production, show detailed cookie preferences
-                const allowAnalytics = confirm('<?php esc_js(_e('Allow analytics cookies to improve the service?', 'explainer-plugin')); ?>');
-                const allowFunctional = confirm('<?php esc_js(_e('Allow functional cookies for AI explanations?', 'explainer-plugin')); ?>');
+                const allowAnalytics = confirm('<?php esc_js(esc_html__('Allow analytics cookies to improve the service?', 'wp-ai-explainer')); ?>');
+                const allowFunctional = confirm('<?php esc_js(esc_html__('Allow functional cookies for AI explanations?', 'wp-ai-explainer')); ?>');
                 
                 if (allowFunctional) {
                     setConsent('granted');
@@ -280,20 +280,24 @@ class Explainer_GDPR_Compliance {
      * Handle AJAX consent
      */
     public function handle_consent_ajax() {
-        if (!wp_verify_nonce($_POST['nonce'], 'explainer_nonce')) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce' ) ) {
             wp_die('Security check failed');
         }
         
-        $consent = sanitize_text_field($_POST['consent']);
+        if ( ! isset( $_POST['consent'] ) ) {
+            wp_die('Missing consent parameter');
+        }
+        
+        $consent = sanitize_text_field( wp_unslash( $_POST['consent'] ) );
         $user_ip = $this->get_user_ip();
-        $user_agent = sanitize_text_field($_SERVER['HTTP_USER_AGENT'] ?? '');
+        $user_agent = sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) );
         
         // Log consent for audit trail
         $this->log_consent_event($consent, $user_ip, $user_agent);
         
         wp_send_json_success(array(
             'status' => $consent,
-            'message' => __('Consent preference saved.', 'explainer-plugin')
+            'message' => __('Consent preference saved.', 'wp-ai-explainer')
         ));
     }
     
@@ -305,6 +309,7 @@ class Explainer_GDPR_Compliance {
         
         $table_name = $wpdb->prefix . 'explainer_gdpr_logs';
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Direct query needed for GDPR compliance logging
         $wpdb->insert(
             $table_name,
             array(
@@ -322,7 +327,7 @@ class Explainer_GDPR_Compliance {
      * Handle data export request
      */
     public function handle_data_export() {
-        if (!wp_verify_nonce($_POST['nonce'], 'explainer_nonce')) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce' ) ) {
             wp_die('Security check failed');
         }
         
@@ -335,7 +340,7 @@ class Explainer_GDPR_Compliance {
         
         wp_send_json_success(array(
             'data' => $data,
-            'message' => __('User data exported successfully.', 'explainer-plugin')
+            'message' => __('User data exported successfully.', 'wp-ai-explainer')
         ));
     }
     
@@ -343,7 +348,7 @@ class Explainer_GDPR_Compliance {
      * Handle data deletion request
      */
     public function handle_data_deletion() {
-        if (!wp_verify_nonce($_POST['nonce'], 'explainer_nonce')) {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce' ) ) {
             wp_die('Security check failed');
         }
         
@@ -356,7 +361,7 @@ class Explainer_GDPR_Compliance {
         
         wp_send_json_success(array(
             'deleted' => $deleted,
-            'message' => __('User data deleted successfully.', 'explainer-plugin')
+            'message' => __('User data deleted successfully.', 'wp-ai-explainer')
         ));
     }
     
@@ -401,6 +406,7 @@ class Explainer_GDPR_Compliance {
         global $wpdb;
         $table_name = $wpdb->prefix . 'explainer_gdpr_logs';
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for GDPR data anonymization
         $wpdb->update(
             $table_name,
             array('user_ip' => '0.0.0.0', 'user_agent' => '[DELETED]'),
@@ -416,8 +422,8 @@ class Explainer_GDPR_Compliance {
      * Register data exporter for WordPress privacy tools
      */
     public function register_data_exporter($exporters) {
-        $exporters['explainer-plugin'] = array(
-            'exporter_friendly_name' => __('WP AI Explainer', 'explainer-plugin'),
+        $exporters['wp-ai-explainer'] = array(
+            'exporter_friendly_name' => __('WP AI Explainer', 'wp-ai-explainer'),
             'callback' => array($this, 'wp_privacy_exporter')
         );
         
@@ -428,8 +434,8 @@ class Explainer_GDPR_Compliance {
      * Register data eraser for WordPress privacy tools
      */
     public function register_data_eraser($erasers) {
-        $erasers['explainer-plugin'] = array(
-            'eraser_friendly_name' => __('WP AI Explainer', 'explainer-plugin'),
+        $erasers['wp-ai-explainer'] = array(
+            'eraser_friendly_name' => __('WP AI Explainer', 'wp-ai-explainer'),
             'callback' => array($this, 'wp_privacy_eraser')
         );
         
@@ -454,15 +460,15 @@ class Explainer_GDPR_Compliance {
         if (!empty($data)) {
             $export_items[] = array(
                 'group_id' => 'explainer_plugin',
-                'group_label' => __('WP AI Explainer', 'explainer-plugin'),
+                'group_label' => __('WP AI Explainer', 'wp-ai-explainer'),
                 'item_id' => 'explainer_data_' . $user->ID,
                 'data' => array(
                     array(
-                        'name' => __('User Preferences', 'explainer-plugin'),
+                        'name' => __('User Preferences', 'wp-ai-explainer'),
                         'value' => wp_json_encode($data['preferences'] ?? array())
                     ),
                     array(
-                        'name' => __('Usage Statistics', 'explainer-plugin'),
+                        'name' => __('Usage Statistics', 'wp-ai-explainer'),
                         'value' => wp_json_encode($data['usage_statistics'] ?? array())
                     )
                 )
@@ -497,7 +503,7 @@ class Explainer_GDPR_Compliance {
             'messages' => array(
                 sprintf(
                     /* translators: %s: comma-separated list of deleted items */
-                    __('Removed: %s', 'explainer-plugin'),
+                    __('Removed: %s', 'wp-ai-explainer'),
                     implode(', ', $deleted)
                 )
             ),
@@ -526,16 +532,16 @@ class Explainer_GDPR_Compliance {
             '<p>%s</p>' .
             '<h3>%s</h3>' .
             '<p>%s</p>',
-            __('WP AI Explainer', 'explainer-plugin'),
-            __('This plugin provides AI-powered text explanations. To provide this service, we may collect and process certain data.', 'explainer-plugin'),
-            __('Data We Collect', 'explainer-plugin'),
-            __('Selected text for AI processing (temporarily, not stored)', 'explainer-plugin'),
-            __('Usage preferences and settings', 'explainer-plugin'),
-            __('Basic usage statistics (anonymized)', 'explainer-plugin'),
-            __('How We Use Your Data', 'explainer-plugin'),
-            __('We use your data solely to provide AI explanations and improve the service. Text sent for AI processing is not stored permanently and is only used for generating explanations.', 'explainer-plugin'),
-            __('Your Rights', 'explainer-plugin'),
-            __('You can request access to, correction of, or deletion of your data at any time. You can also withdraw consent for data processing, which will disable the AI explanation features.', 'explainer-plugin')
+            __('WP AI Explainer', 'wp-ai-explainer'),
+            __('This plugin provides AI-powered text explanations. To provide this service, we may collect and process certain data.', 'wp-ai-explainer'),
+            __('Data We Collect', 'wp-ai-explainer'),
+            __('Selected text for AI processing (temporarily, not stored)', 'wp-ai-explainer'),
+            __('Usage preferences and settings', 'wp-ai-explainer'),
+            __('Basic usage statistics (anonymized)', 'wp-ai-explainer'),
+            __('How We Use Your Data', 'wp-ai-explainer'),
+            __('We use your data solely to provide AI explanations and improve the service. Text sent for AI processing is not stored permanently and is only used for generating explanations.', 'wp-ai-explainer'),
+            __('Your Rights', 'wp-ai-explainer'),
+            __('You can request access to, correction of, or deletion of your data at any time. You can also withdraw consent for data processing, which will disable the AI explanation features.', 'wp-ai-explainer')
         );
         
         wp_add_privacy_policy_content(
@@ -552,16 +558,17 @@ class Explainer_GDPR_Compliance {
         
         // Clean up old GDPR logs
         $logs_table = $wpdb->prefix . 'explainer_gdpr_logs';
-        $logs_cutoff = date('Y-m-d H:i:s', strtotime('-' . self::DATA_RETENTION_LOGS . ' days'));
+        $logs_cutoff = gmdate('Y-m-d H:i:s', strtotime('-' . self::DATA_RETENTION_LOGS . ' days'));
         
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Direct query needed for GDPR data retention cleanup
         $wpdb->query($wpdb->prepare(
-            "DELETE FROM {$logs_table} WHERE timestamp < %s",
+            "DELETE FROM $logs_table WHERE timestamp < %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             $logs_cutoff
         ));
         
         // Clean up old analytics data
         $analytics_cutoff = strtotime('-' . self::DATA_RETENTION_ANALYTICS . ' days');
-        delete_option('explainer_analytics_' . date('Y-m-d', $analytics_cutoff));
+        delete_option('explainer_analytics_' . gmdate('Y-m-d', $analytics_cutoff));
     }
     
     /**
@@ -573,7 +580,7 @@ class Explainer_GDPR_Compliance {
         
         foreach ($ip_keys as $key) {
             if (!empty($_SERVER[$key])) {
-                $ip = sanitize_text_field($_SERVER[$key]);
+                $ip = sanitize_text_field( wp_unslash( $_SERVER[$key] ) );
                 // Handle comma-separated IPs
                 if (strpos($ip, ',') !== false) {
                     $ip = explode(',', $ip)[0];
@@ -638,9 +645,9 @@ class Explainer_GDPR_Compliance {
         
         // Fallback to user IP + user agent hash
         $user_ip = $this->get_user_ip();
-        $user_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+        $user_agent = sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ?? '' ) );
         
-        return md5($user_ip . $user_agent . date('Y-m-d'));
+        return md5($user_ip . $user_agent . gmdate('Y-m-d'));
     }
     
     /**
@@ -676,6 +683,7 @@ class Explainer_GDPR_Compliance {
         global $wpdb;
         
         $table_name = $wpdb->prefix . 'explainer_gdpr_logs';
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Direct schema change needed for GDPR table cleanup on uninstall
         $wpdb->query("DROP TABLE IF EXISTS $table_name");
     }
 }
