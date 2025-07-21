@@ -91,7 +91,7 @@ class ExplainerPlugin_Activator {
             'explainer_rate_limit_logged' => 20, // per minute
             'explainer_rate_limit_anonymous' => 10, // per minute
             'explainer_included_selectors' => 'article, main, .content, .entry-content, .post-content',
-            'explainer_excluded_selectors' => 'nav, header, footer, aside, .widget, #wpadminbar, .admin-bar',
+            'explainer_excluded_selectors' => '',
             'explainer_tooltip_bg_color' => '#333333',
             'explainer_tooltip_text_color' => '#ffffff',
             'explainer_button_enabled_color' => '#46b450',
