@@ -7,6 +7,11 @@
 
 A lightweight WordPress plugin that transforms your website into an interactive learning experience. Users can simply select any text and receive instant AI-generated explanations via elegant, customisable tooltips.
 
+## Demo Video
+
+Watch a quick demo of WP AI Explainer in action:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8V57Y6nZTFs" title="WP AI Explainer Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Key Features
 
 - **Multi-Provider AI Support**: Choose between OpenAI (GPT-3.5, GPT-4) and Claude (Sonnet, Haiku) models
