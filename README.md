@@ -13,6 +13,8 @@ Watch a quick demo of WP AI Explainer in action:
 
 [![WP AI Explainer Demo](https://img.youtube.com/vi/8V57Y6nZTFs/0.jpg)](https://www.youtube.com/watch?v=8V57Y6nZTFs)
 
+
+
 ## Key Features
 
 - **Multi-Provider AI Support**: Choose between OpenAI (GPT-3.5, GPT-4) and Claude (Sonnet, Haiku) models

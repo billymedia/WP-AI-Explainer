@@ -732,7 +732,7 @@
     align-items: center;
     margin-bottom: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid color-mix(in srgb, var(--explainer-tooltip-text-color, #ffffff) 20%, transparent);
 }
 
 /* Title styling - exact match to frontend */

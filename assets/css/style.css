@@ -25,6 +25,7 @@
     --explainer-button-enabled: #46b450;
     --explainer-button-disabled: #666666;
     --explainer-button-text: #ffffff;
+    
 }
 
 /* =============================================================================
@@ -298,7 +299,7 @@
     align-items: center;
     margin-bottom: 8px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid color-mix(in srgb, var(--explainer-tooltip-text-color, #ffffff) 20%, transparent);
 }
 
 .explainer-tooltip-title {
@@ -312,7 +313,7 @@
 .explainer-tooltip-close {
     background: none;
     border: none;
-    color: white;
+    color: var(--explainer-tooltip-text-color, #ffffff);
     font-size: 18px;
     cursor: pointer;
     padding: 0;
@@ -322,7 +323,7 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .explainer-tooltip-close:hover {

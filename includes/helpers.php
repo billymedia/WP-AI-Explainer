@@ -266,6 +266,26 @@ function explainer_cache_explanation($text, $explanation) {
 }
 
 /**
+ * Count cached explanations
+ *
+ * @return int Number of cached items
+ */
+function explainer_count_cached_items() {
+    global $wpdb;
+    
+    // Count only actual cached explanations, excluding rate limiting and nonce transients
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+    $count = $wpdb->get_var( $wpdb->prepare( 
+        "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name NOT LIKE %s AND option_name NOT LIKE %s", 
+        '_transient_explainer_%',
+        '_transient_explainer_nonce_%',
+        '_transient_explainer_rate_limit_%'
+    ) );
+    
+    return (int) $count;
+}
+
+/**
  * Clear explanation cache
  *
  * @return bool Success status
@@ -273,25 +293,31 @@ function explainer_cache_explanation($text, $explanation) {
 function explainer_clear_cache() {
     global $wpdb;
     
-    // Clear transients using WordPress API
-    $transients = get_option( '_transient_timeout_explainer_cache_%' );
-    if ( $transients ) {
-        foreach ( $transients as $transient_key => $value ) {
-            if ( str_starts_with( $transient_key, 'explainer_cache_' ) ) {
-                delete_transient( str_replace( '_transient_timeout_', '', $transient_key ) );
-            }
-        }
-    }
-    
-    // Alternative: Clear specific transients we know about
-    global $wpdb;
+    // Clear transients with the correct cache key pattern (matches actual cache keys)
     // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-    $transient_keys = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", 'explainer_cache_%' ) );
+    $transient_keys = $wpdb->get_col( $wpdb->prepare( 
+        "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", 
+        '_transient_explainer_%' 
+    ) );
+    
     foreach ( $transient_keys as $key ) {
-        delete_transient( str_replace( '_transient_', '', $key ) );
+        // Remove the _transient_ prefix to get the actual transient key
+        $transient_key = str_replace( '_transient_', '', $key );
+        delete_transient( $transient_key );
     }
     
-    // Clear file cache
+    // Also clear the timeout entries
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+    $timeout_keys = $wpdb->get_col( $wpdb->prepare( 
+        "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s", 
+        '_transient_timeout_explainer_%' 
+    ) );
+    
+    foreach ( $timeout_keys as $key ) {
+        delete_option( $key );
+    }
+    
+    // Clear file cache (if any)
     $upload_dir = wp_upload_dir();
     $cache_dir = $upload_dir['basedir'] . '/explainer-plugin/cache';
     

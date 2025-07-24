@@ -4,49 +4,48 @@ Tags: ai, explanation, tooltip, openai, claude
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A lightweight plugin that uses AI to explain highlighted text via tooltips.
+A simple plugin that lets visitors get AI explanations for any text on your site.
 
 == Description ==
 
-WP AI Explainer transforms your WordPress site into an interactive learning experience. Visitors can simply select any text on your site and receive instant AI-generated explanations via elegant, customisable tooltips.
+WP AI Explainer makes your WordPress site more helpful by letting visitors highlight any text and get instant AI explanations. It's pretty straightforward - they select text, they get explanations in nice tooltips.
 
 **Key Features:**
 
-* **Multi-Provider AI Support**: Choose between OpenAI (GPT-3.5, GPT-4) and Claude (Sonnet, Haiku) models
-* **Interactive Tooltips**: Smart positioning with manual user control (no auto-close)
-* **Customisable Appearance**: Configure tooltip colours (background, text, footer), positioning, disclaimers, and provider attribution
-* **Multi-Language Support**: Localized tooltips in 7 languages (English US/UK, Spanish, German, French, Hindi, Chinese)
-* **Secure Integration**: API keys encrypted and never exposed to frontend
-* **Advanced Admin Interface**: Tabbed settings with Basic and Advanced configuration options
-* **Custom Prompt Templates**: Create personalised AI prompts with `{{snippet}}` placeholders
-* **Smart Content Filtering**: Configurable text selection rules and content exclusions
-* **Performance Optimised**: Intelligent caching, rate limiting, and minimal page load impact
-* **Theme Compatible**: Responsive design that works seamlessly with any WordPress theme
-* **Accessibility First**: WCAG AA compliant with full keyboard navigation and screen reader support
-* **Mobile Optimised**: Touch-friendly interface with swipe gestures for all devices
-* **Privacy Focused**: GDPR compliant with minimal data collection and secure processing
+* **Choose Your AI**: Works with both OpenAI (GPT-3.5, GPT-4) and Claude (Sonnet, Haiku)
+* **Smart Tooltips**: Explanations appear in tooltips that position themselves sensibly
+* **Make It Yours**: Change colours, positioning, and add disclaimers to match your site
+* **Multiple Languages**: Interface works in 7 languages including English, Spanish, German, French, Hindi, and Chinese
+* **Secure Setup**: Your API keys are encrypted and never exposed to visitors
+* **Easy Settings**: Clean admin interface with basic and advanced options
+* **Custom Prompts**: Write your own AI prompts using simple placeholders
+* **Control Content**: Choose which parts of your site should have explanations
+* **Performance Minded**: Built-in caching and rate limiting to keep things fast and affordable
+* **Works Everywhere**: Designed to work with any WordPress theme
+* **Accessible**: Built with screen readers and keyboard navigation in mind
+* **Mobile Friendly**: Works great on phones and tablets
+* **Privacy Conscious**: GDPR compliant with minimal data collection
 
 **How It Works:**
 
 1. Install and activate the plugin
-2. Choose your AI provider (OpenAI or Claude) and add your API key
-3. Select your preferred language for tooltip interface elements
-4. Customise tooltip appearance, prompts, and footer options
-5. Visitors select text to get instant AI explanations
-6. Explanations appear in responsive tooltips with localized disclaimers and attribution
+2. Pick your AI provider (OpenAI or Claude) and add your API key
+3. Choose your language and customise how things look
+4. Visitors highlight text to get instant explanations
+5. Explanations show up in neat tooltips they can close when done
 
-**Perfect For:**
+**Great For:**
 
-* Educational websites and online courses
-* Technical documentation and knowledge bases
-* News, magazine, and publishing sites
-* Professional services with complex terminology
-* E-commerce sites with detailed product information
-* Any website with content that benefits from contextual explanations
+* Educational sites and online courses
+* Technical docs and knowledge bases
+* News and magazine sites
+* Any site with jargon or complex terms
+* E-commerce sites with detailed products
+* Basically anywhere people might need extra context
 
 **Technical Highlights:**
 
@@ -70,22 +69,20 @@ WP AI Explainer transforms your WordPress site into an interactive learning expe
 2. Search for "WP AI Explainer"
 3. Click "Install Now" and then "Activate"
 4. Go to Settings → Explainer Settings
-5. Choose your AI provider (OpenAI or Claude)
-6. Select your preferred language for tooltip interface
-7. Enter your API key and select a model
-8. Test your API key to ensure it works
-9. Customise appearance and footer options
-10. Configure advanced settings as needed
-11. Save your settings and test on your site
+5. Pick your AI provider (OpenAI or Claude)
+6. Enter your API key and pick a model
+7. Test your API key to make sure it works
+8. Customise how things look if you want
+9. Save your settings and try it out
 
 **First Time Setup:**
 
 After installation, you'll need to:
-- Sign up for an API account with OpenAI or Claude
-- Generate an API key from your chosen provider
-- Configure the plugin settings in WordPress admin
-- Test the functionality on your site
-- Optionally customise appearance to match your theme
+- Get an API account with OpenAI or Claude
+- Grab an API key from whichever one you chose
+- Set up the plugin in your WordPress admin
+- Test it works on your site
+- Tweak the appearance if you want
 
 **Manual Installation:**
 
@@ -114,67 +111,67 @@ After installation, you'll need to:
 
 = Do I need an API key? =
 
-Yes, you need an API key from either OpenAI or Claude (Anthropic) to use this plugin. You can choose your preferred provider in the settings.
+Yes, you need an API key from either OpenAI or Claude to make this work. You can pick whichever one you prefer in the settings.
 
 = How much does it cost to use? =
 
-The plugin itself is free. You only pay for API usage from your chosen provider (OpenAI or Claude) based on your usage volume. The plugin includes intelligent caching and rate limiting to minimise costs.
+The plugin is free, but you pay for API usage from OpenAI or Claude based on how much it gets used. The plugin has caching and rate limiting built in to keep costs reasonable.
 
 = Will this slow down my website? =
 
-No, the plugin is designed for minimal performance impact. Scripts load asynchronously and only when needed. Target is <100ms added to page load time.
+No, it's built to be lightweight. Scripts only load when they're needed and the goal is to add less than 100ms to your page load time.
 
 = Does it work with my theme? =
 
-Yes, the plugin is designed to work with any WordPress theme. It uses CSS namespacing to prevent conflicts.
+Yes, it should work with any WordPress theme. The CSS is designed to not interfere with your theme's styling.
 
 = Is it accessible? =
 
-Yes, the plugin is WCAG 2.1 AA compliant with full keyboard navigation and screen reader support.
+Yes, it's built with accessibility in mind - keyboard navigation and screen readers work properly.
 
 = Can I customise the appearance? =
 
-Yes, the comprehensive admin panel includes options to customise tooltip colours (background, text, and footer text), positioning, styling, custom prompts, disclaimers, and provider attribution to match your site perfectly.
+Absolutely. You can change colours, positioning, prompts, disclaimers - pretty much everything to match your site.
 
 = What about privacy and GDPR? =
 
-The plugin is designed with privacy in mind and includes comprehensive GDPR compliance features. Selected text is sent to your chosen AI provider for processing but is not stored permanently by the plugin.
+It's built with privacy in mind and follows GDPR requirements. The selected text gets sent to your AI provider but isn't stored anywhere permanently.
 
 = Can I limit usage? =
 
-Yes, built-in rate limiting prevents abuse. You can configure different limits for logged-in and anonymous users.
+Yes, there's built-in rate limiting to prevent people from going crazy with requests. You can set different limits for logged-in users versus visitors.
 
 = Does it work on mobile? =
 
-Yes, the plugin is fully responsive and touch-friendly on all mobile devices.
+Yes, it works great on phones and tablets with touch-friendly controls.
 
 = What if the API is down? =
 
-The plugin includes robust error handling and will show user-friendly messages if the API is unavailable. With multi-provider support, you can also switch providers if needed.
+If the API goes down, it'll show friendly error messages instead of breaking. Since it supports multiple providers, you can switch if one's having issues.
 
 = Can I use this plugin on a multisite installation? =
 
-Yes, the plugin supports WordPress multisite installations. Each site can have its own API keys and settings.
+Yes, it works fine on multisite. Each site gets its own API keys and settings.
 
 = Does this plugin work with caching plugins? =
 
-Yes, the plugin is designed to work with popular caching plugins. It includes its own intelligent caching system for API responses to improve performance.
+Yes, it plays nicely with caching plugins. It also has its own caching system for API responses to make things faster.
 
 = Will this plugin slow down my website? =
 
-No, the plugin is designed for minimal performance impact. Scripts only load when needed, and the target is less than 100ms added to page load time.
+No, it's built to be lightweight. Scripts only load when needed and it aims to add less than 100ms to page load time.
 
 = Can I disable the plugin for certain user roles? =
 
-Yes, you can configure user permissions and rate limits in the Advanced settings. You can also disable the feature entirely for anonymous users.
+Yes, you can set different permissions and rate limits in the Advanced settings. You can even turn it off completely for visitors if you want.
 
 = Is this plugin compatible with page builders? =
 
-Yes, the plugin works with popular page builders like Elementor, Gutenberg, and others. It uses CSS selectors to target content areas.
+Yes, it works with page builders like Elementor, Gutenberg, and others. It uses CSS selectors to find the right content areas.
 
 = Can I translate this plugin? =
 
-Yes, the plugin is fully internationalized and ready for translation. The tooltip interface is already localized in 7 languages (English US/UK, Spanish, German, French, Hindi, Chinese), and you can contribute additional translations or create your own using WordPress translation tools.
+Yes, it's ready for translation and the interface already works in 7 languages (English US/UK, Spanish, German, French, Hindi, Chinese). You can add more languages using WordPress translation tools.
 
 == Screenshots ==
 
@@ -239,15 +236,12 @@ This plugin connects to external AI services to provide explanations. When a use
 - Complete data removal on plugin uninstall
 
 **Legal Compliance:**
-By using this plugin, site administrators agree to comply with the terms of service of their chosen AI provider. Users should be informed that their text selections may be processed by external AI services.
+By using this plugin, you agree to follow the terms of service of whichever AI provider you choose. Let your users know that their selected text gets processed by external AI services.
 
 == Support ==
 
-For support, please report issues or request features via GitHub Issues at https://github.com/billymedia/WP-AI-Explainer/issues. For custom modifications or professional services, contact Billy directly at billy@billymedia.co.uk. Include your WordPress version, PHP version, and detailed description when reporting issues.
+For support, report issues or suggest features on GitHub at https://github.com/billymedia/WP-AI-Explainer/issues. For custom work, email Billy directly at billy@billymedia.co.uk. When reporting issues, include your WordPress version, PHP version, and what's going wrong.
 
-== Contributing ==
-
-Contributions are welcome! Please visit the GitHub repository at https://github.com/billymedia/WP-AI-Explainer for development guidelines and to submit pull requests.
 
 == Technical Requirements ==
 
@@ -263,5 +257,5 @@ Contributions are welcome! Please visit the GitHub repository at https://github.
 * OpenAI for the GPT API and models
 * Anthropic for the Claude API and models
 * WordPress community for development standards and best practices
-* Contributors, beta testers, and the open source community
+* Beta testers and the community
 * Security researchers for responsible disclosure and feedback

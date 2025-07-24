@@ -29,6 +29,11 @@ class ExplainerPlugin_API_Proxy {
     private const MAX_TOKENS = 150;
     
     /**
+     * Cache for decrypted API keys (per-request caching)
+     */
+    private $decrypted_key_cache = array();
+    
+    /**
      * Initialize the API proxy
      */
     public function __construct() {
@@ -39,41 +44,97 @@ class ExplainerPlugin_API_Proxy {
      * Handle Ajax request for explanation with enhanced security
      */
     public function get_explanation() {
-        // Debug: Log that AJAX handler was called
+        $this->debug_log('=== EXPLANATION REQUEST STARTED ===', array(
+            'timestamp' => current_time('mysql'),
+            'user_id' => get_current_user_id(),
+            'user_ip' => explainer_get_client_ip(),
+            'request_method' => sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD'] ?? 'unknown'))
+        ));
         
         // Enhanced CSRF protection
         if (!$this->verify_request_security()) {
+            $this->debug_log('SECURITY VALIDATION FAILED', array(
+                'reason' => 'Enhanced CSRF protection failed',
+                'user_agent' => sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'] ?? 'unknown')),
+                'referer' => sanitize_text_field(wp_unslash($_SERVER['HTTP_REFERER'] ?? 'none'))
+            ));
             wp_send_json_error(array('message' => __('Security validation failed', 'ai-explainer')));
         }
         
         // Verify nonce for security
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_nonce' ) ) {
+            $this->debug_log('NONCE VALIDATION FAILED', array(
+                'nonce_provided' => isset($_POST['nonce']),
+                'nonce_value' => isset($_POST['nonce']) ? substr(sanitize_text_field(wp_unslash($_POST['nonce'])), 0, 10) . '...' : 'none'
+            ));
             wp_send_json_error(array('message' => __('Invalid nonce', 'ai-explainer')));
         }
         
+        $this->debug_log('Security validation passed', array('status' => 'success'));
+        
         // Check if user has permission
         if (!$this->user_can_request_explanation()) {
+            $this->debug_log('USER PERMISSION DENIED', array(
+                'user_id' => get_current_user_id(),
+                'is_logged_in' => is_user_logged_in(),
+                'capabilities' => is_user_logged_in() ? array_keys(wp_get_current_user()->allcaps) : 'anonymous'
+            ));
             wp_send_json_error(array('message' => __('Invalid request', 'ai-explainer')));
         }
         
         // Get and validate input
+        $this->debug_log('Starting input validation', array(
+            'post_data_size' => count($_POST ?? array()),
+            'text_provided' => isset($_POST['text'])
+        ));
+        
         $selected_text = $this->sanitize_and_validate_input($_POST ?? array());
         if (!$selected_text) {
+            $this->debug_log('INPUT VALIDATION FAILED', array('reason' => 'sanitize_and_validate_input returned false'));
             return;
         }
         
+        $this->debug_log('Input validation successful', array(
+            'text_length' => strlen($selected_text),
+            'word_count' => explainer_count_words($selected_text)
+        ));
+        
         // Enhanced rate limiting with DDoS protection
         if ($this->is_rate_limited()) {
+            $user_identifier = explainer_get_user_identifier();
+            $this->debug_log('RATE LIMIT EXCEEDED', array(
+                'user_identifier' => $user_identifier,
+                'is_logged_in' => is_user_logged_in(),
+                'rate_limit_enabled' => get_option('explainer_rate_limit_enabled', true),
+                'limit_logged' => get_option('explainer_rate_limit_logged', 20),
+                'limit_anonymous' => get_option('explainer_rate_limit_anonymous', 10)
+            ));
             $base_message = __('Rate limit exceeded. Please wait before making another request.', 'ai-explainer');
             $polite_message = ExplainerPlugin_Localization::get_polite_error_message($base_message);
             wp_send_json_error(array('message' => $polite_message));
         }
         
+        $this->debug_log('Rate limiting check passed', array('status' => 'success'));
+        
         // Check if API key is configured
+        $this->debug_log('Starting API key retrieval', array(
+            'provider' => get_option('explainer_api_provider', 'openai')
+        ));
+        
         $api_key = $this->get_api_key();
         if (!$api_key) {
+            $this->debug_log('API KEY CONFIGURATION FAILED', array(
+                'reason' => 'No API key retrieved',  
+                'provider' => get_option('explainer_api_provider', 'openai'),
+                'key_option_exists' => !empty(get_option('explainer_api_key', '')) || !empty(get_option('explainer_claude_api_key', ''))
+            ));
             wp_send_json_error(array('message' => __('API key not configured. Please check your settings.', 'ai-explainer')));
         }
+        
+        $this->debug_log('API key retrieved successfully', array(
+            'key_length' => strlen($api_key),
+            'key_prefix' => substr($api_key, 0, 3) . '...'
+        ));
         
         // TESTING: Simulate quota exceeded error (REMOVE AFTER TESTING)
         // if (isset($_POST['text']) && strpos($_POST['text'], 'test quota') !== false) {
@@ -89,8 +150,18 @@ class ExplainerPlugin_API_Proxy {
         // }
         
         // Check cache first
+        $this->debug_log('Starting cache lookup', array(
+            'cache_enabled' => get_option('explainer_cache_enabled', true),
+            'text_hash' => hash('xxh64', $selected_text)
+        ));
+        
         $cached_explanation = $this->get_cached_explanation($selected_text);
         if ($cached_explanation) {
+            $this->debug_log('CACHE HIT - Returning cached explanation', array(
+                'explanation_length' => strlen($cached_explanation),
+                'provider' => get_option('explainer_api_provider', 'openai'),
+                'response_source' => 'cache'
+            ));
             wp_send_json_success(array(
                 'explanation' => $cached_explanation,
                 'cached' => true,
@@ -98,11 +169,17 @@ class ExplainerPlugin_API_Proxy {
             ));
         }
         
-        // Debug logging
-        $this->debug_log('API Request initiated', array(
-            'selected_text' => $selected_text,
+        $this->debug_log('CACHE MISS - Proceeding to API request', array(
+            'cache_enabled' => get_option('explainer_cache_enabled', true),
+            'reason' => 'No cached explanation found'
+        ));
+        
+        // Prepare for API request
+        $this->debug_log('Preparing API request', array(
+            'text_length' => strlen($selected_text),
             'user_id' => get_current_user_id(),
-            'cache_checked' => $cached_explanation ? 'hit' : 'miss'
+            'provider' => get_option('explainer_api_provider', 'openai'),
+            'model' => get_option('explainer_api_model', 'gpt-3.5-turbo')
         ));
         
         // Make API request
@@ -112,14 +189,34 @@ class ExplainerPlugin_API_Proxy {
         
         if ($result['success']) {
             // Cache the successful response
-            $this->cache_explanation($selected_text, $result['explanation']);
+            $this->debug_log('Caching successful explanation', array(
+                'cache_enabled' => get_option('explainer_cache_enabled', true),
+                'cache_duration_hours' => get_option('explainer_cache_duration', 24)
+            ));
             
-            // Debug logging
-            $this->debug_log('API Request successful', array(
+            $cache_result = $this->cache_explanation($selected_text, $result['explanation']);
+            if (!$cache_result) {
+                $this->debug_log('CACHE STORAGE FAILED', array(
+                    'reason' => 'cache_explanation returned false',
+                    'cache_enabled' => get_option('explainer_cache_enabled', true)
+                ));
+            } else {
+                $this->debug_log('Explanation cached successfully', array('status' => 'success'));
+            }
+            
+            // Success logging
+            $this->debug_log('=== API REQUEST SUCCESSFUL ===', array(
                 'explanation_length' => strlen($result['explanation']),
-                'tokens_used' => $result['tokens_used'],
-                'cost' => $result['cost'],
-                'response_time' => round($response_time, 3)
+                'tokens_used' => $result['tokens_used'] ?? 'unknown',
+                'cost' => $result['cost'] ?? 'unknown',
+                'response_time_seconds' => round($response_time, 3),
+                'provider' => get_option('explainer_api_provider', 'openai'),
+                'cached_for_future' => $cache_result
+            ));
+            
+            $this->debug_log('=== EXPLANATION REQUEST COMPLETED SUCCESSFULLY ===', array(
+                'total_response_time_seconds' => round($response_time, 3),
+                'final_status' => 'success'
             ));
             
             wp_send_json_success(array(
@@ -133,15 +230,28 @@ class ExplainerPlugin_API_Proxy {
         } else {
             // Check if this is a quota exceeded error that should disable the plugin
             if (isset($result['disable_plugin']) && $result['disable_plugin'] === true) {
+                $this->debug_log('QUOTA EXCEEDED - Auto-disabling plugin', array(
+                    'error_type' => $result['error_type'] ?? 'quota_exceeded',
+                    'provider' => get_option('explainer_api_provider', 'openai'),
+                    'error_message' => $result['error']
+                ));
                 $this->handle_quota_exceeded_error($result);
             }
             
-            // Debug logging
-            $this->debug_log('API Request failed', array(
-                'error' => $result['error'],
+            // Failure logging
+            $this->debug_log('=== API REQUEST FAILED ===', array(
+                'error_message' => $result['error'],
                 'error_type' => $result['error_type'] ?? 'unknown',
-                'disable_plugin' => $result['disable_plugin'] ?? false,
-                'response_time' => round($response_time, 3)
+                'disable_plugin_triggered' => $result['disable_plugin'] ?? false,
+                'response_time_seconds' => round($response_time, 3),
+                'provider' => get_option('explainer_api_provider', 'openai'),
+                'user_impact' => 'Request failed, no explanation provided'
+            ));
+            
+            $this->debug_log('=== EXPLANATION REQUEST COMPLETED WITH ERROR ===', array(
+                'total_response_time_seconds' => round($response_time, 3),
+                'final_status' => 'error',
+                'error_message' => $result['error']
             ));
             
             wp_send_json_error(array('message' => $result['error']));
@@ -236,12 +346,30 @@ class ExplainerPlugin_API_Proxy {
      * Get API key from options based on current provider
      */
     private function get_api_key() {
+        $provider_key = get_option('explainer_api_provider', 'openai');
+        
+        $this->debug_log('Retrieving API key via factory', array(
+            'provider' => $provider_key,
+            'factory_method' => 'ExplainerPlugin_Provider_Factory::get_current_decrypted_api_key'
+        ));
+        
         // Use the factory method to get decrypted key directly
         $decrypted_key = ExplainerPlugin_Provider_Factory::get_current_decrypted_api_key();
         
         if (empty($decrypted_key)) {
+            $this->debug_log('API KEY RETRIEVAL FAILED', array(
+                'provider' => $provider_key,
+                'reason' => 'Factory returned empty key',
+                'encrypted_key_exists' => !empty(get_option('explainer_api_key', '')) || !empty(get_option('explainer_claude_api_key', ''))
+            ));
             return false;
         }
+        
+        $this->debug_log('API key retrieved and decrypted successfully', array(
+            'provider' => $provider_key,
+            'key_length' => strlen($decrypted_key),
+            'key_format_valid' => $this->is_valid_api_key_format($decrypted_key)
+        ));
         
         return $decrypted_key;
     }
@@ -257,9 +385,10 @@ class ExplainerPlugin_API_Proxy {
      * Get decrypted API key for specific provider
      * 
      * @param string $provider Provider key (openai, claude)
+     * @param bool $for_api_call Whether this is for an actual API call (affects debug logging)
      * @return string Decrypted API key or empty string
      */
-    public function get_decrypted_api_key_for_provider($provider) {
+    public function get_decrypted_api_key_for_provider($provider, $for_api_call = false) {
         $encrypted_key = '';
         
         switch ($provider) {
@@ -278,7 +407,7 @@ class ExplainerPlugin_API_Proxy {
         }
         
         // Decrypt the key
-        return $this->decrypt_api_key($encrypted_key);
+        return $this->decrypt_api_key($encrypted_key, $for_api_call);
     }
     
     /**
@@ -298,7 +427,7 @@ class ExplainerPlugin_API_Proxy {
         
         // Validate that this looks like a real API key before encrypting
         if (!$this->is_valid_api_key_format($api_key)) {
-            $this->debug_log('Encrypt API Key: Invalid key format', array('key_prefix' => substr($api_key, 0, 10)));
+            $this->debug_log('Encrypt API Key: Invalid key format', array('key_prefix' => substr($api_key, 0, 3) . '...'));
             // Return empty string for invalid keys
             return '';
         }
@@ -306,7 +435,7 @@ class ExplainerPlugin_API_Proxy {
         // Use WordPress salts for encryption
         $salt = wp_salt('nonce');
         $encrypted = base64_encode($api_key . '|' . wp_hash($api_key . $salt));
-        $this->debug_log('Encrypt API Key: Successfully encrypted', array('key_prefix' => substr($api_key, 0, 10)));
+        $this->debug_log('Encrypt API Key: Successfully encrypted', array('key_prefix' => substr($api_key, 0, 3) . '...'));
         
         return $encrypted;
     }
@@ -359,15 +488,24 @@ class ExplainerPlugin_API_Proxy {
     /**
      * Decrypt API key from storage
      */
-    private function decrypt_api_key($encrypted_key) {
+    private function decrypt_api_key($encrypted_key, $for_api_call = false) {
         if (empty($encrypted_key)) {
             $this->debug_log('Decrypt API Key: Empty key provided');
             return '';
         }
         
+        // Check cache first to avoid repeated decryption
+        $cache_key = md5($encrypted_key);
+        if (isset($this->decrypted_key_cache[$cache_key])) {
+            return $this->decrypted_key_cache[$cache_key];
+        }
+        
         // Check if the key is already in plain text (not encrypted)
         if ($this->is_valid_api_key_format($encrypted_key)) {
-            $this->debug_log('Decrypt API Key: Key already in plain text', array('key_prefix' => substr($encrypted_key, 0, 10)));
+            if ($for_api_call) {
+                $this->debug_log('Decrypt API Key: Key already in plain text', array('key_prefix' => substr($encrypted_key, 0, 3) . '...'));
+            }
+            $this->decrypted_key_cache[$cache_key] = $encrypted_key;
             return $encrypted_key; // Already decrypted, return as-is
         }
         
@@ -385,8 +523,10 @@ class ExplainerPlugin_API_Proxy {
             $this->debug_log('Decrypt API Key: Not in encrypted format, checking if plain text');
             // Not in our encrypted format, check if it's a valid plain text key
             if ($this->is_valid_api_key_format($encrypted_key)) {
+                $this->decrypted_key_cache[$cache_key] = $encrypted_key;
                 return $encrypted_key;
             }
+            $this->decrypted_key_cache[$cache_key] = '';
             return '';
         }
         
@@ -398,16 +538,22 @@ class ExplainerPlugin_API_Proxy {
         if (wp_hash($api_key . $salt) === $hash) {
             // Validate decrypted key format
             if ($this->is_valid_api_key_format($api_key)) {
-                $this->debug_log('Decrypt API Key: Successfully decrypted', array('key_prefix' => substr($api_key, 0, 10)));
+                if ($for_api_call) {
+                    $this->debug_log('Decrypt API Key: Successfully decrypted', array('key_prefix' => substr($api_key, 0, 3) . '...'));
+                }
+                $this->decrypted_key_cache[$cache_key] = $api_key;
                 return $api_key;
             } else {
-                $this->debug_log('Decrypt API Key: Decrypted key has invalid format');
+                if ($for_api_call) {
+                    $this->debug_log('Decrypt API Key: Decrypted key has invalid format');
+                }
             }
         } else {
             $this->debug_log('Decrypt API Key: Hash verification failed');
         }
         
         // Decryption failed or invalid key format
+        $this->decrypted_key_cache[$cache_key] = '';
         return '';
     }
     
@@ -455,38 +601,89 @@ class ExplainerPlugin_API_Proxy {
      */
     private function make_api_request($selected_text, $api_key) {
         // Get current provider
+        $this->debug_log('Initializing AI provider', array(
+            'provider_key' => get_option('explainer_api_provider', 'openai')
+        ));
+        
         $provider = ExplainerPlugin_Provider_Factory::get_current_provider();
         
         if (!$provider) {
+            $this->debug_log('PROVIDER INITIALIZATION FAILED', array(
+                'provider_key' => get_option('explainer_api_provider', 'openai'),
+                'error' => 'Factory returned null provider',
+                'available_providers' => array_keys(ExplainerPlugin_Provider_Factory::get_available_providers())
+            ));
             return array(
                 'success' => false,
                 'error' => __('No AI provider configured.', 'ai-explainer')
             );
         }
         
+        $this->debug_log('Provider initialized successfully', array(
+            'provider_name' => $provider->get_name(),
+            'provider_class' => get_class($provider)
+        ));
+        
         // Get context if available (nonce already verified above)
         // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified at start of get_explanation() method
         $context = isset($_POST['context']) ? sanitize_textarea_field( wp_unslash( $_POST['context'] ) ) : null;
         
         // Prepare the prompt
+        $this->debug_log('Preparing prompt for API request', array(
+            'custom_prompt_enabled' => !empty(get_option('explainer_custom_prompt', '')),
+            'language' => get_option('explainer_language', 'en_GB'),
+            'context_provided' => !empty($context)
+        ));
+        
         $prompt = $this->prepare_prompt($selected_text, $context);
         
         // Debug logging - log the prompt being sent (without API key)
         $this->debug_log('Prompt prepared for API', array(
             'provider' => $provider->get_name(),
-            'prompt' => $prompt,
-            'selected_text' => $selected_text,
+            'prompt_length' => strlen($prompt),
+            'prompt_preview' => substr($prompt, 0, 100) . '...',
+            'selected_text_length' => strlen($selected_text),
             'context_provided' => !empty($context)
         ));
         
         // Get AI model setting
         $model = get_option('explainer_api_model', 'gpt-3.5-turbo');
         
+        $this->debug_log('Making API request to provider', array(
+            'provider' => $provider->get_name(),
+            'model' => $model,
+            'api_key_configured' => !empty($api_key),
+            'api_key_length' => strlen($api_key)
+        ));
+        
         // Make request using provider
+        $api_start_time = microtime(true);
         $response = $provider->make_request($api_key, $prompt, $model);
+        $api_response_time = microtime(true) - $api_start_time;
+        
+        $this->debug_log('Provider API call completed', array(
+            'response_time_seconds' => round($api_response_time, 3),
+            'response_received' => !empty($response),
+            'response_size_bytes' => !empty($response) ? strlen(json_encode($response)) : 0
+        ));
         
         // Parse response using provider
-        return $provider->parse_response($response, $model);
+        $this->debug_log('Parsing API response', array(
+            'parser' => get_class($provider) . '::parse_response',
+            'model' => $model
+        ));
+        
+        $parsed_result = $provider->parse_response($response, $model);
+        
+        $this->debug_log('API response parsed', array(
+            'success' => $parsed_result['success'] ?? false,
+            'has_explanation' => !empty($parsed_result['explanation']) ?? false,
+            'explanation_length' => !empty($parsed_result['explanation']) ? strlen($parsed_result['explanation']) : 0,
+            'has_error' => !empty($parsed_result['error']) ?? false,
+            'error_type' => $parsed_result['error_type'] ?? 'unknown'
+        ));
+        
+        return $parsed_result;
     }
     
     /**

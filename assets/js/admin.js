@@ -21,8 +21,8 @@
      * Initialize admin functionality
      */
     function initializeAdmin() {
-        // Test API key button
-        $('#test-api-key').on('click', testApiKey);
+        // Test API key buttons (both OpenAI and Claude)
+        $('#test-api-key, #test-claude-api-key').on('click', testApiKey);
         
         // Clear cache button
         $('#clear-cache').on('click', clearCache);
@@ -77,8 +77,18 @@
         var button = $(this);
         var originalText = button.text();
         
-        // Get the current provider
-        var provider = $('#explainer_api_provider').val();
+        // Determine provider based on button ID, with fallback to dropdown
+        var provider;
+        var buttonId = button.attr('id');
+        
+        if (buttonId === 'test-claude-api-key') {
+            provider = 'claude';
+        } else if (buttonId === 'test-api-key') {
+            provider = 'openai';
+        } else {
+            // Fallback to dropdown selection
+            provider = $('#explainer_api_provider').val();
+        }
         
         // Get the appropriate API key
         var apiKey;
@@ -88,25 +98,8 @@
             apiKey = $('input[name="explainer_claude_api_key"]').val().trim();
         }
         
-        // Validate API key before testing
-        if (!apiKey) {
-            showMessage('Please enter an API key first.', 'error');
-            return;
-        }
-        
-        // Validate based on provider
-        var isValid = false;
-        if (provider === 'openai') {
-            isValid = isValidOpenAIApiKey(apiKey);
-        } else if (provider === 'claude') {
-            isValid = isValidClaudeApiKey(apiKey);
-        }
-        
-        if (!isValid) {
-            var providerName = provider === 'openai' ? 'OpenAI' : 'Claude';
-            showMessage('Invalid ' + providerName + ' API key format.', 'error');
-            return;
-        }
+        // Note: We now test saved API keys only for security
+        // The server will validate if a key is configured and provide appropriate error messages
         
         // Show loading state
         button.text('Testing...').prop('disabled', true);
@@ -119,7 +112,6 @@
             type: 'POST',
             data: {
                 action: 'explainer_test_api_key',
-                api_key: apiKey,
                 provider: provider,
                 nonce: explainerAdmin.nonce
             },
@@ -436,21 +428,12 @@
             $('body').removeClass('openai-provider').addClass('claude-provider');
         }
         
-        // Update the test API key button text
-        updateTestButtonText(provider);
+        // Note: Test buttons are now provider-specific and don't need text updates
         
         // Trigger change event on model dropdown to update any dependent fields
         $('#explainer_api_model').trigger('change');
     }
     
-    /**
-     * Update test API key button text based on provider
-     */
-    function updateTestButtonText(provider) {
-        var button = $('#test-api-key');
-        var providerName = provider === 'openai' ? 'OpenAI' : (provider === 'claude' ? 'Claude' : 'API');
-        button.text('Test ' + providerName + ' Key');
-    }
     
     /**
      * Initialize provider selection on page load

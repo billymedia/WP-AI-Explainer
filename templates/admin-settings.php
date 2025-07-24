@@ -150,22 +150,46 @@ if (!defined('ABSPATH')) {
                     </th>
                     <td>
 <?php
-                        // Get masked API key for display (security improvement)
-                        $api_proxy = new ExplainerPlugin_API_Proxy();
-                        $decrypted_api_key = $api_proxy->get_decrypted_api_key();
-                        $masked_key = '';
-                        if (!empty($decrypted_api_key)) {
-                            // Show only first 3 and last 4 characters
-                            $masked_key = substr($decrypted_api_key, 0, 3) . str_repeat('*', max(0, strlen($decrypted_api_key) - 7)) . substr($decrypted_api_key, -4);
+                        // Check if API key is configured (without exposing the key)
+                        $openai_key_configured = !empty(get_option('explainer_api_key', ''));
+                        if ($openai_key_configured) {
+                            // Only decrypt for masking, never expose full key
+                            $api_proxy = new ExplainerPlugin_API_Proxy();
+                            $decrypted_api_key = $api_proxy->get_decrypted_api_key_for_provider('openai');
+                            $masked_key = '';
+                            if (!empty($decrypted_api_key)) {
+                                // Show only first 3 and last 4 characters with ellipsis
+                                $masked_key = substr($decrypted_api_key, 0, 3) . '...' . substr($decrypted_api_key, -4);
+                            }
                         }
                         ?>
-                        <input type="password" name="explainer_api_key" id="explainer_api_key" value="<?php echo esc_attr($decrypted_api_key ?: ''); ?>" class="regular-text" placeholder="<?php echo esc_attr($masked_key); ?>" />
+                        
+                        <?php if ($openai_key_configured): ?>
+                            <div class="api-key-status configured" style="margin-bottom: 10px;">
+                                <span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
+                                <strong><?php echo esc_html__('API Key Configured:', 'ai-explainer'); ?></strong> 
+                                <code><?php echo esc_html($masked_key); ?></code>
+                            </div>
+                        <?php else: ?>
+                            <div class="api-key-status not-configured" style="margin-bottom: 10px;">
+                                <span class="dashicons dashicons-warning" style="color: #dba617;"></span>
+                                <strong><?php echo esc_html__('No API Key Configured', 'ai-explainer'); ?></strong>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <input type="password" name="explainer_api_key" id="explainer_api_key" value="" class="regular-text" placeholder="<?php echo esc_attr__('Enter new API key (leave empty to keep current)', 'ai-explainer'); ?>" />
                         <button type="button" class="button button-secondary" id="toggle-api-key-visibility">
                             <?php echo esc_html__('Show', 'ai-explainer'); ?>
+                        </button>
+                        <button type="button" class="button button-primary" id="test-api-key" style="margin-left: 10px;">
+                            <?php echo esc_html__('Test API Key', 'ai-explainer'); ?>
                         </button>
                         <p class="description">
                             <?php echo esc_html__('Enter your OpenAI API key. Get one from', 'ai-explainer'); ?> 
                             <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">platform.openai.com</a>
+                            <?php if ($openai_key_configured): ?>
+                                <br><em><?php echo esc_html__('Leave empty to keep the current key, or enter a new key to replace it.', 'ai-explainer'); ?></em>
+                            <?php endif; ?>
                         </p>
                         <div id="api-key-status"></div>
                     </td>
@@ -177,22 +201,46 @@ if (!defined('ABSPATH')) {
                     </th>
                     <td>
 <?php
-                        // Get masked Claude API key for display (using proper decryption)
-                        $api_proxy = new ExplainerPlugin_API_Proxy();
-                        $decrypted_claude_key = $api_proxy->get_decrypted_api_key_for_provider('claude');
-                        $masked_claude_key = '';
-                        if (!empty($decrypted_claude_key)) {
-                            // Show only first 3 and last 4 characters
-                            $masked_claude_key = substr($decrypted_claude_key, 0, 3) . str_repeat('*', max(0, strlen($decrypted_claude_key) - 7)) . substr($decrypted_claude_key, -4);
+                        // Check if Claude API key is configured (without exposing the key)
+                        $claude_key_configured = !empty(get_option('explainer_claude_api_key', ''));
+                        if ($claude_key_configured) {
+                            // Only decrypt for masking, never expose full key
+                            $api_proxy = new ExplainerPlugin_API_Proxy();
+                            $decrypted_claude_key = $api_proxy->get_decrypted_api_key_for_provider('claude');
+                            $masked_claude_key = '';
+                            if (!empty($decrypted_claude_key)) {
+                                // Show only first 3 and last 4 characters with ellipsis
+                                $masked_claude_key = substr($decrypted_claude_key, 0, 3) . '...' . substr($decrypted_claude_key, -4);
+                            }
                         }
                         ?>
-                        <input type="password" name="explainer_claude_api_key" id="explainer_claude_api_key" value="<?php echo esc_attr($decrypted_claude_key ?: ''); ?>" class="regular-text" placeholder="<?php echo esc_attr($masked_claude_key); ?>" />
+                        
+                        <?php if ($claude_key_configured): ?>
+                            <div class="api-key-status configured" style="margin-bottom: 10px;">
+                                <span class="dashicons dashicons-yes-alt" style="color: #46b450;"></span>
+                                <strong><?php echo esc_html__('API Key Configured:', 'ai-explainer'); ?></strong> 
+                                <code><?php echo esc_html($masked_claude_key); ?></code>
+                            </div>
+                        <?php else: ?>
+                            <div class="api-key-status not-configured" style="margin-bottom: 10px;">
+                                <span class="dashicons dashicons-warning" style="color: #dba617;"></span>
+                                <strong><?php echo esc_html__('No API Key Configured', 'ai-explainer'); ?></strong>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <input type="password" name="explainer_claude_api_key" id="explainer_claude_api_key" value="" class="regular-text" placeholder="<?php echo esc_attr__('Enter new API key (leave empty to keep current)', 'ai-explainer'); ?>" />
                         <button type="button" class="button button-secondary" id="toggle-claude-key-visibility">
                             <?php echo esc_html__('Show', 'ai-explainer'); ?>
+                        </button>
+                        <button type="button" class="button button-primary" id="test-claude-api-key" style="margin-left: 10px;">
+                            <?php echo esc_html__('Test API Key', 'ai-explainer'); ?>
                         </button>
                         <p class="description">
                             <?php echo esc_html__('Enter your Claude API key. Get one from', 'ai-explainer'); ?> 
                             <a href="https://console.anthropic.com/account/keys" target="_blank" rel="noopener noreferrer">console.anthropic.com</a>
+                            <?php if ($claude_key_configured): ?>
+                                <br><em><?php echo esc_html__('Leave empty to keep the current key, or enter a new key to replace it.', 'ai-explainer'); ?></em>
+                            <?php endif; ?>
                         </p>
                         <div id="claude-api-key-status"></div>
                     </td>
@@ -507,7 +555,7 @@ if (!defined('ABSPATH')) {
                             <div class="explainer-tooltip explainer-tooltip-preview">
                                 <div class="explainer-tooltip-header">
                                     <span class="explainer-tooltip-title" id="preview-tooltip-title"><?php echo esc_html__('Explanation', 'ai-explainer'); ?></span>
-                                    <button class="explainer-tooltip-close" type="button">×</button>
+                                    <button class="explainer-tooltip-close" type="button" id="preview-close-button">×</button>
                                 </div>
                                 <div class="explainer-tooltip-content">
                                     <span id="preview-tooltip-content"><?php echo esc_html__('This is how your tooltip will look with the selected colors. It matches the actual frontend design with proper spacing and typography.', 'ai-explainer'); ?></span>
@@ -576,6 +624,39 @@ if (!defined('ABSPATH')) {
                     </td>
                 </tr>
                 
+                <tr>
+                    <th scope="row"><?php echo esc_html__('Cache Management', 'ai-explainer'); ?></th>
+                    <td>
+                        <div class="cache-management-section">
+                            <div class="cache-info" style="margin-bottom: 15px;">
+                                <p><strong><?php echo esc_html__('Current Cache Status:', 'ai-explainer'); ?></strong></p>
+                                <p>
+                                    <span id="cache-count-display"><?php echo esc_html__('Loading...', 'ai-explainer'); ?></span> 
+                                    <?php echo esc_html__('cached explanations', 'ai-explainer'); ?>
+                                </p>
+                            </div>
+                            <div class="cache-actions">
+                                <button type="button" class="button button-secondary" id="clear-cache-advanced">
+                                    <?php echo esc_html__('Clear Cache', 'ai-explainer'); ?>
+                                </button>
+                                <p class="description"><?php echo esc_html__('Clear all cached explanations. This will force new API requests for all future explanations.', 'ai-explainer'); ?></p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <th scope="row"><?php echo esc_html__('Reset Settings', 'ai-explainer'); ?></th>
+                    <td>
+                        <div class="reset-settings-section">
+                            <button type="button" class="button button-secondary" id="reset-settings">
+                                <?php echo esc_html__('Reset to Defaults', 'ai-explainer'); ?>
+                            </button>
+                            <p class="description"><?php echo esc_html__('Reset all plugin settings to their default values. This action cannot be undone.', 'ai-explainer'); ?></p>
+                        </div>
+                    </td>
+                </tr>
+                
             </table>
         </div>
         
@@ -588,12 +669,12 @@ if (!defined('ABSPATH')) {
                 <div class="help-steps">
                     <div class="help-step">
                         <h4><?php echo esc_html__('1. Choose Your AI Provider', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Go to Basic Settings and select either OpenAI or Claude as your AI provider.', 'ai-explainer'); ?></p>
+                        <p><?php echo esc_html__('Head to the Basic Settings tab and pick either OpenAI or Claude - both work great, it just depends on your preference.', 'ai-explainer'); ?></p>
                     </div>
                     
                     <div class="help-step">
                         <h4><?php echo esc_html__('2. Add Your API Key', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Enter your API key from your chosen provider. Your key is encrypted and secure.', 'ai-explainer'); ?></p>
+                        <p><?php echo esc_html__('Grab your API key from whichever provider you chose. Don\'t worry - we encrypt it properly so it stays safe.', 'ai-explainer'); ?></p>
                         <ul>
                             <li><strong>OpenAI:</strong> Get your key from <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a></li>
                             <li><strong>Claude:</strong> Get your key from <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a></li>
@@ -602,16 +683,16 @@ if (!defined('ABSPATH')) {
                     
                     <div class="help-step">
                         <h4><?php echo esc_html__('3. Select AI Model', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Choose the AI model that best fits your needs and budget.', 'ai-explainer'); ?></p>
+                        <p><?php echo esc_html__('Pick the AI model that works for your situation and budget.', 'ai-explainer'); ?></p>
                         <ul>
-                            <li><strong>OpenAI:</strong> GPT-3.5-turbo (faster, cheaper) or GPT-4 (more accurate)</li>
-                            <li><strong>Claude:</strong> Claude-3-haiku (faster) or Claude-3-sonnet (more detailed)</li>
+                            <li><strong>OpenAI:</strong> GPT-3.5-turbo is quick and affordable, GPT-4 gives better quality</li>
+                            <li><strong>Claude:</strong> Haiku is speedy, Sonnet gives more thoughtful responses</li>
                         </ul>
                     </div>
                     
                     <div class="help-step">
                         <h4><?php echo esc_html__('4. Test and Save', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Use the "Test API Key" button to verify your setup, then save your settings.', 'ai-explainer'); ?></p>
+                        <p><?php echo esc_html__('Hit the "Test API Key" button to make sure everything\'s working, then save your settings and you\'re good to go.', 'ai-explainer'); ?></p>
                     </div>
                 </div>
             </div>
@@ -620,10 +701,10 @@ if (!defined('ABSPATH')) {
                 <h3><?php echo esc_html__('How Users Get Explanations', 'ai-explainer'); ?></h3>
                 <div class="help-usage">
                     <ol>
-                        <li><?php echo esc_html__('Users select any text on your website', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('A floating toggle button appears to enable explanations', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('When enabled, users can select text to get instant AI explanations', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Explanations appear in responsive tooltips that users can dismiss', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Visitors highlight any text on your site', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('A small toggle button shows up so they can turn explanations on', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Once enabled, selecting text gives them instant AI explanations', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Explanations pop up in neat tooltips that they can close when done', 'ai-explainer'); ?></li>
                     </ol>
                 </div>
             </div>
@@ -634,18 +715,18 @@ if (!defined('ABSPATH')) {
                 <div class="help-feature">
                     <h4><?php echo esc_html__('Appearance Tab', 'ai-explainer'); ?></h4>
                     <ul>
-                        <li><?php echo esc_html__('Customise tooltip colours (background, text, and footer text) to match your theme', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Position the toggle button where it works best', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Add disclaimers and provider attribution in tooltip footers', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Control footer text color independently for optimal visibility', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Change tooltip colours to match your site\'s look', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Move the toggle button wherever it feels right', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Add disclaimers and show which AI provider you\'re using', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Tweak footer text colours so they\'re easy to read', 'ai-explainer'); ?></li>
                     </ul>
                 </div>
                 
                 <div class="help-feature">
                     <h4><?php echo esc_html__('Content Rules Tab', 'ai-explainer'); ?></h4>
                     <ul>
-                        <li><?php echo esc_html__('Control minimum and maximum text selection lengths', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Include/exclude specific page elements with CSS selectors', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Set how much text people need to select before they get explanations', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Choose which parts of your site should have explanations and which shouldn\'t', 'ai-explainer'); ?></li>
                         <li><?php 
                         // translators: {{snippet}} is a placeholder that will be replaced with the user's selected text
                         echo esc_html__('Create custom AI prompts with {{snippet}} placeholders', 'ai-explainer'); ?></li>
@@ -655,9 +736,9 @@ if (!defined('ABSPATH')) {
                 <div class="help-feature">
                     <h4><?php echo esc_html__('Performance Tab', 'ai-explainer'); ?></h4>
                     <ul>
-                        <li><?php echo esc_html__('Enable caching to reduce API costs and improve speed', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Set rate limits to prevent abuse and control usage', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Configure different limits for logged-in vs anonymous users', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Turn on caching to save money on API calls and make things faster', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Set limits so people can\'t go crazy with requests', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Give different limits to logged-in users versus random visitors', 'ai-explainer'); ?></li>
                     </ul>
                 </div>
             </div>
@@ -668,29 +749,29 @@ if (!defined('ABSPATH')) {
                     <div class="help-issue">
                         <h4><?php echo esc_html__('Explanations not working?', 'ai-explainer'); ?></h4>
                         <ul>
-                            <li><?php echo esc_html__('Check that the plugin is enabled in Basic Settings', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Verify your API key is entered correctly', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Test your API key using the "Test API Key" button', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Enable Debug Mode in Advanced tab for detailed logs', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Make sure the plugin is actually turned on in Basic Settings', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Double-check your API key - typos happen to everyone', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Use the "Test API Key" button to see if it\'s working', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Turn on Debug Mode in the Advanced tab if you need to see what\'s going wrong', 'ai-explainer'); ?></li>
                         </ul>
                     </div>
                     
                     <div class="help-issue">
-                        <h4><?php echo esc_html__('High API costs?', 'ai-explainer'); ?></h4>
+                        <h4><?php echo esc_html__('API costs getting a bit steep?', 'ai-explainer'); ?></h4>
                         <ul>
-                            <li><?php echo esc_html__('Enable caching in Performance settings', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Set appropriate rate limits for your users', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Consider using GPT-3.5-turbo or Claude-haiku for lower costs', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Adjust text length limits to control prompt size', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Turn on caching in Performance settings - it really helps', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Set sensible rate limits so users don\'t go wild', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Try GPT-3.5-turbo or Claude Haiku - they\'re much cheaper', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Limit how much text people can select to keep prompts shorter', 'ai-explainer'); ?></li>
                         </ul>
                     </div>
                     
                     <div class="help-issue">
-                        <h4><?php echo esc_html__('Tooltip positioning issues?', 'ai-explainer'); ?></h4>
+                        <h4><?php echo esc_html__('Tooltips appearing in weird places?', 'ai-explainer'); ?></h4>
                         <ul>
-                            <li><?php echo esc_html__('The plugin automatically handles positioning and viewport boundaries', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Check Content Rules for conflicting CSS selectors', 'ai-explainer'); ?></li>
-                            <li><?php echo esc_html__('Ensure your theme doesn\'t override plugin styles', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('The plugin tries to position tooltips sensibly, but sometimes themes interfere', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Check your Content Rules - you might have conflicting CSS selectors', 'ai-explainer'); ?></li>
+                            <li><?php echo esc_html__('Your theme might be overriding the plugin styles', 'ai-explainer'); ?></li>
                         </ul>
                     </div>
                 </div>
@@ -700,11 +781,11 @@ if (!defined('ABSPATH')) {
                 <h3><?php echo esc_html__('Cost Management Tips', 'ai-explainer'); ?></h3>
                 <div class="help-costs">
                     <ul>
-                        <li><?php echo esc_html__('Start with caching enabled and conservative rate limits', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Monitor your API usage in your provider\'s dashboard', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Set usage alerts in your API provider account', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Consider shorter custom prompts to reduce token usage', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Use appropriate models: faster models are typically cheaper', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Turn on caching from the start and be conservative with rate limits', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Keep an eye on your API usage in your provider\'s dashboard', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Set up usage alerts in your API account so you don\'t get surprised', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Keep your custom prompts shorter to use fewer tokens', 'ai-explainer'); ?></li>
+                        <li><?php echo esc_html__('Faster models are usually cheaper - you don\'t always need the premium ones', 'ai-explainer'); ?></li>
                     </ul>
                 </div>
             </div>
@@ -743,22 +824,22 @@ if (!defined('ABSPATH')) {
                 <div class="support-options">
                     <div class="support-option">
                         <h4><?php echo esc_html__('1. Check the Help Tab', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Start with the Help tab above for common setup and troubleshooting guides.', 'ai-explainer'); ?></p>
+                        <p><?php echo esc_html__('The Help tab above has most of the common setup and troubleshooting stuff you\'ll need.', 'ai-explainer'); ?></p>
                     </div>
                     
                     <div class="support-option">
                         <h4><?php echo esc_html__('2. Enable Debug Mode', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Turn on Debug Mode in Advanced settings to see detailed error logs.', 'ai-explainer'); ?></p>
+                        <p><?php echo esc_html__('If things aren\'t working, flip on Debug Mode in the Advanced tab to see what\'s happening under the hood.', 'ai-explainer'); ?></p>
                     </div>
                     
                     <div class="support-option">
                         <h4><?php echo esc_html__('3. GitHub Issues', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('Report bugs or request features at', 'ai-explainer'); ?> <a href="https://github.com/billymedia/wp-explainer/issues" target="_blank">github.com/billymedia/wp-explainer/issues</a></p>
+                        <p><?php echo esc_html__('Found a bug or have an idea? Drop it on', 'ai-explainer'); ?> <a href="https://github.com/billymedia/wp-explainer/issues" target="_blank">GitHub</a> <?php echo esc_html__('and I\'ll take a look.', 'ai-explainer'); ?></p>
                     </div>
                     
                     <div class="support-option">
-                        <h4><?php echo esc_html__('4. Custom Modifications', 'ai-explainer'); ?></h4>
-                        <p><?php echo esc_html__('For custom modifications or professional services, contact Billy directly at billy@billymedia.co.uk', 'ai-explainer'); ?></p>
+                        <h4><?php echo esc_html__('4. Custom Work', 'ai-explainer'); ?></h4>
+                        <p><?php echo esc_html__('Need something custom or want professional help? Just email me directly at billy@billymedia.co.uk', 'ai-explainer'); ?></p>
                     </div>
                 </div>
             </div>
@@ -766,7 +847,7 @@ if (!defined('ABSPATH')) {
             <div class="support-section">
                 <h3><?php echo esc_html__('When Requesting Support', 'ai-explainer'); ?></h3>
                 <div class="support-info-needed">
-                    <p><?php echo esc_html__('Please include the following information when requesting support:', 'ai-explainer'); ?></p>
+                    <p><?php echo esc_html__('When you need help, it really speeds things up if you can include:', 'ai-explainer'); ?></p>
                     <ul>
                         <li><?php echo esc_html__('WordPress version', 'ai-explainer'); ?></li>
                         <li><?php echo esc_html__('PHP version', 'ai-explainer'); ?></li>
@@ -780,19 +861,6 @@ if (!defined('ABSPATH')) {
                 </div>
             </div>
             
-            <div class="support-section">
-                <h3><?php echo esc_html__('Contributing', 'ai-explainer'); ?></h3>
-                <div class="contributing-info">
-                    <p><?php echo esc_html__('We welcome contributions to make this plugin better:', 'ai-explainer'); ?></p>
-                    <ul>
-                        <li><?php echo esc_html__('Report bugs and suggest features on GitHub', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Submit pull requests for improvements', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Help with translations and internationalization', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Share feedback and usage experiences', 'ai-explainer'); ?></li>
-                        <li><?php echo esc_html__('Test new features and provide feedback', 'ai-explainer'); ?></li>
-                    </ul>
-                </div>
-            </div>
             
             <div class="support-section">
                 <h3><?php echo esc_html__('System Information', 'ai-explainer'); ?></h3>
@@ -822,40 +890,50 @@ if (!defined('ABSPATH')) {
         <?php submit_button(); ?>
     </form>
     
-    <div class="explainer-admin-actions">
-        <h2><?php echo esc_html__('Quick Actions', 'ai-explainer'); ?></h2>
-        <p>
-            <button type="button" class="button button-primary" id="test-api-key">
-                <?php echo esc_html__('Test API Key', 'ai-explainer'); ?>
-            </button>
-            <button type="button" class="button button-secondary" id="clear-cache">
-                <?php echo esc_html__('Clear Cache', 'ai-explainer'); ?>
-            </button>
-            <button type="button" class="button button-secondary" id="reset-settings">
-                <?php echo esc_html__('Reset to Defaults', 'ai-explainer'); ?>
-            </button>
-        </p>
-        <div id="admin-messages"></div>
-    </div>
+    <div id="admin-messages"></div>
 </div>
 
 <script>
 jQuery(document).ready(function($) {
-    // Tab navigation
-    $('.nav-tab').on('click', function(e) {
-        e.preventDefault();
-        
+    // Function to show a specific tab
+    function showTab(tabHash) {
         // Remove active class from all tabs
         $('.nav-tab').removeClass('nav-tab-active');
         $('.tab-content').hide();
         
         // Add active class to clicked tab
-        $(this).addClass('nav-tab-active');
+        $('.nav-tab[href="' + tabHash + '"]').addClass('nav-tab-active');
         
         // Show corresponding content
-        const target = $(this).attr('href') + '-tab';
+        const target = tabHash + '-tab';
         $(target).show();
+        
+        // Store the active tab in localStorage
+        localStorage.setItem('explainer_active_tab', tabHash);
+    }
+    
+    // Tab navigation
+    $('.nav-tab').on('click', function(e) {
+        e.preventDefault();
+        const tabHash = $(this).attr('href');
+        showTab(tabHash);
     });
+    
+    // Restore active tab on page load
+    function restoreActiveTab() {
+        const savedTab = localStorage.getItem('explainer_active_tab');
+        
+        // Check if saved tab exists and is valid
+        if (savedTab && $('.nav-tab[href="' + savedTab + '"]').length > 0) {
+            showTab(savedTab);
+        } else {
+            // Default to first tab (basic) if no saved tab or invalid tab
+            showTab('#basic');
+        }
+    }
+    
+    // Initialize the correct tab on page load
+    restoreActiveTab();
     
     // API key visibility toggle for OpenAI
     $('#toggle-api-key-visibility').on('click', function() {
@@ -891,6 +969,7 @@ jQuery(document).ready(function($) {
     function updateTooltipPreview() {
         const bgColor = $('#explainer_tooltip_bg_color').val();
         const textColor = $('#explainer_tooltip_text_color').val();
+        const footerColor = $('#explainer_tooltip_footer_color').val();
         
         // Detect site font from paragraph elements
         const siteFont = detectSiteFont();
@@ -898,6 +977,7 @@ jQuery(document).ready(function($) {
         // Use CSS custom properties for dynamic updates (affects both background and arrow)
         document.documentElement.style.setProperty('--explainer-tooltip-bg-color', bgColor);
         document.documentElement.style.setProperty('--explainer-tooltip-text-color', textColor);
+        document.documentElement.style.setProperty('--explainer-tooltip-footer-color', footerColor);
         document.documentElement.style.setProperty('--explainer-site-font', siteFont);
     }
     
@@ -947,7 +1027,7 @@ jQuery(document).ready(function($) {
         });
     }
     
-    $('#explainer_tooltip_bg_color, #explainer_tooltip_text_color').on('input', updateTooltipPreview);
+    $('#explainer_tooltip_bg_color, #explainer_tooltip_text_color, #explainer_tooltip_footer_color').on('input', updateTooltipPreview);
     $('#explainer_button_enabled_color, #explainer_button_disabled_color, #explainer_button_text_color').on('input', updateButtonPreview);
     
     // Initialize previews
@@ -1031,6 +1111,67 @@ jQuery(document).ready(function($) {
         updatePreviewLanguage();
     });
     
+    
+    // Cache count functionality
+    function loadCacheCount() {
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'explainer_get_cache_count',
+                nonce: '<?php echo esc_js(wp_create_nonce('explainer_admin_nonce')); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cache-count-display').text(response.data.count);
+                } else {
+                    $('#cache-count-display').text('0');
+                }
+            },
+            error: function() {
+                $('#cache-count-display').text('Error loading');
+            }
+        });
+    }
+    
+    // Clear cache functionality (Advanced tab)
+    $('#clear-cache-advanced').on('click', function() {
+        const button = $(this);
+        const originalText = button.text();
+        
+        button.text('<?php echo esc_js(__('Clearing...', 'ai-explainer')); ?>').prop('disabled', true);
+        
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {
+                action: 'explainer_clear_cache',
+                nonce: '<?php echo esc_js(wp_create_nonce('explainer_admin_nonce')); ?>'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cache-count-display').text('0');
+                    $('#admin-messages').html('<div class="notice notice-success is-dismissible"><p>' + response.data.message + '</p></div>');
+                } else {
+                    $('#admin-messages').html('<div class="notice notice-error is-dismissible"><p>' + (response.data.message || '<?php echo esc_js(__('Failed to clear cache', 'ai-explainer')); ?>') + '</p></div>');
+                }
+            },
+            error: function() {
+                $('#admin-messages').html('<div class="notice notice-error is-dismissible"><p><?php echo esc_js(__('Error clearing cache', 'ai-explainer')); ?></p></div>');
+            },
+            complete: function() {
+                button.text(originalText).prop('disabled', false);
+            }
+        });
+    });
+    
+    // Load cache count on page load and when Advanced tab is shown
+    loadCacheCount();
+    
+    // Reload cache count when switching to Advanced tab
+    $('.nav-tab[href="#advanced"]').on('click', function() {
+        setTimeout(loadCacheCount, 100); // Small delay to ensure tab is shown
+    });
     
 });
 </script>

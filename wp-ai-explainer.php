@@ -3,7 +3,7 @@
  * Plugin Name: AI Explainer
  * Plugin URI: https://github.com/billymedia/AI-Text-Explainer
  * Description: A lightweight plugin that uses AI to explain highlighted text via tooltips.
- * Version: 1.0.0
+ * Version: 1.0.7
  * Author: Billy Patel
  * Author URI: https://billymedia.co.uk
  * License: GPL v2 or later
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('EXPLAINER_PLUGIN_VERSION', '1.0.0');
+define('EXPLAINER_PLUGIN_VERSION', '1.0.7');
 define('EXPLAINER_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('EXPLAINER_PLUGIN_PATH', plugin_dir_path(__FILE__));
 define('EXPLAINER_PLUGIN_FILE', __FILE__);

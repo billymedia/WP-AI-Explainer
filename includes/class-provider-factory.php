@@ -133,7 +133,7 @@ class ExplainerPlugin_Provider_Factory {
         $provider_key = get_option('explainer_api_provider', 'openai');
         $api_proxy = new ExplainerPlugin_API_Proxy();
         
-        return $api_proxy->get_decrypted_api_key_for_provider($provider_key);
+        return $api_proxy->get_decrypted_api_key_for_provider($provider_key, true);
     }
     
     /**

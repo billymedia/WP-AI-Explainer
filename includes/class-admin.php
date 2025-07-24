@@ -193,6 +193,7 @@ class ExplainerPlugin_Admin {
         // Handle Ajax requests
         add_action('wp_ajax_explainer_test_api_key', array($this, 'test_api_key'));
         add_action('wp_ajax_explainer_clear_cache', array($this, 'clear_cache'));
+        add_action('wp_ajax_explainer_get_cache_count', array($this, 'get_cache_count'));
         add_action('wp_ajax_explainer_reset_settings', array($this, 'reset_settings'));
         add_action('wp_ajax_explainer_view_debug_logs', array($this, 'view_debug_logs'));
         add_action('wp_ajax_explainer_delete_debug_logs', array($this, 'delete_debug_logs'));
@@ -369,21 +370,19 @@ class ExplainerPlugin_Admin {
             wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
         }
         
-        // Get API key and provider from request
-        $api_key = sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) );
+        // Get provider from request - API key should never be sent in request for security
         $provider = sanitize_text_field( wp_unslash( $_POST['provider'] ?? 'openai' ) );
         
-        // Fallback to saved API key if not provided in request
-        if (empty($api_key)) {
-            if ($provider === 'claude') {
-                $api_key = $this->api_proxy->get_decrypted_api_key_for_provider('claude');
-            } else {
-                $api_key = $this->api_proxy->get_decrypted_api_key_for_provider('openai');
-            }
+        // Always use stored API key for security - never accept API key from request
+        if ($provider === 'claude') {
+            $api_key = $this->api_proxy->get_decrypted_api_key_for_provider('claude');
+        } else {
+            $api_key = $this->api_proxy->get_decrypted_api_key_for_provider('openai');
         }
         
         if (empty($api_key)) {
-            wp_send_json_error(array('message' => __('Please enter an API key to test', 'ai-explainer')));
+            $provider_name = $provider === 'claude' ? 'Claude' : 'OpenAI';
+            wp_send_json_error(array('message' => sprintf(__('No %s API key configured. Please save an API key first, then test it.', 'ai-explainer'), $provider_name)));
         }
         
         $result = $this->api_proxy->test_api_key($api_key);
@@ -408,10 +407,28 @@ class ExplainerPlugin_Admin {
         $result = $this->api_proxy->clear_cache();
         
         if ($result) {
-            wp_send_json_success(array('message' => __('Cache cleared successfully', 'ai-explainer')));
+            wp_send_json_success(array(
+                'message' => __('Cache cleared successfully', 'ai-explainer'),
+                'count' => 0
+            ));
         } else {
             wp_send_json_error(array('message' => __('Failed to clear cache', 'ai-explainer')));
         }
+    }
+    
+    /**
+     * Get cache count via Ajax
+     */
+    public function get_cache_count() {
+        check_ajax_referer('explainer_admin_nonce', 'nonce');
+        
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+        }
+        
+        $count = explainer_count_cached_items();
+        
+        wp_send_json_success(array('count' => $count));
     }
     
     /**
@@ -546,10 +563,13 @@ class ExplainerPlugin_Admin {
      */
     public function process_api_key_save($value, $old_value) {
         if (!empty($value)) {
-            // Encrypt the API key before saving
+            // Encrypt the new API key before saving
             return $this->api_proxy->encrypt_api_key($value);
         }
-        return $value;
+        
+        // If empty value submitted, keep the existing key (don't clear it)
+        // This allows the secure form to have empty inputs while preserving existing keys
+        return $old_value;
     }
     
     /**
@@ -557,10 +577,13 @@ class ExplainerPlugin_Admin {
      */
     public function process_claude_api_key_save($value, $old_value) {
         if (!empty($value)) {
-            // Encrypt the Claude API key before saving
+            // Encrypt the new Claude API key before saving
             return $this->api_proxy->encrypt_api_key($value);
         }
-        return $value;
+        
+        // If empty value submitted, keep the existing key (don't clear it)
+        // This allows the secure form to have empty inputs while preserving existing keys
+        return $old_value;
     }
     
     /**
