@@ -122,6 +122,32 @@ Currently under review.
 - **Rate Limiting**: Prevent abuse with configurable limits
 - **User Controls**: Different limits for logged-in vs anonymous users
 
+#### Understanding Rate Limiting
+
+Rate limiting controls how many explanation requests users can make within specific time periods to prevent abuse and manage API costs.
+
+**How It Works:**
+- **Time Windows**: Rate limits reset every minute (60-second sliding windows)
+- **Per-User Tracking**: Each logged-in user or anonymous visitor has their own counter
+- **Cache Exclusion**: Cached explanations don't count toward rate limits
+- **Multiple Tiers**: Minute (primary), hour, and daily limits for comprehensive protection
+
+**Default Limits:**
+- **Logged-in users**: 20 requests per minute, 100 per hour, 500 per day
+- **Anonymous users**: 10 requests per minute, 50 per hour, 200 per day
+- **Rate limiting**: Enabled by default (configurable in Performance tab)
+
+**Common Scenarios:**
+- *24 cached items but no rate limiting triggered*: Cached items accumulate over days/weeks, but rate limits only count fresh API requests within 60-second windows
+- *Testing rate limits*: Make 17+ unique requests (different text) within 60 seconds to see "Rate limit exceeded" message
+- *Different user messages*: Plugin rate limiting shows "Please wait before making another request", while AI provider limits show "Please try again later"
+
+**Best Practices:**
+- Start with conservative limits (10-20 per minute) and adjust based on usage
+- Enable caching to reduce API calls and extend effective limits
+- Monitor your AI provider's dashboard for API usage patterns
+- Set different limits for logged-in users vs anonymous visitors based on trust level
+
 ### Advanced Tab
 - **Debug Tools**: Comprehensive logging and troubleshooting
 - **Security Options**: Enhanced validation and sanitisation
@@ -147,6 +173,13 @@ Currently under review.
 - Ensure accessibility compliance (WCAG AA)
 
 ## Changelog
+
+##### Version 1.0.9 *(July 24, 2025)*
+- Enhanced error popup styling with white text, headers, and close buttons for better visibility
+- Comprehensive rate limiting documentation added to admin interface and help system
+- Improved inline help explaining how rate limiting works with time windows and cache exclusion
+- Added detailed rate limiting section to help tab with common questions and troubleshooting
+- Updated README with comprehensive rate limiting explanation and best practices
 
 ##### Version 1.0.8 *(July 24, 2025)*
 - Enhanced debug logging with comprehensive API request flow tracking

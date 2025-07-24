@@ -447,6 +447,10 @@ if (!defined('ABSPATH')) {
                                 <?php echo esc_html__('requests per minute', 'wp-ai-explainer'); ?>
                             </label>
                             <p class="description"><?php echo esc_html__('Set different rate limits for logged-in and anonymous users.', 'wp-ai-explainer'); ?></p>
+                            <p class="description">
+                                <strong><?php echo esc_html__('How it works:', 'wp-ai-explainer'); ?></strong> 
+                                <?php echo esc_html__('Rate limits reset every minute. For example, "20 requests per minute" means users can make up to 20 explanation requests within any 60-second period. After 60 seconds, the counter resets. Cached explanations don\'t count toward the limit.', 'wp-ai-explainer'); ?>
+                            </p>
                         </fieldset>
                     </td>
                 </tr>
@@ -786,6 +790,28 @@ if (!defined('ABSPATH')) {
                         <li><?php echo esc_html__('Set up usage alerts in your API account so you don\'t get surprised', 'wp-ai-explainer'); ?></li>
                         <li><?php echo esc_html__('Keep your custom prompts shorter to use fewer tokens', 'wp-ai-explainer'); ?></li>
                         <li><?php echo esc_html__('Faster models are usually cheaper - you don\'t always need the premium ones', 'wp-ai-explainer'); ?></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="help-section">
+                <h3><?php echo esc_html__('Understanding Rate Limiting', 'wp-ai-explainer'); ?></h3>
+                <div class="help-rate-limiting">
+                    <p><?php echo esc_html__('Rate limiting prevents abuse and controls costs by limiting how many explanation requests can be made within a specific time period.', 'wp-ai-explainer'); ?></p>
+                    
+                    <h4><?php echo esc_html__('How It Works', 'wp-ai-explainer'); ?></h4>
+                    <ul>
+                        <li><strong><?php echo esc_html__('Time Windows:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('Rate limits reset every minute. If you set "20 requests per minute", users can make up to 20 requests within any 60-second period.', 'wp-ai-explainer'); ?></li>
+                        <li><strong><?php echo esc_html__('Counter Reset:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('After 60 seconds, the counter automatically resets to zero, allowing new requests.', 'wp-ai-explainer'); ?></li>
+                        <li><strong><?php echo esc_html__('Cache Exclusion:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('Cached explanations don\'t count toward rate limits since they don\'t require new API calls.', 'wp-ai-explainer'); ?></li>
+                        <li><strong><?php echo esc_html__('User Types:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('Different limits for logged-in users (default: 20/min) vs anonymous visitors (default: 10/min).', 'wp-ai-explainer'); ?></li>
+                    </ul>
+                    
+                    <h4><?php echo esc_html__('Common Questions', 'wp-ai-explainer'); ?></h4>
+                    <ul>
+                        <li><strong><?php echo esc_html__('Why do I see many cached items but no rate limiting?', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('Cached items accumulate over days/weeks, but rate limits only count fresh requests within 60-second windows.', 'wp-ai-explainer'); ?></li>
+                        <li><strong><?php echo esc_html__('How do I test rate limiting?', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('Make more than your limit in unique requests (different text) within 60 seconds to trigger the "Rate limit exceeded" message.', 'wp-ai-explainer'); ?></li>
+                        <li><strong><?php echo esc_html__('What\'s a good rate limit?', 'wp-ai-explainer'); ?></strong> <?php echo esc_html__('Start conservatively (10-20 per minute) and adjust based on your site\'s usage and API costs.', 'wp-ai-explainer'); ?></li>
                     </ul>
                 </div>
             </div>

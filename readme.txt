@@ -4,7 +4,7 @@ Tags: ai, explanation, tooltip, openai, claude
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.8
+Stable tag: 1.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,6 +183,13 @@ Yes, it's ready for translation and the interface already works in 7 languages (
 6. **Mobile Experience** - Responsive design with touch gestures on mobile devices
 
 == Changelog ==
+
+= 1.0.9 =
+* **Enhanced Error Visibility**: Improved error popup styling with white text, headers, and close buttons for better readability
+* **Comprehensive Rate Limiting Documentation**: Added detailed explanations of how rate limiting works throughout the admin interface
+* **Improved User Education**: Added inline help explaining time windows, cache exclusion, and rate limiting mechanics
+* **Enhanced Help System**: New detailed rate limiting section in help tab with common questions and troubleshooting
+* **Better User Experience**: Comprehensive documentation helps users understand why cached items don't trigger rate limits
 
 = 1.0.8 =
 * **Code Quality Improvements**: Enhanced code structure and maintainability across all provider classes

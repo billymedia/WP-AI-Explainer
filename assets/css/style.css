@@ -386,7 +386,19 @@
 }
 
 .explainer-tooltip.error .explainer-tooltip-content {
-    color: white;
+    color: white !important;
+}
+
+.explainer-tooltip.error .explainer-tooltip-title {
+    color: white !important;
+}
+
+.explainer-tooltip.error .explainer-tooltip-close {
+    color: white !important;
+}
+
+.explainer-tooltip.error .explainer-tooltip-header {
+    border-bottom-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Success state */
