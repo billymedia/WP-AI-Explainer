@@ -8,7 +8,7 @@
  * Author URI: https://billymedia.co.uk
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: ai-explainer
+ * Text Domain: wp-ai-explainer
  * Domain Path: /languages
  * Requires at least: 5.0
  * Tested up to: 6.8
@@ -133,7 +133,7 @@ class ExplainerPlugin {
      * Override plugin locale for this plugin only
      */
     public function override_plugin_locale($locale, $domain) {
-        if ($domain === 'ai-explainer') {
+        if ($domain === 'wp-ai-explainer') {
             $selected_language = get_option('explainer_language', get_locale());
             if (!empty($selected_language)) {
                 return $selected_language;
@@ -581,7 +581,7 @@ function explainer_plugin_action_links($links) {
     $settings_link = sprintf(
         '<a href="%s">%s</a>',
         admin_url('admin.php?page=explainer-settings'),
-        __('Settings', 'ai-explainer')
+        __('Settings', 'wp-ai-explainer')
     );
     
     // Add settings link to the beginning of the array

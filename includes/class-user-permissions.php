@@ -249,7 +249,7 @@ class Explainer_User_Permissions {
         // phpcs:ignore WordPress.Security.NonceVerification.Recommended
         if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'explainer-settings' ) {
             if (!$this->can_manage_plugin()) {
-                wp_die(esc_html__('You do not have permission to access this page.', 'ai-explainer'));
+                wp_die(esc_html__('You do not have permission to access this page.', 'wp-ai-explainer'));
             }
         }
     }
@@ -267,7 +267,7 @@ class Explainer_User_Permissions {
     public function check_explanation_capability() {
         if (!$this->can_use_explainer()) {
             wp_send_json_error(array(
-                'message' => __('You do not have permission to use the AI Explainer feature.', 'ai-explainer')
+                'message' => __('You do not have permission to use the AI Explainer feature.', 'wp-ai-explainer')
             ));
         }
     }
@@ -278,14 +278,14 @@ class Explainer_User_Permissions {
     public function check_guest_access() {
         if (!$this->is_guest_access_allowed()) {
             wp_send_json_error(array(
-                'message' => __('Guest access is not allowed. Please log in to use the AI Explainer feature.', 'ai-explainer')
+                'message' => __('Guest access is not allowed. Please log in to use the AI Explainer feature.', 'wp-ai-explainer')
             ));
         }
         
         // Apply rate limiting for guests
         if (!$this->check_guest_rate_limit()) {
             wp_send_json_error(array(
-                'message' => __('Rate limit exceeded. Please try again later.', 'ai-explainer')
+                'message' => __('Rate limit exceeded. Please try again later.', 'wp-ai-explainer')
             ));
         }
     }
@@ -499,7 +499,7 @@ class Explainer_User_Permissions {
      */
     public function render_role_management() {
         if (!$this->can_manage_plugin()) {
-            return '<p>' . __('Access denied.', 'ai-explainer') . '</p>';
+            return '<p>' . __('Access denied.', 'wp-ai-explainer') . '</p>';
         }
         
         $allowed_roles = $this->get_allowed_user_roles();
@@ -508,15 +508,15 @@ class Explainer_User_Permissions {
         ob_start();
         ?>
         <div class="explainer-role-management">
-            <h3><?php esc_html_e('User Role Management', 'ai-explainer'); ?></h3>
-            <p><?php esc_html_e('Select which user roles can use the AI Explainer feature.', 'ai-explainer'); ?></p>
+            <h3><?php esc_html_e('User Role Management', 'wp-ai-explainer'); ?></h3>
+            <p><?php esc_html_e('Select which user roles can use the AI Explainer feature.', 'wp-ai-explainer'); ?></p>
             
             <form method="post" action="options.php">
                 <?php settings_fields('explainer_permissions'); ?>
                 
                 <table class="form-table">
                     <tr>
-                        <th scope="row"><?php esc_html_e('Allowed User Roles', 'ai-explainer'); ?></th>
+                        <th scope="row"><?php esc_html_e('Allowed User Roles', 'wp-ai-explainer'); ?></th>
                         <td>
                             <?php foreach ($all_roles as $role_key => $role_name): ?>
                                 <label>
@@ -531,39 +531,39 @@ class Explainer_User_Permissions {
                     </tr>
                     
                     <tr>
-                        <th scope="row"><?php esc_html_e('Guest Access', 'ai-explainer'); ?></th>
+                        <th scope="row"><?php esc_html_e('Guest Access', 'wp-ai-explainer'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" 
                                        name="explainer_allow_guest_access" 
                                        value="1"
                                        <?php checked($this->is_guest_access_allowed()); ?>>
-                                <?php esc_html_e('Allow non-logged-in users to use the explainer', 'ai-explainer'); ?>
+                                <?php esc_html_e('Allow non-logged-in users to use the explainer', 'wp-ai-explainer'); ?>
                             </label>
                         </td>
                     </tr>
                     
                     <tr>
-                        <th scope="row"><?php esc_html_e('Editor Management', 'ai-explainer'); ?></th>
+                        <th scope="row"><?php esc_html_e('Editor Management', 'wp-ai-explainer'); ?></th>
                         <td>
                             <label>
                                 <input type="checkbox" 
                                        name="explainer_allow_editor_management" 
                                        value="1"
                                        <?php checked(get_option('explainer_allow_editor_management', false)); ?>>
-                                <?php esc_html_e('Allow editors to manage plugin settings', 'ai-explainer'); ?>
+                                <?php esc_html_e('Allow editors to manage plugin settings', 'wp-ai-explainer'); ?>
                             </label>
                         </td>
                     </tr>
                     
                     <tr>
-                        <th scope="row"><?php esc_html_e('Guest Rate Limit', 'ai-explainer'); ?></th>
+                        <th scope="row"><?php esc_html_e('Guest Rate Limit', 'wp-ai-explainer'); ?></th>
                         <td>
                             <input type="number" 
                                    name="explainer_guest_hourly_limit" 
                                    value="<?php echo esc_attr(get_option('explainer_guest_hourly_limit', 10)); ?>"
                                    min="1" max="100">
-                            <p class="description"><?php esc_html_e('Maximum explanations per hour for guest users', 'ai-explainer'); ?></p>
+                            <p class="description"><?php esc_html_e('Maximum explanations per hour for guest users', 'wp-ai-explainer'); ?></p>
                         </td>
                     </tr>
                 </table>

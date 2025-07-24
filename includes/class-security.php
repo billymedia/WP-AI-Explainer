@@ -313,7 +313,7 @@ class ExplainerPlugin_Security {
     public function validate_ajax_request() {
         // Additional security validation before processing
         if (!$this->is_valid_ajax_request()) {
-            wp_die(esc_html__('Invalid request', 'ai-explainer'), 'Security Error', array('response' => 403));
+            wp_die(esc_html__('Invalid request', 'wp-ai-explainer'), 'Security Error', array('response' => 403));
         }
     }
     

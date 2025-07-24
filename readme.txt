@@ -184,6 +184,18 @@ Yes, it's ready for translation and the interface already works in 7 languages (
 
 == Changelog ==
 
+= 1.0.8 =
+* **Code Quality Improvements**: Enhanced code structure and maintainability across all provider classes
+* **Security Enhancements**: Strengthened input validation and sanitisation throughout the plugin
+* **Architecture Refinements**: Improved provider factory pattern and abstraction layer implementation
+* **Performance Optimisations**: Streamlined admin interface rendering and resource loading
+* **Documentation Updates**: Enhanced inline documentation and code comments for better maintainability
+* **GDPR Compliance Improvements**: Refined privacy handling and data processing procedures
+* **Admin Interface Polish**: Improved settings page organisation and user experience
+* **Provider Implementation Updates**: Enhanced OpenAI and Claude provider reliability and error handling
+* **Template System Enhancements**: Improved admin settings template structure and validation
+* **Helper Function Optimisations**: Streamlined utility functions for better performance
+
 = 1.0.0 =
 * **Multi-Provider Support**: OpenAI and Claude integration with model selection
 * **Advanced Tooltip System**: Smart positioning, manual control, and configurable footers

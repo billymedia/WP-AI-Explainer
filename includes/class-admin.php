@@ -47,8 +47,8 @@ class ExplainerPlugin_Admin {
         $icon_svg_base64 = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iY3VycmVudENvbG9yIj4KICA8cGF0aCBkPSJNMTAgMkM3LjIgMiA1IDQuMiA1IDdjMCAuOC4yIDEuNS41IDIuMkw0IDEwLjdjLS4zLjMtLjMuOCAwIDEuMWwuOS45Yy4zLjMuOC4zIDEuMSAwTDcuNSAxMWMuNy4zIDEuNC41IDIuMi41aC42Yy44IDAgMS41LS4yIDIuMi0uNUwxNCAxMi43Yy4zLjMuOC4zIDEuMSAwbC45LS45Yy4zLS4zLjMtLjggMC0xLjFsLTEuNS0xLjVjLjMtLjcuNS0xLjQuNS0yLjIgMC0yLjgtMi4yLTUtNS01em0tMiA1YzAtLjYuNC0xIDEtMXMxIC40IDEgMS0uNCAxLTEgMS0xLS40LTEtMXptMyAwYzAtLjYuNC0xIDEtMXMxIC40IDEgMS0uNCAxLTEgMS0xLS40LTEtMXoiLz4KICA8cGF0aCBkPSJNNiAxNGg4djFINnYtMXptMSAyaDZ2MUg3di0xem0xIDJoNHYxSDh2LTF6Ii8+CiAgPGNpcmNsZSBjeD0iOCIgY3k9IjUiIHI9Ii41Ii8+CiAgPGNpcmNsZSBjeD0iMTIiIGN5PSI1IiByPSIuNSIvPgogIDxjaXJjbGUgY3g9IjEwIiBjeT0iNCIgcj0iLjUiLz4KPC9zdmc+';
         
         add_menu_page(
-            __('WP AI Explainer Settings', 'ai-explainer'),
-            __('WP AI Explainer', 'ai-explainer'),
+            __('WP AI Explainer Settings', 'wp-ai-explainer'),
+            __('WP AI Explainer', 'wp-ai-explainer'),
             'manage_options',
             'explainer-settings',
             array($this, 'settings_page'),
@@ -97,14 +97,14 @@ class ExplainerPlugin_Admin {
         // Add settings sections
         add_settings_section(
             'explainer_basic_settings',
-            __('Basic Settings', 'ai-explainer'),
+            __('Basic Settings', 'wp-ai-explainer'),
             array($this, 'basic_settings_callback'),
             'explainer_settings'
         );
         
         add_settings_section(
             'explainer_advanced_settings',
-            __('Advanced Settings', 'ai-explainer'),
+            __('Advanced Settings', 'wp-ai-explainer'),
             array($this, 'advanced_settings_callback'),
             'explainer_settings'
         );
@@ -112,7 +112,7 @@ class ExplainerPlugin_Admin {
         // Add settings fields
         add_settings_field(
             'explainer_enabled',
-            __('Enable Plugin', 'ai-explainer'),
+            __('Enable Plugin', 'wp-ai-explainer'),
             array($this, 'enabled_field_callback'),
             'explainer_settings',
             'explainer_basic_settings'
@@ -120,7 +120,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_language',
-            __('Language', 'ai-explainer'),
+            __('Language', 'wp-ai-explainer'),
             array($this, 'language_field_callback'),
             'explainer_settings',
             'explainer_basic_settings'
@@ -128,7 +128,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_api_key',
-            __('OpenAI API Key', 'ai-explainer'),
+            __('OpenAI API Key', 'wp-ai-explainer'),
             array($this, 'api_key_field_callback'),
             'explainer_settings',
             'explainer_basic_settings'
@@ -136,7 +136,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_api_model',
-            __('AI Model', 'ai-explainer'),
+            __('AI Model', 'wp-ai-explainer'),
             array($this, 'api_model_field_callback'),
             'explainer_settings',
             'explainer_basic_settings'
@@ -144,7 +144,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_custom_prompt',
-            __('Custom Prompt Template', 'ai-explainer'),
+            __('Custom Prompt Template', 'wp-ai-explainer'),
             array($this, 'custom_prompt_field_callback'),
             'explainer_settings',
             'explainer_basic_settings'
@@ -152,7 +152,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_cache_enabled',
-            __('Enable Cache', 'ai-explainer'),
+            __('Enable Cache', 'wp-ai-explainer'),
             array($this, 'cache_enabled_field_callback'),
             'explainer_settings',
             'explainer_advanced_settings'
@@ -160,7 +160,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_cache_duration',
-            __('Cache Duration (hours)', 'ai-explainer'),
+            __('Cache Duration (hours)', 'wp-ai-explainer'),
             array($this, 'cache_duration_field_callback'),
             'explainer_settings',
             'explainer_advanced_settings'
@@ -168,7 +168,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_rate_limit_enabled',
-            __('Enable Rate Limiting', 'ai-explainer'),
+            __('Enable Rate Limiting', 'wp-ai-explainer'),
             array($this, 'rate_limit_enabled_field_callback'),
             'explainer_settings',
             'explainer_advanced_settings'
@@ -176,7 +176,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_rate_limit_logged',
-            __('Rate Limit (logged in users)', 'ai-explainer'),
+            __('Rate Limit (logged in users)', 'wp-ai-explainer'),
             array($this, 'rate_limit_logged_field_callback'),
             'explainer_settings',
             'explainer_advanced_settings'
@@ -184,7 +184,7 @@ class ExplainerPlugin_Admin {
         
         add_settings_field(
             'explainer_rate_limit_anonymous',
-            __('Rate Limit (anonymous users)', 'ai-explainer'),
+            __('Rate Limit (anonymous users)', 'wp-ai-explainer'),
             array($this, 'rate_limit_anonymous_field_callback'),
             'explainer_settings',
             'explainer_advanced_settings'
@@ -210,14 +210,14 @@ class ExplainerPlugin_Admin {
      * Basic settings section callback
      */
     public function basic_settings_callback() {
-        echo '<p>' . esc_html__('Configure the basic settings for the AI Explainer plugin.', 'ai-explainer') . '</p>';
+        echo '<p>' . esc_html__('Configure the basic settings for the AI Explainer plugin.', 'wp-ai-explainer') . '</p>';
     }
     
     /**
      * Advanced settings section callback
      */
     public function advanced_settings_callback() {
-        echo '<p>' . esc_html__('Advanced configuration options for performance and rate limiting.', 'ai-explainer') . '</p>';
+        echo '<p>' . esc_html__('Advanced configuration options for performance and rate limiting.', 'wp-ai-explainer') . '</p>';
     }
     
     /**
@@ -228,7 +228,7 @@ class ExplainerPlugin_Admin {
         ?>
         <label>
             <input type="checkbox" name="explainer_enabled" value="1" <?php checked($value, true); ?> />
-            <?php echo esc_html__('Enable the AI Explainer plugin', 'ai-explainer'); ?>
+            <?php echo esc_html__('Enable the AI Explainer plugin', 'wp-ai-explainer'); ?>
         </label>
         <?php
     }
@@ -239,13 +239,13 @@ class ExplainerPlugin_Admin {
     public function language_field_callback() {
         $value = get_option('explainer_language', 'en_GB');
         $languages = array(
-            'en_US' => __('English (United States)', 'ai-explainer'),
-            'en_GB' => __('English (United Kingdom)', 'ai-explainer'),
-            'es_ES' => __('Spanish (Spain)', 'ai-explainer'),
-            'de_DE' => __('German (Germany)', 'ai-explainer'),
-            'fr_FR' => __('French (France)', 'ai-explainer'),
-            'hi_IN' => __('Hindi (India)', 'ai-explainer'),
-            'zh_CN' => __('Chinese (Simplified)', 'ai-explainer')
+            'en_US' => __('English (United States)', 'wp-ai-explainer'),
+            'en_GB' => __('English (United Kingdom)', 'wp-ai-explainer'),
+            'es_ES' => __('Spanish (Spain)', 'wp-ai-explainer'),
+            'de_DE' => __('German (Germany)', 'wp-ai-explainer'),
+            'fr_FR' => __('French (France)', 'wp-ai-explainer'),
+            'hi_IN' => __('Hindi (India)', 'wp-ai-explainer'),
+            'zh_CN' => __('Chinese (Simplified)', 'wp-ai-explainer')
         );
         ?>
         <select name="explainer_language" class="regular-text">
@@ -256,7 +256,7 @@ class ExplainerPlugin_Admin {
             <?php endforeach; ?>
         </select>
         <p class="description">
-            <?php echo esc_html__('Select the language for the plugin interface and AI explanations.', 'ai-explainer'); ?>
+            <?php echo esc_html__('Select the language for the plugin interface and AI explanations.', 'wp-ai-explainer'); ?>
         </p>
         <?php
     }
@@ -269,7 +269,7 @@ class ExplainerPlugin_Admin {
         ?>
         <input type="password" name="explainer_api_key" value="<?php echo esc_attr($value); ?>" class="regular-text" />
         <p class="description">
-            <?php echo esc_html__('Enter your OpenAI API key. Get one from https://platform.openai.com/api-keys', 'ai-explainer'); ?>
+            <?php echo esc_html__('Enter your OpenAI API key. Get one from https://platform.openai.com/api-keys', 'wp-ai-explainer'); ?>
         </p>
         <?php
     }
@@ -303,7 +303,7 @@ class ExplainerPlugin_Admin {
         ?>
         <label>
             <input type="checkbox" name="explainer_cache_enabled" value="1" <?php checked($value, true); ?> />
-            <?php echo esc_html__('Enable caching to reduce API calls and costs', 'ai-explainer'); ?>
+            <?php echo esc_html__('Enable caching to reduce API calls and costs', 'wp-ai-explainer'); ?>
         </label>
         <?php
     }
@@ -316,7 +316,7 @@ class ExplainerPlugin_Admin {
         ?>
         <input type="number" name="explainer_cache_duration" value="<?php echo esc_attr($value); ?>" min="1" max="168" />
         <p class="description">
-            <?php echo esc_html__('How long to cache explanations (1-168 hours)', 'ai-explainer'); ?>
+            <?php echo esc_html__('How long to cache explanations (1-168 hours)', 'wp-ai-explainer'); ?>
         </p>
         <?php
     }
@@ -329,7 +329,7 @@ class ExplainerPlugin_Admin {
         ?>
         <label>
             <input type="checkbox" name="explainer_rate_limit_enabled" value="1" <?php checked($value, true); ?> />
-            <?php echo esc_html__('Enable rate limiting to prevent abuse', 'ai-explainer'); ?>
+            <?php echo esc_html__('Enable rate limiting to prevent abuse', 'wp-ai-explainer'); ?>
         </label>
         <?php
     }
@@ -342,7 +342,7 @@ class ExplainerPlugin_Admin {
         ?>
         <input type="number" name="explainer_rate_limit_logged" value="<?php echo esc_attr($value); ?>" min="1" max="100" />
         <p class="description">
-            <?php echo esc_html__('Requests per minute for logged in users', 'ai-explainer'); ?>
+            <?php echo esc_html__('Requests per minute for logged in users', 'wp-ai-explainer'); ?>
         </p>
         <?php
     }
@@ -355,7 +355,7 @@ class ExplainerPlugin_Admin {
         ?>
         <input type="number" name="explainer_rate_limit_anonymous" value="<?php echo esc_attr($value); ?>" min="1" max="50" />
         <p class="description">
-            <?php echo esc_html__('Requests per minute for anonymous users', 'ai-explainer'); ?>
+            <?php echo esc_html__('Requests per minute for anonymous users', 'wp-ai-explainer'); ?>
         </p>
         <?php
     }
@@ -367,7 +367,7 @@ class ExplainerPlugin_Admin {
         check_ajax_referer('explainer_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Permission denied', 'wp-ai-explainer')));
         }
         
         // Get provider from request - API key should never be sent in request for security
@@ -382,7 +382,8 @@ class ExplainerPlugin_Admin {
         
         if (empty($api_key)) {
             $provider_name = $provider === 'claude' ? 'Claude' : 'OpenAI';
-            wp_send_json_error(array('message' => sprintf(__('No %s API key configured. Please save an API key first, then test it.', 'ai-explainer'), $provider_name)));
+            // translators: %s is the name of the AI provider (OpenAI or Claude)
+            wp_send_json_error(array('message' => sprintf(__('No %s API key configured. Please save an API key first, then test it.', 'wp-ai-explainer'), $provider_name)));
         }
         
         $result = $this->api_proxy->test_api_key($api_key);
@@ -401,18 +402,18 @@ class ExplainerPlugin_Admin {
         check_ajax_referer('explainer_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Permission denied', 'wp-ai-explainer')));
         }
         
         $result = $this->api_proxy->clear_cache();
         
         if ($result) {
             wp_send_json_success(array(
-                'message' => __('Cache cleared successfully', 'ai-explainer'),
+                'message' => __('Cache cleared successfully', 'wp-ai-explainer'),
                 'count' => 0
             ));
         } else {
-            wp_send_json_error(array('message' => __('Failed to clear cache', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Failed to clear cache', 'wp-ai-explainer')));
         }
     }
     
@@ -423,7 +424,7 @@ class ExplainerPlugin_Admin {
         check_ajax_referer('explainer_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Permission denied', 'wp-ai-explainer')));
         }
         
         $count = explainer_count_cached_items();
@@ -438,13 +439,13 @@ class ExplainerPlugin_Admin {
         check_ajax_referer('explainer_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Permission denied', 'wp-ai-explainer')));
         }
         
         $logs = get_option('explainer_debug_logs', array());
         
         if (empty($logs)) {
-            wp_send_json_success(array('logs' => array(), 'message' => __('No debug logs found.', 'ai-explainer')));
+            wp_send_json_success(array('logs' => array(), 'message' => __('No debug logs found.', 'wp-ai-explainer')));
         }
         
         // Get latest 100 logs
@@ -460,12 +461,12 @@ class ExplainerPlugin_Admin {
         check_ajax_referer('explainer_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Permission denied', 'wp-ai-explainer')));
         }
         
         delete_option('explainer_debug_logs');
         
-        wp_send_json_success(array('message' => __('Debug logs deleted successfully.', 'ai-explainer')));
+        wp_send_json_success(array('message' => __('Debug logs deleted successfully.', 'wp-ai-explainer')));
     }
     
     /**
@@ -515,7 +516,7 @@ class ExplainerPlugin_Admin {
         check_ajax_referer('explainer_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Permission denied', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Permission denied', 'wp-ai-explainer')));
         }
         
         // Get all default options
@@ -554,7 +555,7 @@ class ExplainerPlugin_Admin {
             update_option($option, $value);
         }
         
-        wp_send_json_success(array('message' => __('Settings reset to defaults successfully', 'ai-explainer')));
+        wp_send_json_success(array('message' => __('Settings reset to defaults successfully', 'wp-ai-explainer')));
     }
     
     
@@ -596,14 +597,14 @@ class ExplainerPlugin_Admin {
         <p class="description">
             <?php 
             // translators: {{snippet}} is a placeholder that will be replaced with the user's selected text
-            echo esc_html__('Customize the prompt sent to the AI. Use {{snippet}} where you want the selected text to appear. Maximum 500 characters.', 'ai-explainer'); ?>
+            echo esc_html__('Customize the prompt sent to the AI. Use {{snippet}} where you want the selected text to appear. Maximum 500 characters.', 'wp-ai-explainer'); ?>
         </p>
         <p class="description">
-            <strong><?php echo esc_html__('Example:', 'ai-explainer'); ?></strong> <?php 
+            <strong><?php echo esc_html__('Example:', 'wp-ai-explainer'); ?></strong> <?php 
             // translators: {{snippet}} is a placeholder that will be replaced with the user's selected text
-            echo esc_html__('\"Explain this text in simple terms for a beginner: {{snippet}}\"', 'ai-explainer'); ?>
+            echo esc_html__('\"Explain this text in simple terms for a beginner: {{snippet}}\"', 'wp-ai-explainer'); ?>
         </p>
-        <button type="button" class="button" id="reset-prompt-default"><?php echo esc_html__('Reset to Default', 'ai-explainer'); ?></button>
+        <button type="button" class="button" id="reset-prompt-default"><?php echo esc_html__('Reset to Default', 'wp-ai-explainer'); ?></button>
         <?php
     }
     
@@ -630,7 +631,7 @@ class ExplainerPlugin_Admin {
                 'explainer_custom_prompt',
                 'missing_snippet_variable',
                 // translators: {{snippet}} is a placeholder that will be replaced with the user's selected text
-                __('Custom prompt must contain {{snippet}} placeholder.', 'ai-explainer')
+                __('Custom prompt must contain {{snippet}} placeholder.', 'wp-ai-explainer')
             );
             return $old_value; // Return old value if validation fails
         }
@@ -640,7 +641,7 @@ class ExplainerPlugin_Admin {
             add_settings_error(
                 'explainer_custom_prompt',
                 'prompt_too_long',
-                __('Custom prompt cannot exceed 500 characters.', 'ai-explainer')
+                __('Custom prompt cannot exceed 500 characters.', 'wp-ai-explainer')
             );
             return $old_value; // Return old value if validation fails
         }
@@ -827,32 +828,32 @@ class ExplainerPlugin_Admin {
         ?>
         <div id="<?php echo esc_attr($notice_id); ?>" class="<?php echo esc_attr($notice_class); ?>">
             <div class="explainer-notice-content">
-                <h3><?php esc_html_e('WP AI Explainer Automatically Disabled', 'ai-explainer'); ?></h3>
-                <p><strong><?php esc_html_e('The plugin has been automatically disabled due to API usage limits being exceeded.', 'ai-explainer'); ?></strong></p>
+                <h3><?php esc_html_e('WP AI Explainer Automatically Disabled', 'wp-ai-explainer'); ?></h3>
+                <p><strong><?php esc_html_e('The plugin has been automatically disabled due to API usage limits being exceeded.', 'wp-ai-explainer'); ?></strong></p>
                 
                 <?php if (!empty($reason)): ?>
-                    <p><strong><?php esc_html_e('Reason:', 'ai-explainer'); ?></strong> <?php echo esc_html($reason); ?></p>
+                    <p><strong><?php esc_html_e('Reason:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html($reason); ?></p>
                 <?php endif; ?>
                 
                 <?php if (!empty($provider)): ?>
-                    <p><strong><?php esc_html_e('Provider:', 'ai-explainer'); ?></strong> <?php echo esc_html($provider); ?></p>
+                    <p><strong><?php esc_html_e('Provider:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html($provider); ?></p>
                 <?php endif; ?>
                 
                 <?php if (!empty($time_since)): ?>
-                    <p><strong><?php esc_html_e('Disabled:', 'ai-explainer'); ?></strong> <?php echo esc_html($time_since); ?></p>
+                    <p><strong><?php esc_html_e('Disabled:', 'wp-ai-explainer'); ?></strong> <?php echo esc_html($time_since); ?></p>
                 <?php endif; ?>
                 
-                <p><?php esc_html_e('Please check your AI provider account billing and usage limits. Once resolved, you can manually re-enable the plugin below.', 'ai-explainer'); ?></p>
+                <p><?php esc_html_e('Please check your AI provider account billing and usage limits. Once resolved, you can manually re-enable the plugin below.', 'wp-ai-explainer'); ?></p>
                 
                 <div class="explainer-notice-actions">
                     <button type="button" class="button button-primary explainer-reenable-btn" data-nonce="<?php echo esc_attr(wp_create_nonce('explainer_reenable_plugin')); ?>">
-                        <?php esc_html_e('Re-enable Plugin', 'ai-explainer'); ?>
+                        <?php esc_html_e('Re-enable Plugin', 'wp-ai-explainer'); ?>
                     </button>
                     <button type="button" class="button explainer-dismiss-notice-btn" data-nonce="<?php echo esc_attr(wp_create_nonce('explainer_dismiss_notice')); ?>">
-                        <?php esc_html_e('Dismiss Notice (Keep Plugin Disabled)', 'ai-explainer'); ?>
+                        <?php esc_html_e('Dismiss Notice (Keep Plugin Disabled)', 'wp-ai-explainer'); ?>
                     </button>
                     <a href="<?php echo esc_url(admin_url('options-general.php?page=explainer-settings')); ?>" class="button">
-                        <?php esc_html_e('Go to Plugin Settings', 'ai-explainer'); ?>
+                        <?php esc_html_e('Go to Plugin Settings', 'wp-ai-explainer'); ?>
                     </a>
                 </div>
             </div>
@@ -867,11 +868,11 @@ class ExplainerPlugin_Admin {
                 var nonce = button.data('nonce');
                 var originalText = button.text();
                 
-                if (!confirm('<?php echo esc_js(__('Are you sure you want to re-enable the AI Explainer plugin? Make sure you have resolved the usage limit issues first.', 'ai-explainer')); ?>')) {
+                if (!confirm('<?php echo esc_js(__('Are you sure you want to re-enable the AI Explainer plugin? Make sure you have resolved the usage limit issues first.', 'wp-ai-explainer')); ?>')) {
                     return;
                 }
                 
-                button.prop('disabled', true).text('<?php echo esc_js(__('Re-enabling...', 'ai-explainer')); ?>');
+                button.prop('disabled', true).text('<?php echo esc_js(__('Re-enabling...', 'wp-ai-explainer')); ?>');
                 
                 $.post(ajaxurl, {
                     action: 'explainer_reenable_plugin',
@@ -883,18 +884,18 @@ class ExplainerPlugin_Admin {
                             $(this).remove();
                         });
                         // Show success message
-                        $('body').prepend('<div class="notice notice-success is-dismissible"><p><?php echo esc_js(__('Plugin has been successfully re-enabled.', 'ai-explainer')); ?></p></div>');
+                        $('body').prepend('<div class="notice notice-success is-dismissible"><p><?php echo esc_js(__('Plugin has been successfully re-enabled.', 'wp-ai-explainer')); ?></p></div>');
                         // Reload page after a short delay to reflect enabled state
                         setTimeout(function() {
                             window.location.reload();
                         }, 2000);
                     } else {
-                        alert('<?php echo esc_js(__('Error re-enabling plugin:', 'ai-explainer')); ?> ' + (response.data.message || '<?php echo esc_js(__('Unknown error', 'ai-explainer')); ?>'));
+                        alert('<?php echo esc_js(__('Error re-enabling plugin:', 'wp-ai-explainer')); ?> ' + (response.data.message || '<?php echo esc_js(__('Unknown error', 'wp-ai-explainer')); ?>'));
                         button.prop('disabled', false).text(originalText);
                     }
                 })
                 .fail(function() {
-                    alert('<?php echo esc_js(__('Failed to re-enable plugin. Please try again.', 'ai-explainer')); ?>');
+                    alert('<?php echo esc_js(__('Failed to re-enable plugin. Please try again.', 'wp-ai-explainer')); ?>');
                     button.prop('disabled', false).text(originalText);
                 });
             });
@@ -906,7 +907,7 @@ class ExplainerPlugin_Admin {
                 var nonce = button.data('nonce');
                 var originalText = button.text();
                 
-                button.prop('disabled', true).text('<?php echo esc_js(__('Dismissing...', 'ai-explainer')); ?>');
+                button.prop('disabled', true).text('<?php echo esc_js(__('Dismissing...', 'wp-ai-explainer')); ?>');
                 
                 $.post(ajaxurl, {
                     action: 'explainer_dismiss_usage_notice',
@@ -918,12 +919,12 @@ class ExplainerPlugin_Admin {
                             $(this).remove();
                         });
                     } else {
-                        alert('<?php echo esc_js(__('Error dismissing notice:', 'ai-explainer')); ?> ' + (response.data.message || '<?php echo esc_js(__('Unknown error', 'ai-explainer')); ?>'));
+                        alert('<?php echo esc_js(__('Error dismissing notice:', 'wp-ai-explainer')); ?> ' + (response.data.message || '<?php echo esc_js(__('Unknown error', 'wp-ai-explainer')); ?>'));
                         button.prop('disabled', false).text(originalText);
                     }
                 })
                 .fail(function() {
-                    alert('<?php echo esc_js(__('Failed to dismiss notice. Please try again.', 'ai-explainer')); ?>');
+                    alert('<?php echo esc_js(__('Failed to dismiss notice. Please try again.', 'wp-ai-explainer')); ?>');
                     button.prop('disabled', false).text(originalText);
                 });
             });
@@ -938,17 +939,17 @@ class ExplainerPlugin_Admin {
     public function handle_reenable_plugin() {
         // Verify nonce
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_reenable_plugin' ) ) {
-            wp_send_json_error(array('message' => __('Invalid nonce.', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Invalid nonce.', 'wp-ai-explainer')));
         }
         
         // Check user capability
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Insufficient permissions.', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Insufficient permissions.', 'wp-ai-explainer')));
         }
         
         // Check if plugin is actually auto-disabled
         if (!explainer_is_auto_disabled()) {
-            wp_send_json_error(array('message' => __('Plugin is not currently auto-disabled.', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Plugin is not currently auto-disabled.', 'wp-ai-explainer')));
         }
         
         // Re-enable the plugin
@@ -956,11 +957,11 @@ class ExplainerPlugin_Admin {
         
         if ($success) {
             wp_send_json_success(array(
-                'message' => __('Plugin has been successfully re-enabled.', 'ai-explainer')
+                'message' => __('Plugin has been successfully re-enabled.', 'wp-ai-explainer')
             ));
         } else {
             wp_send_json_error(array(
-                'message' => __('Failed to re-enable plugin.', 'ai-explainer')
+                'message' => __('Failed to re-enable plugin.', 'wp-ai-explainer')
             ));
         }
     }
@@ -971,12 +972,12 @@ class ExplainerPlugin_Admin {
     public function handle_dismiss_usage_notice() {
         // Verify nonce
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'explainer_dismiss_notice' ) ) {
-            wp_send_json_error(array('message' => __('Invalid nonce.', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Invalid nonce.', 'wp-ai-explainer')));
         }
         
         // Check user capability
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(array('message' => __('Insufficient permissions.', 'ai-explainer')));
+            wp_send_json_error(array('message' => __('Insufficient permissions.', 'wp-ai-explainer')));
         }
         
         // Dismiss the notice
@@ -984,11 +985,11 @@ class ExplainerPlugin_Admin {
         
         if ($success) {
             wp_send_json_success(array(
-                'message' => __('Notice dismissed successfully.', 'ai-explainer')
+                'message' => __('Notice dismissed successfully.', 'wp-ai-explainer')
             ));
         } else {
             wp_send_json_error(array(
-                'message' => __('Failed to dismiss notice.', 'ai-explainer')
+                'message' => __('Failed to dismiss notice.', 'wp-ai-explainer')
             ));
         }
     }

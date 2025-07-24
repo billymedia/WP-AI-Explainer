@@ -837,7 +837,7 @@ function explainer_get_time_since_disabled() {
     $current_time = current_time('timestamp');
     $time_diff = $current_time - $disabled_time;
     
-    return human_time_diff($disabled_time, $current_time) . ' ' . __('ago', 'ai-explainer');
+    return human_time_diff($disabled_time, $current_time) . ' ' . __('ago', 'wp-ai-explainer');
 }
 
 /**

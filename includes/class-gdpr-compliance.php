@@ -129,12 +129,12 @@ class Explainer_GDPR_Compliance {
         <div id="explainer-gdpr-banner" class="explainer-gdpr-banner" role="banner" aria-live="polite">
             <div class="explainer-gdpr-content">
                 <div class="explainer-gdpr-message">
-                    <h3><?php esc_html_e('Cookie Consent', 'ai-explainer'); ?></h3>
+                    <h3><?php esc_html_e('Cookie Consent', 'wp-ai-explainer'); ?></h3>
                     <p>
                         <?php
                         printf(
                             /* translators: %s: site name */
-                            esc_html__('This website uses cookies to enhance your experience, including the AI Explainer feature. We respect your privacy and only collect necessary data. By continuing to use %s, you consent to our use of cookies.', 'ai-explainer'),
+                            esc_html__('This website uses cookies to enhance your experience, including the AI Explainer feature. We respect your privacy and only collect necessary data. By continuing to use %s, you consent to our use of cookies.', 'wp-ai-explainer'),
                             '<strong>' . esc_html($site_name) . '</strong>'
                         );
                         ?>
@@ -142,7 +142,7 @@ class Explainer_GDPR_Compliance {
                     <?php if ($privacy_policy_url): ?>
                     <p>
                         <a href="<?php echo esc_url($privacy_policy_url); ?>" target="_blank" rel="noopener">
-                            <?php esc_html_e('Read our Privacy Policy', 'ai-explainer'); ?>
+                            <?php esc_html_e('Read our Privacy Policy', 'wp-ai-explainer'); ?>
                         </a>
                     </p>
                     <?php endif; ?>
@@ -151,20 +151,20 @@ class Explainer_GDPR_Compliance {
                     <button type="button" 
                             id="explainer-gdpr-accept" 
                             class="explainer-gdpr-button explainer-gdpr-accept"
-                            aria-label="<?php esc_attr_e('Accept cookies and continue', 'ai-explainer'); ?>">
-                        <?php esc_html_e('Accept', 'ai-explainer'); ?>
+                            aria-label="<?php esc_attr_e('Accept cookies and continue', 'wp-ai-explainer'); ?>">
+                        <?php esc_html_e('Accept', 'wp-ai-explainer'); ?>
                     </button>
                     <button type="button" 
                             id="explainer-gdpr-decline" 
                             class="explainer-gdpr-button explainer-gdpr-decline"
-                            aria-label="<?php esc_attr_e('Decline cookies', 'ai-explainer'); ?>">
-                        <?php esc_html_e('Decline', 'ai-explainer'); ?>
+                            aria-label="<?php esc_attr_e('Decline cookies', 'wp-ai-explainer'); ?>">
+                        <?php esc_html_e('Decline', 'wp-ai-explainer'); ?>
                     </button>
                     <button type="button" 
                             id="explainer-gdpr-customize" 
                             class="explainer-gdpr-button explainer-gdpr-customize"
-                            aria-label="<?php esc_attr_e('Customize cookie preferences', 'ai-explainer'); ?>">
-                        <?php esc_html_e('Customize', 'ai-explainer'); ?>
+                            aria-label="<?php esc_attr_e('Customize cookie preferences', 'wp-ai-explainer'); ?>">
+                        <?php esc_html_e('Customize', 'wp-ai-explainer'); ?>
                     </button>
                 </div>
             </div>
@@ -250,8 +250,8 @@ class Explainer_GDPR_Compliance {
             
             function showCustomizeModal() {
                 // Basic implementation - in production, show detailed cookie preferences
-                const allowAnalytics = confirm('<?php esc_js(esc_html__('Allow analytics cookies to improve the service?', 'ai-explainer')); ?>');
-                const allowFunctional = confirm('<?php esc_js(esc_html__('Allow functional cookies for AI explanations?', 'ai-explainer')); ?>');
+                const allowAnalytics = confirm('<?php esc_js(esc_html__('Allow analytics cookies to improve the service?', 'wp-ai-explainer')); ?>');
+                const allowFunctional = confirm('<?php esc_js(esc_html__('Allow functional cookies for AI explanations?', 'wp-ai-explainer')); ?>');
                 
                 if (allowFunctional) {
                     setConsent('granted');
@@ -297,7 +297,7 @@ class Explainer_GDPR_Compliance {
         
         wp_send_json_success(array(
             'status' => $consent,
-            'message' => __('Consent preference saved.', 'ai-explainer')
+            'message' => __('Consent preference saved.', 'wp-ai-explainer')
         ));
     }
     
@@ -340,7 +340,7 @@ class Explainer_GDPR_Compliance {
         
         wp_send_json_success(array(
             'data' => $data,
-            'message' => __('User data exported successfully.', 'ai-explainer')
+            'message' => __('User data exported successfully.', 'wp-ai-explainer')
         ));
     }
     
@@ -361,7 +361,7 @@ class Explainer_GDPR_Compliance {
         
         wp_send_json_success(array(
             'deleted' => $deleted,
-            'message' => __('User data deleted successfully.', 'ai-explainer')
+            'message' => __('User data deleted successfully.', 'wp-ai-explainer')
         ));
     }
     
@@ -422,8 +422,8 @@ class Explainer_GDPR_Compliance {
      * Register data exporter for WordPress privacy tools
      */
     public function register_data_exporter($exporters) {
-        $exporters['ai-explainer'] = array(
-            'exporter_friendly_name' => __('WP AI Explainer', 'ai-explainer'),
+        $exporters['wp-ai-explainer'] = array(
+            'exporter_friendly_name' => __('WP AI Explainer', 'wp-ai-explainer'),
             'callback' => array($this, 'wp_privacy_exporter')
         );
         
@@ -434,8 +434,8 @@ class Explainer_GDPR_Compliance {
      * Register data eraser for WordPress privacy tools
      */
     public function register_data_eraser($erasers) {
-        $erasers['ai-explainer'] = array(
-            'eraser_friendly_name' => __('WP AI Explainer', 'ai-explainer'),
+        $erasers['wp-ai-explainer'] = array(
+            'eraser_friendly_name' => __('WP AI Explainer', 'wp-ai-explainer'),
             'callback' => array($this, 'wp_privacy_eraser')
         );
         
@@ -460,15 +460,15 @@ class Explainer_GDPR_Compliance {
         if (!empty($data)) {
             $export_items[] = array(
                 'group_id' => 'explainer_plugin',
-                'group_label' => __('WP AI Explainer', 'ai-explainer'),
+                'group_label' => __('WP AI Explainer', 'wp-ai-explainer'),
                 'item_id' => 'explainer_data_' . $user->ID,
                 'data' => array(
                     array(
-                        'name' => __('User Preferences', 'ai-explainer'),
+                        'name' => __('User Preferences', 'wp-ai-explainer'),
                         'value' => wp_json_encode($data['preferences'] ?? array())
                     ),
                     array(
-                        'name' => __('Usage Statistics', 'ai-explainer'),
+                        'name' => __('Usage Statistics', 'wp-ai-explainer'),
                         'value' => wp_json_encode($data['usage_statistics'] ?? array())
                     )
                 )
@@ -503,7 +503,7 @@ class Explainer_GDPR_Compliance {
             'messages' => array(
                 sprintf(
                     /* translators: %s: comma-separated list of deleted items */
-                    __('Removed: %s', 'ai-explainer'),
+                    __('Removed: %s', 'wp-ai-explainer'),
                     implode(', ', $deleted)
                 )
             ),
@@ -532,16 +532,16 @@ class Explainer_GDPR_Compliance {
             '<p>%s</p>' .
             '<h3>%s</h3>' .
             '<p>%s</p>',
-            __('WP AI Explainer', 'ai-explainer'),
-            __('This plugin provides AI-powered text explanations. To provide this service, we may collect and process certain data.', 'ai-explainer'),
-            __('Data We Collect', 'ai-explainer'),
-            __('Selected text for AI processing (temporarily, not stored)', 'ai-explainer'),
-            __('Usage preferences and settings', 'ai-explainer'),
-            __('Basic usage statistics (anonymized)', 'ai-explainer'),
-            __('How We Use Your Data', 'ai-explainer'),
-            __('We use your data solely to provide AI explanations and improve the service. Text sent for AI processing is not stored permanently and is only used for generating explanations.', 'ai-explainer'),
-            __('Your Rights', 'ai-explainer'),
-            __('You can request access to, correction of, or deletion of your data at any time. You can also withdraw consent for data processing, which will disable the AI explanation features.', 'ai-explainer')
+            __('WP AI Explainer', 'wp-ai-explainer'),
+            __('This plugin provides AI-powered text explanations. To provide this service, we may collect and process certain data.', 'wp-ai-explainer'),
+            __('Data We Collect', 'wp-ai-explainer'),
+            __('Selected text for AI processing (temporarily, not stored)', 'wp-ai-explainer'),
+            __('Usage preferences and settings', 'wp-ai-explainer'),
+            __('Basic usage statistics (anonymized)', 'wp-ai-explainer'),
+            __('How We Use Your Data', 'wp-ai-explainer'),
+            __('We use your data solely to provide AI explanations and improve the service. Text sent for AI processing is not stored permanently and is only used for generating explanations.', 'wp-ai-explainer'),
+            __('Your Rights', 'wp-ai-explainer'),
+            __('You can request access to, correction of, or deletion of your data at any time. You can also withdraw consent for data processing, which will disable the AI explanation features.', 'wp-ai-explainer')
         );
         
         wp_add_privacy_policy_content(
