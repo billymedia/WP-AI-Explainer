@@ -62,6 +62,8 @@ Watch a quick demo of WP AI Explainer in action:
 10. Configure advanced settings as needed
 11. Save your settings and test on your site
 -->
+### From WordPress Admin
+Currently under review.
 
 ### Manual Installation
 
