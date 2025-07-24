@@ -11,8 +11,9 @@ A lightweight WordPress plugin that transforms your website into an interactive 
 
 Watch a quick demo of WP AI Explainer in action:
 
-[![WP AI Explainer Demo](https://img.youtube.com/vi/8V57Y6nZTFs/0.jpg)](https://www.youtube.com/watch?v=8V57Y6nZTFs)
+![WP AI Explainer Demo](https://billymedia.co.uk/_demos/demo.gif)
 
+[Watch a demo video](https://www.youtube.com/watch?v=8V57Y6nZTFs)
 
 
 ## Key Features
