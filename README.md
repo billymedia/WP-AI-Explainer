@@ -3,7 +3,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
 [![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
 [![License](https://img.shields.io/badge/License-GPL%20v2%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
-[![Version](https://img.shields.io/badge/Version-1.0.7-orange.svg)](https://github.com/billymedia/WP-AI-Explainer/releases)
+[![Version](https://img.shields.io/badge/Version-1.0.8-orange.svg)](https://github.com/billymedia/WP-AI-Explainer/releases)
 
 A lightweight WordPress plugin that transforms your website into an interactive learning experience. Users can simply select any text and receive instant AI-generated explanations via elegant, customisable tooltips.
 
@@ -146,19 +146,30 @@ Watch a quick demo of WP AI Explainer in action:
 
 ## Changelog
 
-### Version 1.0.0
-- **Multi-Provider Support**: OpenAI and Claude integration with model selection
-- **Multi-Language Interface**: Localised tooltips in 7 languages with real-time language switching
-- **Comprehensive Admin Interface**: Tabbed settings with Basic and Advanced options
-- **Custom Prompt Templates**: Personalised AI prompts with validation
-- **Encrypted API Storage**: Secure WordPress salts-based encryption
-- **Provider Factory Architecture**: Clean, extensible codebase for future providers
-- **Enhanced Security**: Comprehensive validation, sanitisation, and capability checks
-- **Performance Optimisation**: Intelligent caching, rate limiting, and minimal impact
-- **Accessibility Excellence**: WCAG AA compliance with full keyboard and screen reader support
-- **Mobile Excellence**: Touch-friendly interface with responsive design
-- **Theme Compatibility**: Works with any WordPress theme
-- **Debug Tools**: Comprehensive logging and troubleshooting capabilities
+#### Version 1.0.8
+- Enhanced debug logging with comprehensive API request flow tracking
+- Improved tab persistence using localStorage for better user experience
+- Moved Reset to Defaults button to Advanced tab for better organization
+- Relocated Test API Key buttons next to API key inputs, removed Quick Actions section
+- Enhanced security by preventing API key transmission in client requests
+- Fixed tooltip preview horizontal line styling to match frontend appearance
+- Updated help, support, and readme content to be more conversational and human-sounding
+- Reduced debug logging API key prefix from 10 to 3 characters for improved security
+- Comprehensive security audit ensuring API keys never appear in POST/GET requests
+
+#### Version 1.0.0
+- Multi-Provider Support: OpenAI and Claude integration with model selection
+- Multi-Language Interface: Localised tooltips in 7 languages with real-time language switching
+- Comprehensive Admin Interface: Tabbed settings with Basic and Advanced options
+- Custom Prompt Templates: Personalised AI prompts with validation
+- Encrypted API Storage: Secure WordPress salts-based encryption
+- Provider Factory Architecture: Clean, extensible codebase for future providers
+- Enhanced Security: Comprehensive validation, sanitisation, and capability checks
+- Performance Optimisation: Intelligent caching, rate limiting, and minimal impact
+- Accessibility Excellence: WCAG AA compliance with full keyboard and screen reader support
+- Mobile Excellence: Touch-friendly interface with responsive design
+- Theme Compatibility: Works with any WordPress theme
+- Debug Tools: Comprehensive logging and troubleshooting capabilities
 
 ## Privacy & Security
 
