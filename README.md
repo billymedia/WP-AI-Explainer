@@ -146,18 +146,49 @@ Watch a quick demo of WP AI Explainer in action:
 
 ## Changelog
 
-#### Version 1.0.8
+##### Version 1.0.8 *(July 24, 2025)*
 - Enhanced debug logging with comprehensive API request flow tracking
 - Improved tab persistence using localStorage for better user experience
-- Moved Reset to Defaults button to Advanced tab for better organization
+- Moved Reset to Defaults button to Advanced tab for better organisation
 - Relocated Test API Key buttons next to API key inputs, removed Quick Actions section
 - Enhanced security by preventing API key transmission in client requests
 - Fixed tooltip preview horizontal line styling to match frontend appearance
 - Updated help, support, and readme content to be more conversational and human-sounding
 - Reduced debug logging API key prefix from 10 to 3 characters for improved security
 - Comprehensive security audit ensuring API keys never appear in POST/GET requests
+- Added working iframe display functionality
+- Integrated YouTube demo video
+- Removed default exclusion classes for better theme compatibility
 
-#### Version 1.0.0
+##### Version 1.0.6 *(July 20, 2025)*
+- WordPress Plugin Directory compliance improvements
+- Enhanced plugin validation and quality checks
+- Code structure improvements for WordPress standards
+
+##### Version 1.0.5 *(July 19, 2025)*
+- Updated repository links to correct GitHub location
+- Fixed documentation references and URLs
+
+##### Version 1.0.4 *(July 19, 2025)*
+- Added correct UK English language support
+- Improved British English localisation accuracy
+
+##### Version 1.0.3 *(July 19, 2025)*
+- Major restructure and rename of plugin files and folders
+- Improved file organisation and naming conventions
+- Enhanced code maintainability
+
+##### Version 1.0.2 *(July 19, 2025)*
+- Added blocked words filter functionality
+- Content filtering and moderation capabilities
+- Removed test code and cleaned up codebase
+
+##### Version 1.0.1 *(July 19, 2025)*
+- Added API usage monitoring and automatic plugin disable on quota exceeded
+- Enhanced error handling for API limits
+- Improved cost management features
+
+##### Version 1.0.0 *(July 19, 2025)*
 - Multi-Provider Support: OpenAI and Claude integration with model selection
 - Multi-Language Interface: Localised tooltips in 7 languages with real-time language switching
 - Comprehensive Admin Interface: Tabbed settings with Basic and Advanced options
