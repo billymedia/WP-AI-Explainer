@@ -47,6 +47,7 @@ Watch a quick demo of WP AI Explainer in action:
 
 ## Installation
 
+<!--
 ### From WordPress Admin
 
 1. Go to **Plugins → Add New**
@@ -60,6 +61,7 @@ Watch a quick demo of WP AI Explainer in action:
 9. Customise appearance and footer options
 10. Configure advanced settings as needed
 11. Save your settings and test on your site
+-->
 
 ### Manual Installation
 
