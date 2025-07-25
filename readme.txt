@@ -4,7 +4,7 @@ Tags: ai, explanation, tooltip, openai, claude
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.0.9
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,6 +183,15 @@ Yes, it's ready for translation and the interface already works in 7 languages (
 6. **Mobile Experience** - Responsive design with touch gestures on mobile devices
 
 == Changelog ==
+
+= 1.1.0 =
+* **Enhanced CSS Compatibility**: Complete defensive CSS overhaul to prevent styling conflicts with other plugins
+* **Plugin Conflict Resolution**: Bulletproof styling using highly specific selectors and important declarations
+* **CSS Reset Integration**: Added comprehensive CSS reset for all plugin elements to prevent inheritance issues
+* **Improved Style Protection**: All tooltip colours, button styling, and positioning now protected against external interference
+* **Better Plugin Compatibility**: Works reliably alongside any WordPress plugins that modify CSS
+* **Enhanced Selector Specificity**: Multiple selector variations ensure styles apply consistently across different themes
+* **Defensive Styling Architecture**: Complete protection against CSS cascade conflicts and rule override issues
 
 = 1.0.9 =
 * **Enhanced Error Visibility**: Improved error popup styling with white text, headers, and close buttons for better readability

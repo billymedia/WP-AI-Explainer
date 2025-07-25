@@ -1,7 +1,50 @@
 /**
  * WP AI Explainer - Styles
  * Performance optimized with CSS containment and efficient selectors
+ * Defensive CSS to prevent conflicts with other plugins
  */
+
+/* =============================================================================
+   Plugin-specific CSS Reset for Defensive Styling
+   ============================================================================= */
+
+/* Reset all possible inherited styles for our plugin elements */
+.explainer-toggle,
+.explainer-toggle *,
+.explainer-tooltip,
+.explainer-tooltip *,
+.explainer-selection-highlight {
+    all: unset !important;
+    box-sizing: border-box !important;
+}
+
+/* Restore essential display properties that 'all: unset' removes */
+.explainer-toggle {
+    display: inline-flex !important;
+}
+
+.explainer-tooltip {
+    display: block !important;
+}
+
+.explainer-tooltip-header {
+    display: flex !important;
+}
+
+.explainer-tooltip-content,
+.explainer-tooltip-footer,
+.explainer-disclaimer,
+.explainer-provider {
+    display: block !important;
+}
+
+.explainer-tooltip-close {
+    display: flex !important;
+}
+
+.explainer-selection-highlight {
+    display: inline !important;
+}
 
 /* =============================================================================
    CSS Custom Properties for Performance
@@ -32,164 +75,248 @@
    Toggle Button - Modern Button Design with Icon
    ============================================================================= */
 
+/* Highly specific selector to prevent other plugins from overriding */
+body .explainer-toggle,
+html body .explainer-toggle,
+div .explainer-toggle,
 .explainer-toggle {
     /* Positioning */
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: var(--explainer-z-index-toggle);
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: var(--explainer-z-index-toggle) !important;
     
     /* Button styling */
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 25px;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 12px 20px !important;
+    border: none !important;
+    border-radius: 25px !important;
     
     /* Typography */
-    font-size: 14px;
-    font-weight: 600;
-    font-family: var(--explainer-font-stack);
-    text-transform: none;
-    letter-spacing: 0.5px;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    font-family: var(--explainer-font-stack) !important;
+    text-transform: none !important;
+    letter-spacing: 0.5px !important;
     
     /* Colors - disabled state by default */
-    background-color: var(--explainer-button-disabled);
-    color: var(--explainer-button-text);
+    background-color: var(--explainer-button-disabled) !important;
+    color: var(--explainer-button-text) !important;
     
     /* Effects */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: var(--explainer-transition);
-    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    transition: var(--explainer-transition) !important;
+    cursor: pointer !important;
     
     /* Performance optimizations */
-    contain: layout style;
-    will-change: transform, background-color, box-shadow;
+    contain: layout style !important;
+    will-change: transform, background-color, box-shadow !important;
     
     /* Accessibility enhancements */
-    outline: none;
-    user-select: none;
+    outline: none !important;
+    user-select: none !important;
     
     /* Touch optimization */
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
     
     /* Remove default button styles */
-    margin: 0;
+    margin: 0 !important;
     
     /* Ensure text and icon are properly aligned */
-    line-height: 1;
+    line-height: 1 !important;
+    
+    /* Additional defensive styles to prevent interference */
+    width: auto !important;
+    height: auto !important;
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: none !important;
+    max-height: none !important;
+    text-decoration: none !important;
+    text-align: left !important;
+    vertical-align: baseline !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 /* Icon styling */
+body .explainer-toggle .explainer-icon,
+html body .explainer-toggle .explainer-icon,
+div .explainer-toggle .explainer-icon,
 .explainer-toggle .explainer-icon {
-    width: 16px;
-    height: 16px;
-    fill: currentColor;
-    flex-shrink: 0;
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
+    flex-shrink: 0 !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: none !important;
 }
 
 /* Button text */
+body .explainer-toggle .explainer-text,
+html body .explainer-toggle .explainer-text,
+div .explainer-toggle .explainer-text,
 .explainer-toggle .explainer-text {
-    font-size: inherit;
-    font-weight: inherit;
-    color: inherit;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-decoration: none !important;
+    display: inline !important;
 }
 
 /* Hover state */
+body .explainer-toggle:hover,
+html body .explainer-toggle:hover,
+div .explainer-toggle:hover,
 .explainer-toggle:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Active state */
+body .explainer-toggle:active,
+html body .explainer-toggle:active,
+div .explainer-toggle:active,
 .explainer-toggle:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Focus state for accessibility */
+body .explainer-toggle:focus,
+html body .explainer-toggle:focus,
+div .explainer-toggle:focus,
 .explainer-toggle:focus {
-    outline: 2px solid #0066CC;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3);
+    outline: 2px solid #0066CC !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3) !important;
 }
 
+body .explainer-toggle:focus-visible,
+html body .explainer-toggle:focus-visible,
+div .explainer-toggle:focus-visible,
 .explainer-toggle:focus-visible {
-    outline: 2px solid #0066CC;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3);
+    outline: 2px solid #0066CC !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.3) !important;
 }
 
 /* Enabled state */
+body .explainer-toggle.enabled,
+html body .explainer-toggle.enabled,
+div .explainer-toggle.enabled,
 .explainer-toggle.enabled {
-    background-color: var(--explainer-button-enabled);
+    background-color: var(--explainer-button-enabled) !important;
 }
 
+body .explainer-toggle.enabled:hover,
+html body .explainer-toggle.enabled:hover,
+div .explainer-toggle.enabled:hover,
 .explainer-toggle.enabled:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.1) !important;
 }
 
 /* Disabled state (when plugin functionality is disabled) */
+body .explainer-toggle:disabled,
+html body .explainer-toggle:disabled,
+div .explainer-toggle:disabled,
 .explainer-toggle:disabled {
-    background-color: var(--explainer-button-disabled);
-    cursor: not-allowed;
-    opacity: 0.7;
+    background-color: var(--explainer-button-disabled) !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
 }
 
+body .explainer-toggle:disabled:hover,
+html body .explainer-toggle:disabled:hover,
+div .explainer-toggle:disabled:hover,
 .explainer-toggle:disabled:hover {
-    transform: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Position variations */
+body .explainer-toggle.bottom-left,
+html body .explainer-toggle.bottom-left,
+div .explainer-toggle.bottom-left,
 .explainer-toggle.bottom-left {
-    bottom: 20px;
-    left: 20px;
-    right: auto;
+    bottom: 20px !important;
+    left: 20px !important;
+    right: auto !important;
+    top: auto !important;
 }
 
+body .explainer-toggle.top-right,
+html body .explainer-toggle.top-right,
+div .explainer-toggle.top-right,
 .explainer-toggle.top-right {
-    top: 20px;
-    bottom: auto;
-    right: 20px;
+    top: 20px !important;
+    bottom: auto !important;
+    right: 20px !important;
+    left: auto !important;
 }
 
+body .explainer-toggle.top-left,
+html body .explainer-toggle.top-left,
+div .explainer-toggle.top-left,
 .explainer-toggle.top-left {
-    top: 20px;
-    bottom: auto;
-    left: 20px;
-    right: auto;
+    top: 20px !important;
+    bottom: auto !important;
+    left: 20px !important;
+    right: auto !important;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+    body .explainer-toggle,
+    html body .explainer-toggle,
+    div .explainer-toggle,
     .explainer-toggle {
-        padding: 10px 16px;
-        font-size: 13px;
-        bottom: 15px;
-        right: 15px;
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+        bottom: 15px !important;
+        right: 15px !important;
     }
     
+    body .explainer-toggle .explainer-icon,
+    html body .explainer-toggle .explainer-icon,
+    div .explainer-toggle .explainer-icon,
     .explainer-toggle .explainer-icon {
-        width: 14px;
-        height: 14px;
+        width: 14px !important;
+        height: 14px !important;
     }
     
+    body .explainer-toggle.bottom-left,
+    html body .explainer-toggle.bottom-left,
+    div .explainer-toggle.bottom-left,
     .explainer-toggle.bottom-left {
-        bottom: 15px;
-        left: 15px;
+        bottom: 15px !important;
+        left: 15px !important;
     }
     
+    body .explainer-toggle.top-right,
+    html body .explainer-toggle.top-right,
+    div .explainer-toggle.top-right,
     .explainer-toggle.top-right {
-        top: 15px;
-        right: 15px;
+        top: 15px !important;
+        right: 15px !important;
     }
     
+    body .explainer-toggle.top-left,
+    html body .explainer-toggle.top-left,
+    div .explainer-toggle.top-left,
     .explainer-toggle.top-left {
-        top: 15px;
-        left: 15px;
+        top: 15px !important;
+        left: 15px !important;
     }
 }
 
@@ -225,12 +352,26 @@
    Text Selection Highlighting
    ============================================================================= */
 
+body .explainer-selection-highlight,
+html body .explainer-selection-highlight,
+div .explainer-selection-highlight,
 .explainer-selection-highlight {
     background-color: rgba(255, 255, 0, 0.3) !important;
-    border-radius: 2px;
-    transition: background-color 0.2s ease;
+    border-radius: 2px !important;
+    transition: background-color 0.2s ease !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    text-decoration: none !important;
+    display: inline !important;
 }
 
+body .explainer-selection-highlight.processing,
+html body .explainer-selection-highlight.processing,
+div .explainer-selection-highlight.processing,
 .explainer-selection-highlight.processing {
     background-color: rgba(0, 115, 170, 0.3) !important;
 }
@@ -239,140 +380,246 @@
    Tooltip Base Styles
    ============================================================================= */
 
+/* Highly specific selectors for tooltip to prevent other plugins from overriding */
+body .explainer-tooltip,
+html body .explainer-tooltip,
+div .explainer-tooltip,
 .explainer-tooltip {
-    position: absolute;
-    z-index: var(--explainer-z-index-tooltip);
+    position: absolute !important;
+    z-index: var(--explainer-z-index-tooltip) !important;
     
     /* Box styling - uses admin color settings */
-    background: var(--explainer-tooltip-bg-color, #333);
-    color: var(--explainer-tooltip-text-color, white);
-    border-radius: var(--explainer-border-radius);
-    padding: 12px 16px;
-    max-width: 300px;
-    min-width: 200px;
+    background: var(--explainer-tooltip-bg-color, #333) !important;
+    color: var(--explainer-tooltip-text-color, white) !important;
+    border-radius: var(--explainer-border-radius) !important;
+    padding: 12px 16px !important;
+    max-width: 300px !important;
+    min-width: 200px !important;
     
     /* Typography - use site's paragraph font */
-    font-size: 14px;
-    font-family: var(--explainer-site-font, inherit);
-    line-height: 1.4;
+    font-size: 14px !important;
+    font-family: var(--explainer-site-font, inherit) !important;
+    line-height: 1.4 !important;
     
     /* Effects */
-    box-shadow: var(--explainer-box-shadow);
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    box-shadow: var(--explainer-box-shadow) !important;
+    opacity: 0 !important;
+    transform: translateY(10px) !important;
+    transition: opacity 0.3s ease, transform 0.3s ease !important;
     
     /* Pointer events */
-    pointer-events: auto;
+    pointer-events: auto !important;
     
     /* Touch-friendly */
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
     
     /* Better mobile interaction */
-    -webkit-touch-callout: none;
-    -webkit-user-select: text;
-    -khtml-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: text !important;
+    -khtml-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
     
     /* Accessibility */
-    role: tooltip;
+    role: tooltip !important;
+    
+    /* Additional defensive styles */
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    border: none !important;
+    text-align: left !important;
+    text-decoration: none !important;
+    vertical-align: baseline !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    visibility: hidden !important;
 }
 
+body .explainer-tooltip.visible,
+html body .explainer-tooltip.visible,
+div .explainer-tooltip.visible,
 .explainer-tooltip.visible {
-    opacity: 1;
-    transform: translateY(0);
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    visibility: visible !important;
 }
 
+body .explainer-tooltip.hidden,
+html body .explainer-tooltip.hidden,
+div .explainer-tooltip.hidden,
 .explainer-tooltip.hidden {
-    opacity: 0;
-    transform: translateY(10px);
-    pointer-events: none;
+    opacity: 0 !important;
+    transform: translateY(10px) !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
 }
 
 /* Tooltip header */
+body .explainer-tooltip-header,
+html body .explainer-tooltip-header,
+div .explainer-tooltip-header,
 .explainer-tooltip-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid color-mix(in srgb, var(--explainer-tooltip-text-color, #ffffff) 20%, transparent);
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid color-mix(in srgb, var(--explainer-tooltip-text-color, #ffffff) 20%, transparent) !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    width: auto !important;
+    height: auto !important;
 }
 
+body .explainer-tooltip-title,
+html body .explainer-tooltip-title,
+div .explainer-tooltip-title,
 .explainer-tooltip-title {
-    font-weight: 600;
-    font-size: 13px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    opacity: 0.9;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    opacity: 0.9 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: inherit !important;
+    text-decoration: none !important;
+    background: none !important;
+    border: none !important;
 }
 
+body .explainer-tooltip-close,
+html body .explainer-tooltip-close,
+div .explainer-tooltip-close,
 .explainer-tooltip-close {
-    background: none;
-    border: none;
-    color: var(--explainer-tooltip-text-color, #ffffff);
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0;
-    width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    background: none !important;
+    border: none !important;
+    color: var(--explainer-tooltip-text-color, #ffffff) !important;
+    font-size: 18px !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 
+body .explainer-tooltip-close:hover,
+html body .explainer-tooltip-close:hover,
+div .explainer-tooltip-close:hover,
 .explainer-tooltip-close:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2) !important;
 }
 
 /* Tooltip content */
+body .explainer-tooltip-content,
+html body .explainer-tooltip-content,
+div .explainer-tooltip-content,
 .explainer-tooltip-content {
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: inherit !important;
+    background: none !important;
+    border: none !important;
+    text-decoration: none !important;
+    width: auto !important;
+    height: auto !important;
+    display: block !important;
 }
 
 /* Tooltip footer */
+body .explainer-tooltip-footer,
+html body .explainer-tooltip-footer,
+div .explainer-tooltip-footer,
 .explainer-tooltip-footer {
-    margin-top: 12px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 11px;
-    line-height: 1.3;
-    opacity: 0.7;
+    margin-top: 12px !important;
+    margin-bottom: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-top: 8px !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    opacity: 0.7 !important;
+    background: none !important;
+    color: inherit !important;
+    width: auto !important;
+    height: auto !important;
+    display: block !important;
 }
 
+body .explainer-disclaimer,
+html body .explainer-disclaimer,
+div .explainer-disclaimer,
 .explainer-disclaimer,
+body .explainer-provider,
+html body .explainer-provider,
+div .explainer-provider,
 .explainer-provider {
-    margin: 2px 0;
-    font-style: italic;
-    color: var(--explainer-tooltip-footer-color, rgba(255, 255, 255, 0.8));
+    margin: 2px 0 !important;
+    padding: 0 !important;
+    font-style: italic !important;
+    color: var(--explainer-tooltip-footer-color, rgba(255, 255, 255, 0.8)) !important;
+    background: none !important;
+    border: none !important;
+    text-decoration: none !important;
+    width: auto !important;
+    height: auto !important;
+    display: block !important;
 }
 
+body .explainer-provider,
+html body .explainer-provider,
+div .explainer-provider,
 .explainer-provider {
-    font-size: 10px;
+    font-size: 10px !important;
 }
 
 /* Loading state */
+body .explainer-tooltip.loading .explainer-tooltip-content,
+html body .explainer-tooltip.loading .explainer-tooltip-content,
+div .explainer-tooltip.loading .explainer-tooltip-content,
 .explainer-tooltip.loading .explainer-tooltip-content {
-    opacity: 0.7;
+    opacity: 0.7 !important;
 }
 
+body .explainer-tooltip.loading::after,
+html body .explainer-tooltip.loading::after,
+div .explainer-tooltip.loading::after,
 .explainer-tooltip.loading::after {
-    content: '';
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    margin-left: 8px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top: 2px solid white;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    content: '' !important;
+    display: inline-block !important;
+    width: 16px !important;
+    height: 16px !important;
+    margin-left: 8px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    margin-right: 0 !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-top: 2px solid white !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+    background: none !important;
+    padding: 0 !important;
 }
 
 @keyframes spin {
@@ -381,82 +628,132 @@
 }
 
 /* Error state */
+body .explainer-tooltip.error,
+html body .explainer-tooltip.error,
+div .explainer-tooltip.error,
 .explainer-tooltip.error {
-    background: var(--explainer-error-color);
+    background: var(--explainer-error-color) !important;
 }
 
+body .explainer-tooltip.error .explainer-tooltip-content,
+html body .explainer-tooltip.error .explainer-tooltip-content,
+div .explainer-tooltip.error .explainer-tooltip-content,
 .explainer-tooltip.error .explainer-tooltip-content {
     color: white !important;
 }
 
+body .explainer-tooltip.error .explainer-tooltip-title,
+html body .explainer-tooltip.error .explainer-tooltip-title,
+div .explainer-tooltip.error .explainer-tooltip-title,
 .explainer-tooltip.error .explainer-tooltip-title {
     color: white !important;
 }
 
+body .explainer-tooltip.error .explainer-tooltip-close,
+html body .explainer-tooltip.error .explainer-tooltip-close,
+div .explainer-tooltip.error .explainer-tooltip-close,
 .explainer-tooltip.error .explainer-tooltip-close {
     color: white !important;
 }
 
+body .explainer-tooltip.error .explainer-tooltip-header,
+html body .explainer-tooltip.error .explainer-tooltip-header,
+div .explainer-tooltip.error .explainer-tooltip-header,
 .explainer-tooltip.error .explainer-tooltip-header {
     border-bottom-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Success state */
+body .explainer-tooltip.success,
+html body .explainer-tooltip.success,
+div .explainer-tooltip.success,
 .explainer-tooltip.success {
-    background: var(--explainer-success-color);
+    background: var(--explainer-success-color) !important;
 }
 
 /* Tooltip arrow - uses admin color settings */
+body .explainer-tooltip::before,
+html body .explainer-tooltip::before,
+div .explainer-tooltip::before,
 .explainer-tooltip::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--explainer-tooltip-bg-color, #333);
+    content: '' !important;
+    position: absolute !important;
+    top: -8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-left: 8px solid transparent !important;
+    border-right: 8px solid transparent !important;
+    border-bottom: 8px solid var(--explainer-tooltip-bg-color, #333) !important;
+    border-top: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    display: block !important;
 }
 
+body .explainer-tooltip.error::before,
+html body .explainer-tooltip.error::before,
+div .explainer-tooltip.error::before,
 .explainer-tooltip.error::before {
-    border-bottom-color: var(--explainer-error-color);
+    border-bottom-color: var(--explainer-error-color) !important;
 }
 
+body .explainer-tooltip.success::before,
+html body .explainer-tooltip.success::before,
+div .explainer-tooltip.success::before,
 .explainer-tooltip.success::before {
-    border-bottom-color: var(--explainer-success-color);
+    border-bottom-color: var(--explainer-success-color) !important;
 }
 
 /* Position tooltip below selection */
+body .explainer-tooltip.below::before,
+html body .explainer-tooltip.below::before,
+div .explainer-tooltip.below::before,
 .explainer-tooltip.below::before {
-    top: -8px;
-    border-top: none;
-    border-bottom: 8px solid #333;
+    top: -8px !important;
+    border-top: none !important;
+    border-bottom: 8px solid #333 !important;
 }
 
 /* Position tooltip above selection */
+body .explainer-tooltip.above,
+html body .explainer-tooltip.above,
+div .explainer-tooltip.above,
 .explainer-tooltip.above {
-    transform: translateY(-10px);
+    transform: translateY(-10px) !important;
 }
 
+body .explainer-tooltip.above.visible,
+html body .explainer-tooltip.above.visible,
+div .explainer-tooltip.above.visible,
 .explainer-tooltip.above.visible {
-    transform: translateY(0);
+    transform: translateY(0) !important;
 }
 
+body .explainer-tooltip.above::before,
+html body .explainer-tooltip.above::before,
+div .explainer-tooltip.above::before,
 .explainer-tooltip.above::before {
-    top: auto;
-    bottom: -8px;
-    border-bottom: none;
-    border-top: 8px solid #333;
+    top: auto !important;
+    bottom: -8px !important;
+    border-bottom: none !important;
+    border-top: 8px solid #333 !important;
 }
 
+body .explainer-tooltip.above.error::before,
+html body .explainer-tooltip.above.error::before,
+div .explainer-tooltip.above.error::before,
 .explainer-tooltip.above.error::before {
-    border-top-color: var(--explainer-error-color);
+    border-top-color: var(--explainer-error-color) !important;
 }
 
+body .explainer-tooltip.above.success::before,
+html body .explainer-tooltip.above.success::before,
+div .explainer-tooltip.above.success::before,
 .explainer-tooltip.above.success::before {
-    border-top-color: var(--explainer-success-color);
+    border-top-color: var(--explainer-success-color) !important;
 }
 
 /* Mobile tooltip adjustments */
