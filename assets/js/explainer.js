@@ -130,8 +130,6 @@
         // Validate and enhance color contrast
         validateColorContrast();
         
-        // Create enhanced skip links
-        createEnhancedSkipLinks();
         
         // Create UI elements
         createToggleButton();
@@ -1340,20 +1338,6 @@
         }
     }
     
-    /**
-     * Create skip link for keyboard navigation
-     */
-    function createSkipLink() {
-        const skipLink = document.createElement('a');
-        skipLink.href = '#explainer-toggle';
-        skipLink.className = 'explainer-skip-link';
-        skipLink.textContent = 'Skip to AI Explainer';
-        skipLink.setAttribute('tabindex', '0');
-        
-        document.body.insertBefore(skipLink, document.body.firstChild);
-        
-        return skipLink;
-    }
     
     /**
      * Manage focus for accessibility with enhanced features
@@ -1445,33 +1429,6 @@
         }
     }
     
-    /**
-     * Create enhanced skip links for better navigation
-     */
-    function createEnhancedSkipLinks() {
-        const skipLinksContainer = document.createElement('div');
-        skipLinksContainer.id = 'explainer-skip-links';
-        skipLinksContainer.className = 'explainer-skip-links';
-        
-        const skipToToggle = document.createElement('a');
-        skipToToggle.href = '#explainer-toggle';
-        skipToToggle.className = 'explainer-skip-link';
-        skipToToggle.textContent = 'Skip to AI Explainer toggle';
-        skipToToggle.setAttribute('tabindex', '0');
-        
-        const skipToContent = document.createElement('a');
-        skipToContent.href = '#main, #content, article, .content';
-        skipToContent.className = 'explainer-skip-link';
-        skipToContent.textContent = 'Skip to main content';
-        skipToContent.setAttribute('tabindex', '0');
-        
-        skipLinksContainer.appendChild(skipToToggle);
-        skipLinksContainer.appendChild(skipToContent);
-        
-        document.body.insertBefore(skipLinksContainer, document.body.firstChild);
-        
-        return skipLinksContainer;
-    }
     
     /**
      * Enhance color contrast validation

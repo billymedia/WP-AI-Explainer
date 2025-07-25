@@ -4,7 +4,7 @@ Tags: ai, explanation, tooltip, openai, claude
 Requires at least: 5.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -183,6 +183,12 @@ Yes, it's ready for translation and the interface already works in 7 languages (
 6. **Mobile Experience** - Responsive design with touch gestures on mobile devices
 
 == Changelog ==
+
+= 1.1.1 =
+* **Removed Skip Links**: Eliminated automatic skip link generation for cleaner page markup
+* **Reduced DOM Manipulation**: Removed unnecessary accessibility links that were being added to page headers
+* **Streamlined Navigation**: Plugin no longer modifies site navigation structure with auto-generated links
+* **Cleaner Implementation**: Simplified JavaScript initialization by removing skip link creation functions
 
 = 1.1.0 =
 * **Enhanced CSS Compatibility**: Complete defensive CSS overhaul to prevent styling conflicts with other plugins
